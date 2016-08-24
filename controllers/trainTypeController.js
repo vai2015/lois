@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var util = require('util');
-var model = require('../models/itemType');
+var model = require('../models/trainType');
 var BaseController = require('./baseController');
 var objectId = mongoose.Types.ObjectId;
 

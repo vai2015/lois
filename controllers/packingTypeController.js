@@ -1,12 +1,12 @@
 var mongoose = require('mongoose');
 var util = require('util');
-var model = require('../models/driver');
+var model = require('../models/packingType');
 var BaseController = require('./baseController');
 var objectId = mongoose.Types.ObjectId;
 
-function DriverController(){
+function PackingTypeController(){
    BaseController.call(this, model);
-   this.api = 'driver';
+   this.api = 'packingType';
 };
 
 RegionController.prototype.setParameters = function(query){
@@ -24,5 +24,5 @@ RegionController.prototype.setParameters = function(query){
     return parameters;
 };
 
-util.inherits(DriverController, BaseController);
-module.exports = new DriverController();
+util.inherits(PackingTypeController, BaseController);
+module.exports = new PackingTypeController();
