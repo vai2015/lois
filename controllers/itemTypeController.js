@@ -9,7 +9,7 @@ function ItemTypeController(){
    this.api = 'itemType';
 };
 
-RegionController.prototype.setParameters = function(query){
+ItemTypeController.prototype.setParameters = function(query){
     var parameters = {"conditions": {}};
 
     if(query['name'])

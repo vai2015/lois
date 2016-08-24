@@ -1,6 +1,7 @@
 var router = require('express').Router();
 var dotenv = require('dotenv').config();
-var controller = require('../controllers/driverController');
+var controller = require('../controllers/userController');
+var auth = require('../utils/authentication');
 
 router.get(process.env.BASE_API + controller.api + '/get', auth.isAuthenticated, function(req, res){
    controller.get(req.query.id).then(function(result){
@@ -31,6 +32,10 @@ router.post(process.env.BASE_API + controller.api + '/save', auth.isAuthenticate
    }).catch(function(exception){
        return res.status(500).send(exception.message);
    });
+});
+
+router.post(process.env.BASE_API + controller.api + '/authenticate', function(req, res){
+   
 });
 
 router.delete(process.env.BASE_API + controller.api + '/delete', auth.isAuthenticated, function(req, res){

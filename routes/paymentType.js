@@ -2,7 +2,7 @@ var router = require('express').Router();
 var dotenv = require('dotenv').config();
 var controller = require('../controllers/paymentTypeController');
 
-router.get(process.env.BASE_API + controller.api + '/get', function(req, res){
+router.get(process.env.BASE_API + controller.api + '/get', auth.isAuthenticated, function(req, res){
    controller.get(req.query.id).then(function(result){
        return res.status(200).send(result);
    }).catch(function(exception){
@@ -10,7 +10,7 @@ router.get(process.env.BASE_API + controller.api + '/get', function(req, res){
    });
 });
 
-router.getAll(process.env.BASE_API + controller.api + '/getAll', function(req, res){
+router.getAll(process.env.BASE_API + controller.api + '/getAll', auth.isAuthenticated, function(req, res){
     var parameters = controller.setParameters(JSON.parse(req.query['query']));
     controller.getAll(parameters).then(function(result){
         return res.status(200).send(result);
@@ -19,7 +19,7 @@ router.getAll(process.env.BASE_API + controller.api + '/getAll', function(req, r
     });
 });
 
-router.post(process.env.BASE_API + controller.api + '/save', function(req, res){
+router.post(process.env.BASE_API + controller.api + '/save', auth.isAuthenticated, function(req, res){
    var data = req.body;
    var api = controller.save;
 
@@ -33,7 +33,7 @@ router.post(process.env.BASE_API + controller.api + '/save', function(req, res){
    });
 });
 
-router.delete(process.env.BASE_API + controller.api + '/delete', function(req, res){
+router.delete(process.env.BASE_API + controller.api + '/delete', auth.isAuthenticated, function(req, res){
     controller.delete(req.query.id).then(function(result){
        return res.status(200).send(result);
     }).catch(function(exception){

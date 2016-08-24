@@ -9,7 +9,7 @@ function PackingTypeController(){
    this.api = 'packingType';
 };
 
-RegionController.prototype.setParameters = function(query){
+PackingTypeController.prototype.setParameters = function(query){
     var parameters = {"conditions": {}};
 
     if(query['name'])

@@ -1,15 +1,15 @@
 var mongoose = require('mongoose');
 var util = require('util');
-var model = require('../models/driver');
+var model = require('../models/role');
 var BaseController = require('./baseController');
 var objectId = mongoose.Types.ObjectId;
 
-function DriverController(){
+function RoleController(){
    BaseController.call(this, model);
-   this.api = 'driver';
+   this.api = 'role';
 };
 
-DriverController.prototype.setParameters = function(query){
+RoleController.prototype.setParameters = function(query){
     var parameters = {"conditions": {}};
 
     if(query['name'])
@@ -24,5 +24,5 @@ DriverController.prototype.setParameters = function(query){
     return parameters;
 };
 
-util.inherits(DriverController, BaseController);
-module.exports = new DriverController();
+util.inherits(RoleController, BaseController);
+module.exports = new RoleController();

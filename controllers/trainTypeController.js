@@ -9,7 +9,7 @@ function TrainTypeController(){
    this.api = 'trainType';
 };
 
-RegionController.prototype.setParameters = function(query){
+TrainTypeController.prototype.setParameters = function(query){
     var parameters = {"conditions": {}};
 
     if(query['name'])

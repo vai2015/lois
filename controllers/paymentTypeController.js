@@ -9,7 +9,7 @@ function PaymentTypeController(){
    this.api = 'paymentType';
 };
 
-RegionController.prototype.setParameters = function(query){
+PaymentTypeController.prototype.setParameters = function(query){
     var parameters = {"conditions": {}};
 
     if(query['name'])
