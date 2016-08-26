@@ -27,7 +27,7 @@ ShippingController.prototype.setUser = function(user){
   this.user = user;
 };
 
-ShippingController.prototype.setParameters = function(query){
+ShippingController.prototype.getParameters = function(query){
   var parameters = {"conditions": {}, "limit": 10, "skip": 0};
 
   if(query['spbNumber'])

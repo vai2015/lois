@@ -12,7 +12,7 @@ PackingTypeController.api = 'packingType';
 
 util.inherits(PackingTypeController, BaseController);
 
-PackingTypeController.prototype.setParameters = function(query){
+PackingTypeController.prototype.getParameters = function(query){
     var parameters = {"conditions": {}};
 
     if(query['name'])

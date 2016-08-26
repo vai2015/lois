@@ -12,7 +12,7 @@ RoleMenuController.api = 'roleMenu';
 
 util.inherits(RoleMenuController, BaseController);
 
-RoleMenuController.prototype.setParameters = function(query){
+RoleMenuController.prototype.getParameters = function(query){
     var parameters = {"conditions": {}};
 
     if(query['name'])

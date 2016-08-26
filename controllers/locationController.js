@@ -12,7 +12,7 @@ LocationController.api = 'locatio';
 
 util.inherits(LocationController, BaseController);
 
-LocationController.prototype.setParameters = function(query){
+LocationController.prototype.getParameters = function(query){
     var parameters = {"conditions": {}};
 
     if(query['name'])

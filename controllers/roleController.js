@@ -12,7 +12,7 @@ RoleController.api = 'role';
 
 util.inherits(RoleController, BaseController);
 
-RoleController.prototype.setParameters = function(query){
+RoleController.prototype.getParameters = function(query){
     var parameters = {"conditions": {}};
 
     if(query['name'])

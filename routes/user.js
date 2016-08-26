@@ -1,6 +1,7 @@
 var router = require('express').Router();
 var dotenv = require('dotenv').config();
 var auth = require('../utils/authentication');
+var location = require('../models/location');
 var co = require('co');
 var UserController = require('../controllers/userController');
 var controller = new UserController();
@@ -59,14 +60,12 @@ router.post(process.env.BASE_API + UserController.api + '/authenticate', functio
 
     return co(function*(){
         var user = yield controller.authenticate(req.body.userName, req.body.password);
-        var parameters = {"role": user.role};
-
-        var reports = yield roleReportController.getAll(parameters);
-        var menus = yield roleMenuController.getAll(parameters);
-
+       // var reports = yield roleReportController.getAll(parameters);
+        var menus = yield controller.getMenus(user.role);
+        
         req.session.user  = user;
         req.session.menus = menus;
-        req.session.reports = reports;
+        //req.session.reports = reports;
         return res.status(200).send('Ok');
     }).catch(function(exception){
        return res.status(500).send(exception.message);

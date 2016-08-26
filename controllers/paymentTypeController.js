@@ -12,7 +12,7 @@ PaymentTypeController.api = 'paymentType';
 
 util.inherits(PaymentTypeController, BaseController);
 
-PaymentTypeController.prototype.setParameters = function(query){
+PaymentTypeController.prototype.getParameters = function(query){
     var parameters = {"conditions": {}};
 
     if(query['name'])

@@ -12,7 +12,7 @@ ItemTypeController.api = 'itemType';
 
 util.inherits(ItemTypeController, BaseController);
 
-ItemTypeController.prototype.setParameters = function(query){
+ItemTypeController.prototype.getParameters = function(query){
     var parameters = {"conditions": {}};
 
     if(query['name'])

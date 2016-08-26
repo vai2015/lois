@@ -4,10 +4,14 @@ var model = require('../models/user');
 var crypto = require('crypto');
 var co = require('co');
 var BaseController = require('./baseController');
+var RoleMenuController = require('../controllers/roleMenuController');
+var RoleReportController = require('../controllers/roleReportController');
 var objectId = mongoose.Types.ObjectId;
 
 function UserController(){
    UserController.super_.call(this, model);
+   this.roleMenuController = new RoleMenuController();
+   this.roleReportController = new RoleReportController();
 };
 
 util.inherits(UserController, BaseController);
@@ -53,5 +57,15 @@ UserController.prototype.setParameters = function(query){
 
     return parameters;
 };
+
+UserController.prototype.getMenus = function(roleId){
+   var parameters = this.roleMenuController.getParameters({"roles": roleId});
+   return this.roleMenuController.getAll(parameters);
+};
+
+UserController.prototype.getReports = function(roleId){
+   var parameters = this.roleReportController.getParameters({"roles": roleId});
+   return this.roleReportController.getAll(parameters);
+}
 
 module.exports = UserController;

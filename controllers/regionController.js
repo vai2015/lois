@@ -12,7 +12,7 @@ RegionController.api = 'region';
 
 util.inherits(RegionController, BaseController);
 
-RegionController.prototype.setParameters = function(query){
+RegionController.prototype.getParameters = function(query){
     var parameters = {"conditions": {}};
 
     if(query['name'])

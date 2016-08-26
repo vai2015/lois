@@ -13,7 +13,7 @@ TrainTypeController.api = 'trainType';
 
 util.inherits(TrainTypeController, BaseController);
 
-TrainTypeController.prototype.setParameters = function(query){
+TrainTypeController.prototype.getParameters = function(query){
     var parameters = {"conditions": {}};
 
     if(query['name'])

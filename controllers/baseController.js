@@ -15,11 +15,11 @@ BaseController.prototype.get = function(id){
 };
 
 BaseController.prototype.getAll = function(parameters){
-   var find = this.model.find(paramters['conditions']);
+   var find = this.model.find(parameters['conditions']);
 
-   if(paramters['limit'] && paramters['skip'])
+   if(parameters['limit'] && parameters['skip'])
      find = find.limit(parameters['limit']).skip(parameters['skip']);
-
+   
    return find.lean().exec();
 };
 

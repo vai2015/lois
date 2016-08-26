@@ -12,7 +12,7 @@ router.get(process.env.BASE_API + TrainTypeController.api + '/get', auth.isAuthe
 });
 
 router.getAll(process.env.BASE_API + TrainTypeController.api + '/getAll', auth.isAuthenticated, function(req, res){
-    var parameters = controller.setParameters(JSON.parse(req.query['query']));
+    var parameters = controller.getParameters(JSON.parse(req.query['query']));
     controller.getAll(parameters).then(function(result){
         return res.status(200).send(result);
     }).catch(function(exception){

@@ -12,7 +12,7 @@ DeliveryController.api = 'driver';
 
 util.inherits(DriverController, BaseController);
 
-DriverController.prototype.setParameters = function(query){
+DriverController.prototype.getParameters = function(query){
     var parameters = {"conditions": {}};
 
     if(query['name'])
