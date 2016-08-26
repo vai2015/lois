@@ -40,6 +40,15 @@ router.get(process.env.BASE_API + UserController.api + '/getSession', auth.isAut
     });
 });
 
+router.get(process.env.BASE_API + UserController.api + '/logout', auth.isAuthenticated, function(req, res){
+    req.session.destroy(function(err) {
+      if(err)
+         return res.status(500).send(err);
+
+       return res.status(200).send('Ok');
+    });
+});
+
 router.post(process.env.BASE_API + UserController.api + '/save', auth.isAuthenticated, function(req, res){
    var data = req.body;
    var api = controller.save;

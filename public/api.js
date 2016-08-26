@@ -17,5 +17,17 @@ var app;
             return user;
         }());
         api.user = user;
+        var configuration = (function () {
+            function configuration() {
+            }
+            configuration.get = function (config, id) {
+                return app.http.get('/lois/api/' + config + '/get?id=' + id);
+            };
+            configuration.getAll = function (config, query) {
+                return app.http.get('/lois/api/' + config + '/getAll?query=' + JSON.stringify(query));
+            };
+            return configuration;
+        }());
+        api.configuration = configuration;
     })(api = app.api || (app.api = {}));
 })(app || (app = {}));
