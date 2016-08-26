@@ -5,9 +5,12 @@ var BaseController = require('./baseController');
 var objectId = mongoose.Types.ObjectId;
 
 function RoleController(){
-   BaseController.call(this, model);
-   this.api = 'role';
+   RoleController.super_.call(this, model);
 };
+
+RoleController.api = 'role';
+
+util.inherits(RoleController, BaseController);
 
 RoleController.prototype.setParameters = function(query){
     var parameters = {"conditions": {}};
@@ -24,5 +27,4 @@ RoleController.prototype.setParameters = function(query){
     return parameters;
 };
 
-util.inherits(RoleController, BaseController);
-module.exports = new RoleController();
+module.exports = RoleController;

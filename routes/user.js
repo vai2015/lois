@@ -1,15 +1,15 @@
 var router = require('express').Router();
 var dotenv = require('dotenv').config();
-var controller = require('../controllers/userController');
 var auth = require('../utils/authentication');
 var co = require('co');
+var UserController = require('../controllers/userController');
+var controller = new UserController();
 
-console.log(controller);
 router.get('/lois/login', function(req, res){
    res.redirect('/lois');
 });
 
-router.get(process.env.BASE_API + controller.api + '/get', auth.isAuthenticated, function(req, res){
+router.get(process.env.BASE_API + UserController.api + '/get', auth.isAuthenticated, function(req, res){
    controller.get(req.query.id).then(function(result){
        return res.status(200).send(result);
    }).catch(function(exception){
@@ -17,7 +17,7 @@ router.get(process.env.BASE_API + controller.api + '/get', auth.isAuthenticated,
    });
 });
 
-router.get(process.env.BASE_API + controller.api + '/getAll', auth.isAuthenticated, function(req, res){
+router.get(process.env.BASE_API + UserController.api + '/getAll', auth.isAuthenticated, function(req, res){
     var parameters = controller.setParameters(JSON.parse(req.query['query']));
     controller.getAll(parameters).then(function(result){
         return res.status(200).send(result);
@@ -26,7 +26,7 @@ router.get(process.env.BASE_API + controller.api + '/getAll', auth.isAuthenticat
     });
 });
 
-router.get(process.env.BASE_API + controller.api + '/getSession', auth.isAuthenticated, function(req, res){
+router.get(process.env.BASE_API + UserController.api + '/getSession', auth.isAuthenticated, function(req, res){
     var user = {
       "name": req.session.user.name,
       "location": req.session.user.location.name
@@ -39,7 +39,7 @@ router.get(process.env.BASE_API + controller.api + '/getSession', auth.isAuthent
     });
 });
 
-router.post(process.env.BASE_API + controller.api + '/save', auth.isAuthenticated, function(req, res){
+router.post(process.env.BASE_API + UserController.api + '/save', auth.isAuthenticated, function(req, res){
    var data = req.body;
    var api = controller.save;
 
@@ -53,7 +53,7 @@ router.post(process.env.BASE_API + controller.api + '/save', auth.isAuthenticate
    });
 });
 
-router.post(process.env.BASE_API + controller.api + '/authenticate', function(req, res){
+router.post(process.env.BASE_API + UserController.api + '/authenticate', function(req, res){
     var roleMenuController = require('../controllers/roleMenuController');
     var roleReportController = require('../controllers/roleReportController');
 
@@ -73,7 +73,7 @@ router.post(process.env.BASE_API + controller.api + '/authenticate', function(re
     });
 });
 
-router.delete(process.env.BASE_API + controller.api + '/delete', auth.isAuthenticated, function(req, res){
+router.delete(process.env.BASE_API + UserController.api + '/delete', auth.isAuthenticated, function(req, res){
     controller.delete(req.query.id).then(function(result){
        return res.status(200).send(result);
     }).catch(function(exception){

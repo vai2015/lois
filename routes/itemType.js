@@ -1,8 +1,9 @@
 var router = require('express').Router();
 var dotenv = require('dotenv').config();
-var controller = require('../controllers/ItemTypeController');
+var ItemTypeController = require('../controllers/ItemTypeController');
+var controller = new ItemTypeController();
 
-router.get(process.env.BASE_API + controller.api + '/get', auth.isAuthenticated, function(req, res){
+router.get(process.env.BASE_API + ItemTypeController.api + '/get', auth.isAuthenticated, function(req, res){
    controller.get(req.query.id).then(function(result){
        return res.status(200).send(result);
    }).catch(function(exception){
@@ -10,7 +11,7 @@ router.get(process.env.BASE_API + controller.api + '/get', auth.isAuthenticated,
    });
 });
 
-router.getAll(process.env.BASE_API + controller.api + '/getAll', auth.isAuthenticated, function(req, res){
+router.getAll(process.env.BASE_API + ItemTypeController.api + '/getAll', auth.isAuthenticated, function(req, res){
     var parameters = controller.setParameters(JSON.parse(req.query['query']));
     controller.getAll(parameters).then(function(result){
         return res.status(200).send(result);
@@ -19,7 +20,7 @@ router.getAll(process.env.BASE_API + controller.api + '/getAll', auth.isAuthenti
     });
 });
 
-router.post(process.env.BASE_API + controller.api + '/save', auth.isAuthenticated, function(req, res){
+router.post(process.env.BASE_API + ItemTypeController.api + '/save', auth.isAuthenticated, function(req, res){
    var data = req.body;
    var api = controller.save;
 
@@ -33,7 +34,7 @@ router.post(process.env.BASE_API + controller.api + '/save', auth.isAuthenticate
    });
 });
 
-router.delete(process.env.BASE_API + controller.api + '/delete', auth.isAuthenticated, function(req, res){
+router.delete(process.env.BASE_API + ItemTypeController.api + '/delete', auth.isAuthenticated, function(req, res){
     controller.delete(req.query.id).then(function(result){
        return res.status(200).send(result);
     }).catch(function(exception){

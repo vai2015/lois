@@ -13,10 +13,13 @@ var TEREKAP_SEBAGIAN = 'Terekap Sebagian';
 var TERKIRIM_SEBAGIAN = 'Terkirim Sebagian';
 
 function RecapitulationController(){
-   BaseController.call(this, model);
-   this.api = 'recapitulation';
+   RecapitulationController.super_.call(this, model);
    this.user = null;
 };
+
+RecapitulationController.api = 'recapitulation';
+
+util.inherits(RecapitulationController, BaseController);
 
 RecapitulationController.prototype.setUser = function(user){
    this.user = user;
@@ -177,5 +180,4 @@ RecapitulationController.prototype.cancelRecap = function(viewModels){
   });
 };
 
-util.inherits(RecapitulationController, BaseController);
-module.exports = new RecapitulationController();
+module.exports = RecapitulationController;

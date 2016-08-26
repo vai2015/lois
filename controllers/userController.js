@@ -7,9 +7,12 @@ var BaseController = require('./baseController');
 var objectId = mongoose.Types.ObjectId;
 
 function UserController(){
-   BaseController.call(this, model);
-   this.api = 'user';
+   UserController.super_.call(this, model);
 };
+
+util.inherits(UserController, BaseController);
+
+UserController.api = 'user';
 
 UserController.prototype.authenticate = function(userName, password){
    var self = this;
@@ -51,5 +54,4 @@ UserController.prototype.setParameters = function(query){
     return parameters;
 };
 
-util.inherits(UserController, BaseController);
-module.exports = new UserController();
+module.exports = UserController;

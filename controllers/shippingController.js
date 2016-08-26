@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var util = require('util');
 var model = require('../models/shipping');
 var BaseController = require('./baseController');
+var TariffController = require('./tariffController');
 var objectId = mongoose.Types.ObjectId;
 
 var DEFAULT_LOCATION_ID = "";
@@ -13,10 +14,14 @@ var ITEM_TYPE_WEIGHT = "";
 var ITEM_TYPE_VOLUME = "";
 
 function ShippingController(){
-  BaseController.call(this, model);
-  this.api = 'shipping';
+  ShippingController.super_.call(this, model);
   this.user = null;
+  this.tariffController = new TariffController();
 }
+
+ShippingController.api = 'shipping';
+
+util.inherits(ShippingController, BaseController);
 
 ShippingController.prototype.setUser = function(user){
   this.user = user;
@@ -136,21 +141,22 @@ ShippingController.prototype.update = function(data){
    var self = this;
 
    return co(function* (){
-       var tariff = yield require('../controllers/tariffController').getTariff(data.sender._id, data.destination._id);
+       var tariff = self.tariffController.getTariff(data.sender._id, data.destination._id);
 
        if(!tariff)
-         throw new Error('Tariff is not found for client ' + data.sender.name + ' and destination ' + data.destination.name);
+         throw new Error('Tariff is not found for client ' + data.sender.name + 
+                         ' and destination ' + data.destination.name);
 
        var dataModel = new self.model(data);
+
        self.calculateCost(dataModel);
 
        dataModel.regions.source = self.user.location.region;
        dataModel.regions.destination = data.destination.region;
        dataModel.modified.user = self.user._id;
 
-       return self.model.update({_id: objectId(dataModel._id)}, dataModel);
+       return self.update(dataModel);
    });
 }
 
-util.inherits(ShippingController, BaseController);
-module.exports = new ShippingController();
+module.exports = ShippingController;

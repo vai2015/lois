@@ -5,9 +5,12 @@ var BaseController = require('./baseController');
 var objectId = mongoose.Types.ObjectId;
 
 function DriverController(){
-   BaseController.call(this, model);
-   this.api = 'driver';
+   DriverController.super_.call(this, model);
 };
+
+DeliveryController.api = 'driver';
+
+util.inherits(DriverController, BaseController);
 
 DriverController.prototype.setParameters = function(query){
     var parameters = {"conditions": {}};
@@ -24,5 +27,4 @@ DriverController.prototype.setParameters = function(query){
     return parameters;
 };
 
-util.inherits(DriverController, BaseController);
-module.exports = new DriverController();
+module.exports = DriverController;

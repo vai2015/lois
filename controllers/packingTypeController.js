@@ -5,9 +5,12 @@ var BaseController = require('./baseController');
 var objectId = mongoose.Types.ObjectId;
 
 function PackingTypeController(){
-   BaseController.call(this, model);
-   this.api = 'packingType';
+   PackingTypeController.super_.call(this, model);
 };
+
+PackingTypeController.api = 'packingType';
+
+util.inherits(PackingTypeController, BaseController);
 
 PackingTypeController.prototype.setParameters = function(query){
     var parameters = {"conditions": {}};
@@ -24,5 +27,4 @@ PackingTypeController.prototype.setParameters = function(query){
     return parameters;
 };
 
-util.inherits(PackingTypeController, BaseController);
-module.exports = new PackingTypeController();
+module.exports = PackingTypeController;

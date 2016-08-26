@@ -5,9 +5,11 @@ var BaseController = require('./baseController');
 var objectId = mongoose.Types.ObjectId;
 
 function ClientController(){
-  BaseController.call(this, model);
-  this.api = 'client';
+  ClientController.super_.call(this, model);
 }
 
+ClientController.api = 'client';
+
 util.inherits(ClientController, BaseController);
+
 module.exports = new ClientController();

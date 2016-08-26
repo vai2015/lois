@@ -5,9 +5,12 @@ var BaseController = require('./baseController');
 var objectId = mongoose.Types.ObjectId;
 
 function LocationController(){
-   BaseController.call(this, model);
-   this.api = 'location';
+   LocationController.super_.call(this, model);
 };
+
+LocationController.api = 'locatio';
+
+util.inherits(LocationController, BaseController);
 
 LocationController.prototype.setParameters = function(query){
     var parameters = {"conditions": {}};
@@ -27,5 +30,4 @@ LocationController.prototype.setParameters = function(query){
     return parameters;
 };
 
-util.inherits(LocationController, BaseController);
-module.exports = new LocationController();
+module.exports = LocationController;

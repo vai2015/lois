@@ -5,13 +5,15 @@ var BaseController = require('./baseController');
 var objectId = mongoose.Types.ObjectId;
 
 function TariffController(){
-  BaseController.call(this, model);
-  this.api = 'tariff';
+  TrainTypeController.super_.call(this, model);
 }
+
+TariffController.api = 'tariff';
+
+util.inherits(TariffController, BaseController);
 
 TariffController.prototype.getTariff = function(clientId, destinationId){
    return this.model.findOne({client: objectId(clientId), destination: objectId(destinationId)}).exec();
 }
 
-util.inherits(TariffController, BaseController);
-module.exports = new TariffController();
+module.exports = TariffController;

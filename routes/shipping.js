@@ -1,8 +1,9 @@
 var router = require('express').Router();
 var dotenv = require('dotenv').config();
-var controller = require('../controllers/shippingController');
+var ShippingController = require('../controllers/shippingController');
+var controller = new ShippingController();
 
-router.get(process.env.BASE_API + controller.api + '/get', auth.isAuthenticated, function(req, res){
+router.get(process.env.BASE_API + ShippingController.api + '/get', auth.isAuthenticated, function(req, res){
    controller.get(req.query.id).then(function(result){
        return res.status(200).send(result);
    }).catch(function(exception){
@@ -10,7 +11,7 @@ router.get(process.env.BASE_API + controller.api + '/get', auth.isAuthenticated,
    });
 });
 
-router.getAll(process.env.BASE_API + controller.api + '/getAll', auth.isAuthenticated, function(req, res){
+router.getAll(process.env.BASE_API + ShippingController.api + '/getAll', auth.isAuthenticated, function(req, res){
     var parameters = controller.setParameters(JSON.parse(req.query['query']));
     controller.getAll(parameters).then(function(result){
         return res.status(200).send(result);
@@ -19,7 +20,7 @@ router.getAll(process.env.BASE_API + controller.api + '/getAll', auth.isAuthenti
     });
 });
 
-router.post(process.env.BASE_API + controller.api + '/add', auth.isAuthenticated, function(req, res){
+router.post(process.env.BASE_API + ShippingController.api + '/add', auth.isAuthenticated, function(req, res){
     controller.setUser(req.session.user);
     controller.add().then(function(result){
        return res.status(200).send(result);
@@ -28,7 +29,7 @@ router.post(process.env.BASE_API + controller.api + '/add', auth.isAuthenticated
     });
 });
 
-router.post(process.env.BASE_API + controller.api + '/update', auth.isAuthenticated, function(req, res){
+router.post(process.env.BASE_API + ShippingController.api + '/update', auth.isAuthenticated, function(req, res){
     controller.setUser(req.session.user);
     controller.update().then(function(result){
        return res.status(200).send(result);
@@ -37,7 +38,7 @@ router.post(process.env.BASE_API + controller.api + '/update', auth.isAuthentica
     });
 });
 
-router.delete(process.env.BASE_API + controller.api + '/delete', auth.isAuthenticated, function(req, res){
+router.delete(process.env.BASE_API + ShippingController.api + '/delete', auth.isAuthenticated, function(req, res){
     controller.delete(req.query.id).then(function(result){
        return res.status(200).send(result);
     }).catch(function(exception){

@@ -5,9 +5,13 @@ var BaseController = require('./baseController');
 var objectId = mongoose.Types.ObjectId;
 
 function TrainTypeController(){
-   BaseController.call(this, model);
-   this.api = 'trainType';
+   TrainTypeController.super_.call(this, model);
 };
+
+TrainTypeController.api = 'trainType';
+
+
+util.inherits(TrainTypeController, BaseController);
 
 TrainTypeController.prototype.setParameters = function(query){
     var parameters = {"conditions": {}};
@@ -24,5 +28,4 @@ TrainTypeController.prototype.setParameters = function(query){
     return parameters;
 };
 
-util.inherits(TrainTypeController, BaseController);
-module.exports = new TrainTypeController();
+module.exports = TrainTypeController;

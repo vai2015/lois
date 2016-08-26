@@ -1,8 +1,9 @@
 var router = require('express').Router();
 var dotenv = require('dotenv').config();
-var controller = require('../controllers/deliveryController');
+var DeliveryController = require('../controllers/deliveryController');
+var controller = new DeliveryController();
 
-router.get(process.env.BASE_API + controller.api + '/get', auth.isAuthenticated, function(req, res){
+router.get(process.env.BASE_API + DeliveryController.api + '/get', auth.isAuthenticated, function(req, res){
    controller.get(req.query.id).then(function(result){
        return res.status(200).send(result);
    }).catch(function(exception){
@@ -10,7 +11,7 @@ router.get(process.env.BASE_API + controller.api + '/get', auth.isAuthenticated,
    });
 });
 
-router.getAll(process.env.BASE_API + controller.api + '/getAll', auth.isAuthenticated, function(req, res){
+router.getAll(process.env.BASE_API + DeliveryController.api + '/getAll', auth.isAuthenticated, function(req, res){
     controller.getAll(JSON.parse(req.query['query'])).then(function(result){
         return res.status(200).send(result);
     }).catch(function(exception){
@@ -18,7 +19,7 @@ router.getAll(process.env.BASE_API + controller.api + '/getAll', auth.isAuthenti
     });
 });
 
-router.getAll(process.env.BASE_API + controller.api + '/getAllCancel', auth.isAuthenticated, function(req, res){
+router.getAll(process.env.BASE_API + DeliveryController.api + '/getAllCancel', auth.isAuthenticated, function(req, res){
     controller.getAllCancel(req.query['query'])).then(function(result){
         return res.status(200).send(result);
     }).catch(function(exception){
@@ -26,7 +27,7 @@ router.getAll(process.env.BASE_API + controller.api + '/getAllCancel', auth.isAu
     });
 });
 
-router.post(process.env.BASE_API + controller.api + '/deliver', auth.isAuthenticated, function(req, res){
+router.post(process.env.BASE_API + DeliveryController.api + '/deliver', auth.isAuthenticated, function(req, res){
   controller.deliver(req.body).then(function(result){
       return res.status(200).send(result);
   }).catch(function(exception){
@@ -34,7 +35,7 @@ router.post(process.env.BASE_API + controller.api + '/deliver', auth.isAuthentic
   });
 });
 
-router.post(process.env.BASE_API + controller.api + '/cancelDeliver', auth.isAuthenticated, function(req, res){
+router.post(process.env.BASE_API + DeliveryController.api + '/cancelDeliver', auth.isAuthenticated, function(req, res){
   controller.cancelDeliver(req.body).then(function(result){
       return res.status(200).send(result);
   }).catch(function(exception){

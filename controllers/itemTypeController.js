@@ -5,9 +5,12 @@ var BaseController = require('./baseController');
 var objectId = mongoose.Types.ObjectId;
 
 function ItemTypeController(){
-   BaseController.call(this, model);
-   this.api = 'itemType';
+   ItemTypeController.super_.call(this, model);
 };
+
+ItemTypeController.api = 'itemType';
+
+util.inherits(ItemTypeController, BaseController);
 
 ItemTypeController.prototype.setParameters = function(query){
     var parameters = {"conditions": {}};
@@ -24,5 +27,4 @@ ItemTypeController.prototype.setParameters = function(query){
     return parameters;
 };
 
-util.inherits(ItemTypeController, BaseController);
-module.exports = new ItemTypeController();
+module.exports = ItemTypeController;

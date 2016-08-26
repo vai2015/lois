@@ -5,9 +5,12 @@ var BaseController = require('./baseController');
 var objectId = mongoose.Types.ObjectId;
 
 function PaymentTypeController(){
-   BaseController.call(this, model);
-   this.api = 'paymentType';
+   PaymentTypeController.super_.call(this, model);
 };
+
+PaymentTypeController.api = 'paymentType';
+
+util.inherits(PaymentTypeController, BaseController);
 
 PaymentTypeController.prototype.setParameters = function(query){
     var parameters = {"conditions": {}};
@@ -24,5 +27,4 @@ PaymentTypeController.prototype.setParameters = function(query){
     return parameters;
 };
 
-util.inherits(PaymentTypeController, BaseController);
-module.exports = new PaymentTypeController();
+module.exports = PaymentTypeController;

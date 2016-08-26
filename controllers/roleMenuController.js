@@ -5,9 +5,12 @@ var BaseController = require('./baseController');
 var objectId = mongoose.Types.ObjectId;
 
 function RoleMenuController(){
-   BaseController.call(this, model);
-   this.api = 'roleMenu';
+   RoleMenuController.super_.call(this, model);
 };
+
+RoleMenuController.api = 'roleMenu';
+
+util.inherits(RoleMenuController, BaseController);
 
 RoleMenuController.prototype.setParameters = function(query){
     var parameters = {"conditions": {}};
@@ -27,5 +30,4 @@ RoleMenuController.prototype.setParameters = function(query){
     return parameters;
 };
 
-util.inherits(RoleMenuController, BaseController);
-module.exports = new RoleMenuController();
+module.exports = RoleMenuController;

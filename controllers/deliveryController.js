@@ -13,10 +13,13 @@ var TERKIRIM = 'Terkirim';
 var TERKIRIM_SEBAGIAN = 'Terkirim Sebagian';
 
 function DeliveryController(){
-   BaseController.call(this, model);
-   this.api = 'delivery';
+   DeliveryController.super_.call(this, model);
    this.user = null;
 };
+
+DeliveryController.api = 'delivery';
+
+util.inherits(DeliveryController, BaseController);
 
 DeliveryController.prototype.setUser = function(user){
    this.user = user;
@@ -179,12 +182,12 @@ DeliveryController.prototype.cancelDeliver = function(viewModels){
          delivery.weight = (item.dimensions.weight / item.colli.quantity) *  viewModel.quantity;
          delivery.modified.user = self.user._id;
 
-         item.status = item.colli.delivered > 0 ? TERKIRIM_SEBAGIAN : item.colli.available === 0 ? TEREKAP : TEREKAP_SEBAGIAN;
+         item.status = item.colli.delivered > 0 ? TERKIRIM_SEBAGIAN : item.colli.available === 0 ? 
+                       TEREKAP : TEREKAP_SEBAGIAN;
 
          yield self.save(shipping);
      });
   });
 };
 
-util.inherits(DeliveryController, BaseController);
-module.exports = new DeliveryController();
+module.exports = DeliveryController;

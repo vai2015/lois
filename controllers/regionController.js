@@ -5,9 +5,12 @@ var BaseController = require('./baseController');
 var objectId = mongoose.Types.ObjectId;
 
 function RegionController(){
-   BaseController.call(this, model);
-   this.api = 'region';
+   RegionController.super_.call(this, model);
 };
+
+RegionController.api = 'region';
+
+util.inherits(RegionController, BaseController);
 
 RegionController.prototype.setParameters = function(query){
     var parameters = {"conditions": {}};
@@ -24,5 +27,4 @@ RegionController.prototype.setParameters = function(query){
     return parameters;
 };
 
-util.inherits(RegionController, BaseController);
-module.exports = new RegionController();
+module.exports = RegionController;
