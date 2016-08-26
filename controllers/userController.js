@@ -14,7 +14,7 @@ function UserController(){
 UserController.prototype.authenticate = function(userName, password){
    var self = this;
 
-   return co(function* (){
+   return co(function*(){
       var user = yield self.getModel().findOne({userName: userName}).populate('location').exec();
 
       if(!user)

@@ -4,6 +4,7 @@ var controller = require('../controllers/userController');
 var auth = require('../utils/authentication');
 var co = require('co');
 
+console.log(controller);
 router.get('/lois/login', function(req, res){
    res.redirect('/lois');
 });
@@ -56,7 +57,7 @@ router.post(process.env.BASE_API + controller.api + '/authenticate', function(re
     var roleMenuController = require('../controllers/roleMenuController');
     var roleReportController = require('../controllers/roleReportController');
 
-    co(function*(){
+    return co(function*(){
         var user = yield controller.authenticate(req.body.userName, req.body.password);
         var parameters = {"role": user.role};
 
