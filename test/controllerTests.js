@@ -9,6 +9,7 @@
  var partnerController = require('../controllers/partner');
  var roleController = require('../controllers/role');
  var userController = require('../controllers/user');
+ var roleMenuController = require('../controllers/roleMenu');
  var co = require('co');
  var objectId = mongoose.Types.ObjectId;
 
@@ -132,7 +133,6 @@
        return co(function* (){
            var result =  yield roleController.save(roleData);
            result.nModified.should.equal(1);
-
            return yield roleController.save({_id: "57c14bebb495e502157d7ce9", name: "manager"});
        });
     });
@@ -142,8 +142,17 @@
     it('Should retrive a correct user without error', function(){
         return co(function*(){
            var user = yield userController.authenticate('admin', 'admin');
-
            user.hash.should.equal("99a90237c75259e4f918edb9414734f3888321777840be4d19fd0d162661be4a");
         });
     });
- })
+ });
+
+ describe('Get role menus', function(){
+    it('Should retrieve correct menus for specific role', function(){
+        return co(function*(){
+           var parameters = yield roleMenuController.getParameters({"role": "57c02f99dd376f7ad0f33f1d"});
+           var roleMenus = yield roleMenuController.getAll(parameters);
+           roleMenus.length.should.equal(11);
+        });
+    });
+ });

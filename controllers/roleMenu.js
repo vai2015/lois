@@ -1,12 +1,12 @@
 var mongoose = require('mongoose');
-var model = require('../models/roleMenus');
+var model = require('../models/roleMenu');
 var roleModel = require('../models/role');
 var co = require('co');
 var objectId = mongoose.Types.ObjectId;
 
 function Controller(){}
 
-Controller.api = 'roleMenus';
+Controller.api = 'roleMenu';
 
 Controller.prototype.get = function(id){
    return model.findOne({_id: objectId(id)}).exec();
