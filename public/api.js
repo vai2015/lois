@@ -17,6 +17,24 @@ var app;
             return user;
         }());
         api.user = user;
+        var shipping = (function () {
+            function shipping() {
+            }
+            shipping.get = function (id) {
+                return app.http.get('/lois/api/shipping/get?id=' + id);
+            };
+            shipping.getAll = function (query) {
+                return app.http.get('/lois/api/shipping/getAll?query=' + JSON.stringify(query));
+            };
+            shipping.add = function () {
+                return app.http.post('/lois/api/shipping/add', null);
+            };
+            shipping.save = function (data) {
+                return app.http.post('/lois/api/shipping/save', JSON.stringify(data));
+            };
+            return shipping;
+        }());
+        api.shipping = shipping;
         var configuration = (function () {
             function configuration() {
             }
@@ -32,5 +50,14 @@ var app;
             return configuration;
         }());
         api.configuration = configuration;
+        var autocomplete = (function () {
+            function autocomplete() {
+            }
+            autocomplete.getAll = function (name, keyword) {
+                return app.http.get('/lois/api/' + name + '/getAll?query=' + JSON.stringify({ "name": keyword }));
+            };
+            return autocomplete;
+        }());
+        api.autocomplete = autocomplete;
     })(api = app.api || (app.api = {}));
 })(app || (app = {}));

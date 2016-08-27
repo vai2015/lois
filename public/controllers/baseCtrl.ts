@@ -42,6 +42,50 @@ module lois.controllers{
         });
      }
 
+     edit(id: any): void {
+        var ctrl = this;
+        ctrl.processing = true;
+        ctrl.showForm = true;
+
+        ctrl.getFunc(id).then(result => {
+           ctrl.entity = result.data;
+        }).catch(exception => {
+           ctrl.notify('error', exception.data);
+        }).finally(() => {
+           ctrl.processing = false;
+        });
+     }
+
+     save(): void {
+       var ctrl = this;
+       ctrl.processing = true;
+
+       ctrl.saveFunc(ctrl.entity).then(result => {
+          ctrl.notify('success', 'Data berhasil disimpan');
+          ctrl.showForm = false;
+          ctrl.filter();
+       }).catch(exception => {
+          ctrl.notify('error', exception.data);
+       }).finally(() => {
+          ctrl.processing = false;
+       });
+     }
+
+     delete(id): void {
+        var confirmed = confirm('Data akan dihapus, anda yakin?');
+
+        if(!confirmed)
+          return;
+
+        var ctrl = this;
+        ctrl.deleteFunc(id).then(result => {
+           ctrl.notify('success', 'Data berhasil dihapus');
+           ctrl.filter();
+        }).catch(exception => {
+           ctrl.notify('error', exception.data);
+        });
+     }
+
      createQuery(): void{
         this.query = {};
         this.createPagingQuery();
@@ -103,5 +147,11 @@ module lois.controllers{
      notify(type: string, message: string): void {
        this.notification[type](message);
      }
+
+     suggest(name: string, keyword: string) {
+       return app.api.autocomplete.getAll(name, keyword).then(result => {
+          return result.data;
+       });
+    }
   }
 }

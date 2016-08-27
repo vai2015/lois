@@ -51,4 +51,13 @@ router.get(process.env.BASE_API + 'user/getSession', auth.isAuthenticated, funct
  });
 });
 
+router.get(process.env.BASE_API + 'user/logout', auth.isAuthenticated, function(req, res){
+  req.session.destroy(function(err) {
+    if(err)
+       return res.status(500).send(err);
+
+     return res.status(200).send('Ok');
+  });
+});
+
 module.exports = router;

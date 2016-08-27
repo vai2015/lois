@@ -24,6 +24,7 @@ var CW = "57bedeaa6a797e9c1d9fdab7";
 function Controller(){
   this.tariffController = require('../controllers/tariff');
   this.locationController = require('../controllers/location');
+  this.clientController = require('../controllers/client');
 };
 
 Controller.prototype.get = function(id){
@@ -69,8 +70,6 @@ Controller.prototype.getParameters = function(query){
      parameters['conditions']['date'] = {"$gte" : fromShipping, "$lt": toShipping};
   }
 
-  parameters['populations'] = ['sender', 'destination', 'paymentType', 'partner'];
-
   return parameters;
 };
 
@@ -80,10 +79,8 @@ Controller.prototype.getAll = function(parameters){
   if(parameters['limit'] && (parameters['skip'] || parameters['skip'] == 0))
     find = find.skip(parameters['skip']).limit(parameters['limit']);
 
-  if(parameters['populations'])
-    find = find.populate(parameters['populations'].join());
-
-  return find.sort({"number": -1}).lean().exec();
+  return find.sort({"number": -1}).populate('sender').populate('destination').populate('payment.type')
+                                  .populate('items.itemType').populate('items.packingType').lean().exec();
 };
 
 Controller.prototype.add = function(user){
@@ -150,44 +147,49 @@ Controller.prototype.calculateCost = function(shipping, tariff){
 
        var cost = {
          colli: parseFloat(item.cost.colli),
-         additional: parseFloat(item.cost.additional)
+         additional: parseFloat(item.cost.additional),
+         discount: parseFloat(item.cost.discount)
        };
 
        var colli = _.parseInt(item.colli.quantity);
        var colliCost = colli * cost.colli;
-       var discount = parseFloat(item.discount);
        var limit = 0;
+       var itemType = item.itemType._id ? item.itemType._id : item.itemType;
 
-       switch(item.itemType._id.toString()){
+       switch(itemType.toString()){
           case WEIGHT:
             limit = dimensions.weight * price;
-            item.cost.shipping = limit > minimum ? (price * dimensions.weight) - discount + colliCost + cost.additional :
-                                                   minimum - discount + colliCost + cost.additional;
+            item.cost.shipping = limit > minimum ? (price * dimensions.weight) - cost.discount + colliCost + cost.additional :
+                                                   minimum - cost.discount + colliCost + cost.additional;
           break;
           case VOLUME:
             limit = dimensions.length * dimensions.width * (dimensions.height / 4000) * price * colli;
-            item.cost.shipping = limit > minimum ? limit - discount + cost.additional : minimum - discount + colliCost + cost.additional;
+            item.cost.shipping = limit > minimum ? limit - cost.discount + cost.additional : minimum - cost.discount + colliCost + cost.additional;
           break;
           case COLLI:
-             item.cost.shipping = colliCost + cost.additional - discount;
+             item.cost.shipping = colliCost + cost.additional - cost.discount;
           break;
           case MOM:
-             item.cost.shipping = (colli - 1) * colliCost + cost.additional - discount + minimum;
+             item.cost.shipping = (colli - 1) * colliCost + cost.additional - cost.discount + minimum;
           break;
           case JMW:
              limit = (dimensions.weight * price) + cost.additional;
-             item.cost.shipping = limit > minimum ? (price * dimensions.weight) - discount + colliCost + cost.additional :
-                                                    minimum - discount + colliCost + cost.additional;
+             item.cost.shipping = limit > minimum ? (price * dimensions.weight) - cost.discount + colliCost + cost.additional :
+                                                    minimum - cost.discount + colliCost + cost.additional;
           break;
           case SMW:
-             item.cost.shipping = dimensions.weight > quota ? minimum + ((dimensions.weight - quota) * price) - discount + cost.additional :
-                                                              minimum - discount + colliCost + cost.additional;
+             item.cost.shipping = dimensions.weight > quota ? minimum + ((dimensions.weight - quota) * price) - cost.discount + cost.additional :
+                                                              minimum - cost.discount + colliCost + cost.additional;
           break;
           case CW:
              item.cost.shipping = dimensions.weight > quota ? minimum + ((dimensions.weight - quota) * price) - (colli - 1)
-                                                              * colliCost - discount + cost.additional : 0;
+                                                              * colliCost - cost.discount + cost.additional : 0;
           break;
        }
+
+       if(item.status == 'Belum Terekap')
+         item.colli.available = item.colli.quantity;
+
        shipping.colli.quantity += colli;
        shipping.cost.total += item.cost.shipping;
    });
@@ -204,20 +206,22 @@ Controller.prototype.calculateCost = function(shipping, tariff){
 Controller.prototype.save = function(data){
    var self = this;
 
-   data.regions.destination = data.destination.region._id;
-
    return co(function*(){
-      var source = yield self.locationController.get(data.sender.location._id);
+      var sender = yield self.clientController.get(data.sender._id ? data.sender._id : data.sender);
+      var source = yield self.locationController.get(data.sender.location._id ? data.sender.location._id : data.sender.location);
+      var destination = yield self.locationController.get(data.destination._id ? data.destination._id : data.destination);
 
       if(!source)
         throw new Error('Client location is not found');
 
-      var tariff = yield self.tariffController.getTariff(data.sender._id, data.destination._id);
+      var tariff = yield self.tariffController.getTariff(sender._id, destination._id);
 
       if(!tariff)
-        throw new Error('Tariff is not found for client ' + data.sender.name + ' and location ' + data.destination.name);
+        throw new Error('Tariff is not found for client ' + sender.name + ' and location ' + destination.name);
 
       data.regions.source = source.region._id;
+      data.regions.destination = destination.region._id;
+
       self.calculateCost(data, tariff);
 
       var dataModel = new model(data);

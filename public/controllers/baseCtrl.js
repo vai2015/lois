@@ -27,6 +27,43 @@ var lois;
                     ctrl.loadingData = false;
                 });
             };
+            baseCtrl.prototype.edit = function (id) {
+                var ctrl = this;
+                ctrl.processing = true;
+                ctrl.showForm = true;
+                ctrl.getFunc(id).then(function (result) {
+                    ctrl.entity = result.data;
+                }).catch(function (exception) {
+                    ctrl.notify('error', exception.data);
+                }).finally(function () {
+                    ctrl.processing = false;
+                });
+            };
+            baseCtrl.prototype.save = function () {
+                var ctrl = this;
+                ctrl.processing = true;
+                ctrl.saveFunc(ctrl.entity).then(function (result) {
+                    ctrl.notify('success', 'Data berhasil disimpan');
+                    ctrl.showForm = false;
+                    ctrl.filter();
+                }).catch(function (exception) {
+                    ctrl.notify('error', exception.data);
+                }).finally(function () {
+                    ctrl.processing = false;
+                });
+            };
+            baseCtrl.prototype.delete = function (id) {
+                var confirmed = confirm('Data akan dihapus, anda yakin?');
+                if (!confirmed)
+                    return;
+                var ctrl = this;
+                ctrl.deleteFunc(id).then(function (result) {
+                    ctrl.notify('success', 'Data berhasil dihapus');
+                    ctrl.filter();
+                }).catch(function (exception) {
+                    ctrl.notify('error', exception.data);
+                });
+            };
             baseCtrl.prototype.createQuery = function () {
                 this.query = {};
                 this.createPagingQuery();
@@ -75,6 +112,11 @@ var lois;
             };
             baseCtrl.prototype.notify = function (type, message) {
                 this.notification[type](message);
+            };
+            baseCtrl.prototype.suggest = function (name, keyword) {
+                return app.api.autocomplete.getAll(name, keyword).then(function (result) {
+                    return result.data;
+                });
             };
             return baseCtrl;
         }());
