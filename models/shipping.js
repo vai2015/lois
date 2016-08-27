@@ -21,7 +21,7 @@ var model = Schema({
       status: {type: String, default: 'Belum Terbayar'},
       phases: [{
          date: {type: Date, default: null},
-         bank: {type: String, default: null}.
+         bank: {type: String, default: null},
          notes: {type: String, default: null},
          amount: {type: Number, default: 0.0}
       }],
@@ -61,11 +61,9 @@ var model = Schema({
       limasColor: {type: String, default: null},
       relationColor: {type: String, default: null},
       relationCode: {type: String, default: null},
+      notes: {type: String, default: null},
       concernedPerson: {type: String, default: null},
-      created: {
-         user: {type: refId, ref: 'User'},
-         date: {type: Date, default: null}
-      }
+      created: {type: refId, ref: 'User'}
    },
    inputLocation: {type: refId, ref: 'Location'},
    created: {
@@ -103,12 +101,14 @@ var model = Schema({
          date: {type: Date, default: null},
          quantity: {type: Number, default: 0},
          available: {type: Number, default: 0},
+         weight: {type: Number, default: 0},
          limasColor: {type: String, default: null},
          relationColor: {type: String, default: null},
          vehicleNumber: {type: String, default: null},
+         departureDate: {type: Date, default: null},
          notes: {type: String, default: null},
-         trainTypeId: {type: refId, ref: 'TrainType'},
-         driverId: {type: refId, ref: 'Driver'},
+         trainType: {type: refId, ref: 'TrainType'},
+         driver: {type: refId, ref: 'Driver'},
          created: {
             user: {type: refId, ref: 'User'},
             date: {type: Date, default: null}
@@ -119,16 +119,17 @@ var model = Schema({
          }
       }],
       deliveries: [{
-         recapitulationId: {type: refId},
+         recapitulation: {type: refId},
          date: {type: Date, default: null},
          quantity: {type: Number, default: 0},
          available: {type: Number, default: 0},
+         weight: {type: Number, default: 0},
          limasColor: {type: String, default: null},
          relationColor: {type: String, default: null},
          vehicleNumber: {type: String, default: null},
          deliveryCode: {type: String, default: null},
          notes: {type: String, default: null},
-         driverId: {type: refId, ref: 'Driver'},
+         driver: {type: refId, ref: 'Driver'},
          created: {
             user: {type: refId, ref: 'User'},
             date: {type: Date, default: null}
@@ -139,4 +140,6 @@ var model = Schema({
          }
       }]
    }]
-}, {versionKey: false, collection: 'shippings'})
+}, {versionKey: false, collection: 'shippings'});
+
+module.exports = mongoose.model('Shipping', model);

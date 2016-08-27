@@ -55,7 +55,7 @@
        }).then(function(result){
            result.regions.length.should.equal(6);
            result.locations.length.should.equal(74);
-           result.clients.length.should.equal(9663);
+           result.clients.length.should.equal(9664);
        });
     });
  });

@@ -4,7 +4,7 @@
   "description": "Limas operating integrated system",
   "main": "app",
   "scripts": {
-    "test": "mocha test/controllerTests.js"
+    "test": "mocha test/controllerTests.js test/shippingTests.js test/recapitulationTests.js test/deliveryTests.js test/returnTests.js test/cleanup.js"
   },
   "repository": {
     "type": "git",

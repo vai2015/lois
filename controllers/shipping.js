@@ -1,10 +1,11 @@
 var mongoose = require('mongoose');
 var model = require('../models/shipping');
-var clientModel = require('../models/sender');
+var clientModel = require('../models/client');
 var locationModel = require('../models/location');
 var paymentTypeModel = require('../models/paymentType');
 var partnerModel = require('../models/partner');
 var co = require('co');
+var _ = require('lodash');
 var objectId = mongoose.Types.ObjectId;
 
 var DEFAULT_LOCATION = "57bedddcc06122040d626411";
@@ -12,8 +13,8 @@ var DEFAULT_REGION = "57bedc8254fae0c013130aa9";
 var DEFAULT_CLIENT = "57c15819b495e502157d7cea";
 var DEFAULT_PAYMENT_TYPE = "57bede7533df7f1c060f8db0";
 var DEFAULT_PARTNER = "57c1589eb495e502157d7ceb";
-var WEIGHT = "57b31fd9203af5dc2342113c";
-var VOLUME = "57b31fd9203af5dc2342113d";
+var WEIGHT = "57bedeaa6a797e9c1d9fdab0";
+var VOLUME = "57bedeaa6a797e9c1d9fdab1";
 var COLLI = "57bedeaa6a797e9c1d9fdab2";
 var MOM = "57bedeaa6a797e9c1d9fdab3";
 var JMW = "57bedeaa6a797e9c1d9fdab5";
@@ -21,17 +22,25 @@ var SMW = "57bedeaa6a797e9c1d9fdab6";
 var CW = "57bedeaa6a797e9c1d9fdab7";
 
 function Controller(){
-  this.tariffController = require('../controllers/tariffController');
-  this.locationController = require('../controllers/locationController');
+  this.tariffController = require('../controllers/tariff');
+  this.locationController = require('../controllers/location');
 };
 
-Controller.prototype.get = function(){
+Controller.prototype.get = function(id){
   return model.findOne({_id: objectId(id)}).populate('sender').populate('destination').populate('payment.type')
+              .populate('payment.location').populate('partner').lean().exec();
+};
+
+Controller.prototype.getBySpbNumber = function(spbNumber){
+  return model.findOne({spbNumber: spbNumber}).populate('sender').populate('destination').populate('payment.type')
               .populate('payment.location').populate('partner').lean().exec();
 };
 
 Controller.prototype.getParameters = function(query){
   var parameters = {"conditions": {}};
+
+  parameters['limit'] = query['limit'] ? query['limit'] : 10;
+  parameters['skip'] = query['skip'] ? query['skip'] : 0;
 
   if(query['name'])
      parameters['conditions']['spbNumber'] = new RegExp(query['spbNumber'], 'i');
@@ -60,12 +69,6 @@ Controller.prototype.getParameters = function(query){
      parameters['conditions']['date'] = {"$gte" : fromShipping, "$lt": toShipping};
   }
 
-  if(query['limit'])
-     parameters['limit'] = query['limit'];
-
-  if(query['skip'] || query['skip'] == 0)
-     parameters['skip'] = query['skip'];
-
   parameters['populations'] = ['sender', 'destination', 'paymentType', 'partner'];
 
   return parameters;
@@ -83,19 +86,20 @@ Controller.prototype.getAll = function(parameters){
   return find.sort({"number": -1}).lean().exec();
 };
 
-Controller.prototype.add = function(userId, locationId){
+Controller.prototype.add = function(user){
    var self = this;
+
+   if(!user.location)
+     throw new Error('Location is not found');
+
+   if(!user.location.prefix)
+     throw new Error('Prefix is not found for location ' + user.location.name);
+
+   var location = user.location;
 
    return co(function*(){
       var lastShipping = yield model.findOne({}).sort({"number": -1});
-      var lastLocShipping = yield model.findOne({"inputLocation": objectId(locationId)}).sort({"number": -1});
-      var location = yield self.locationController.get(locationId);
-
-      if(!location)
-        throw new Error('Location is not found');
-
-      if(!location.prefix)
-        throw new Error('Prefix is not found for location ' + location.name);
+      var lastLocShipping = yield model.findOne({"inputLocation": objectId(location._id)}).sort({"number": -1});
 
       var number = !lastShipping ? 1 : lastShipping.number + 1;
 
@@ -116,15 +120,15 @@ Controller.prototype.add = function(userId, locationId){
             "location": DEFAULT_LOCATION
          },
          "partner": DEFAULT_PARTNER,
-         "inputLocation": location._id,
+         "inputLocation": user.location._id,
          "created": {
-           "user": userId,
+           "user": user._id,
            "date": new Date()
          },
-         "modified": {"user": userId }
+         "modified": {"user": user._id}
       };
 
-      return self.save(shipping);
+      return new model(shipping).save();
    });
 };
 
@@ -132,7 +136,7 @@ Controller.prototype.calculateCost = function(shipping, tariff){
    var self = this;
    var price = tariff.prices[shipping.tariff];
    var minimum = tariff.minimum;
-   var quota = _.parseInt(shipping.sender.quota);
+   var quota = shipping.sender.quota;
 
    shipping.cost.total = 0.0;
 
@@ -153,8 +157,7 @@ Controller.prototype.calculateCost = function(shipping, tariff){
        var colliCost = colli * cost.colli;
        var discount = parseFloat(item.discount);
        var limit = 0;
-
-       switch(item.itemType.id.toString()){
+       switch(item.itemType._id.toString()){
           case WEIGHT:
             limit = dimensions.weight * price;
             item.cost.shipping = limit > minimum ? (price * dimensions.weight) - discount + colliCost + cost.additional :
@@ -184,14 +187,16 @@ Controller.prototype.calculateCost = function(shipping, tariff){
                                                               * colliCost - discount + cost.additional : 0;
           break;
        }
-
        shipping.cost.total += item.cost.shipping;
    });
 
    shipping.cost.total += shipping.cost.worker;
 
-   shipping.cost.pph === 0.02 ? shipping.cost.total += (shipping.cost.total * 0.02)
-                              : shipping.cost.total /= 0.98;
+   if(shipping.cost.pph === 0.02)
+     shipping.cost.total += (shipping.cost.total * 0.02);
+
+   else if(shipping.cost.pph === 0.98)
+     shipping.cost.total /= 0.98;
 };
 
 Controller.prototype.save = function(data){
