@@ -4,7 +4,6 @@ var path = require('path');
 var session = require('express-session');
 var compression = require('compression');
 var dotenv = require('dotenv').config();
-
 var mongoose = require('mongoose');
 var app = express();
 
@@ -12,14 +11,9 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 app.use(session({secret: 'sdfe34234fdff234fsdf', saveUninitialized: true, resave: true}));
 app.use(require('./routes/user'));
-app.use(require('./routes/region'));
-app.use(require('./routes/location'));
-app.use(require('./routes/paymentType'));
-app.use(require('./routes/client'));
-app.use(require('./routes/tariff'));
 
 if(process.env.MODE == 'production')
-  app.user(compression());
+  app.use(compression());
 
 app.listen(process.env.PORT, function(error){
    if(error)

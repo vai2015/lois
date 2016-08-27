@@ -11,7 +11,7 @@ var lois;
                 var ctrl = this;
                 app.api.user.getSession().then(function (result) {
                     ctrl.menus = result.data['menus'];
-                    ctrl.user = result.data['user'];
+                    ctrl.user = result.data['name'];
                 });
             };
             indexCtrl.prototype.logout = function () {

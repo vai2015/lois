@@ -13,7 +13,7 @@ module lois.controllers{
         var ctrl = this;
         app.api.user.getSession().then(result => {
            ctrl.menus = <Array<any>> result.data['menus'];
-           ctrl.user = result.data['user'];
+           ctrl.user = result.data['name'];
         })
       }
 

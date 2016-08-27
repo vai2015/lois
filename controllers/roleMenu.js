@@ -41,7 +41,7 @@ Controller.prototype.getAll = function(parameters){
    if(parameters['populations'])
      find = find.populate(parameters['populations'].join());
 
-   return find.sort({"name": 1}).exec();
+   return find.sort({"position": 1}).exec();
 };
 
 Controller.prototype.save = function(data){

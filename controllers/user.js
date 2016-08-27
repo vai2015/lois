@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
 var model = require('../models/user');
+var locationModel = require('../models/location');
+var roleModel = require('../models/role');
 var co = require('co');
 var crypto = require('crypto');
 var objectId = mongoose.Types.ObjectId;
@@ -55,7 +57,7 @@ Controller.prototype.save = function(data){
 
 Controller.prototype.authenticate = function(userName, password){
    return co(function*(){
-      var user = yield model.findOne({"userName": userName});
+      var user = yield model.findOne({"userName": userName}).populate('location').populate('role').exec();
 
       if(!user)
         throw new Error('User is not found');
