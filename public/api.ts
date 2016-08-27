@@ -22,7 +22,7 @@ module app.api{
           return app.http.get('/lois/api/' + config + '/getAll?query=' + JSON.stringify(query));
        }
 
-       static save(config: string,, data: any){
+       static save(config: string, data: any){
          return app.http.post('/lois/api/' + config + '/save', JSON.stringify(data));
        }
    }

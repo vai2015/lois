@@ -17,49 +17,49 @@
              </a>
          </div>
          <ul class="nav nav-tabs pull-right in" id="myTab">
-             <li ng-class="{'active': ctrl.configType == 1}">
+             <li ng-class="{'active': ctrl.configType == 'region'}">
                <a data-toggle="tab" href="#" ng-click="ctrl.onConfigChange('region')"><span class="hidden-mobile hidden-tablet">Regional</span></a>
              </li>
-             <li ng-class="{'active': ctrl.configType == 2}">
+             <li ng-class="{'active': ctrl.config == 'location'}">
                <a data-toggle="tab" href="#" ng-click="ctrl.onConfigChange('location')"><span class="hidden-mobile hidden-tablet">Lokasi</span></a>
              </li>
-             <li ng-class="{'active': ctrl.configType == 3}">
+             <li ng-class="{'active': ctrl.config == 'paymentType'}">
                <a data-toggle="tab" href="#" ng-click="ctrl.onConfigChange('paymentType')"><span class="hidden-mobile hidden-tablet">Cara Pembayaran</span></a>
              </li>
-             <li ng-class="{'active': ctrl.configType == 4}">
+             <li ng-class="{'active': ctrl.config == 'client'}">
                <a data-toggle="tab" href="#" ng-click="ctrl.onConfigChange('client')"><span class="hidden-mobile hidden-tablet">Klien</span></a>
              </li>
-             <li ng-class="{'active': ctrl.configType == 4}">
+             <li ng-class="{'active': ctrl.config == 'tariff'}">
                <a data-toggle="tab" href="#" ng-click="ctrl.onConfigChange('tariff')"><span class="hidden-mobile hidden-tablet">Tarif</span></a>
              </li>
-             <li ng-class="{'active': ctrl.configType == 5}">
+             <li ng-class="{'active': ctrl.config == 'partner'}">
                <a data-toggle="tab" href="#" ng-click="ctrl.onConfigChange('partner')"><span class="hidden-mobile hidden-tablet">Partner</span></a>
              </li>
-             <li ng-class="{'active': ctrl.configType == 6}">
+             <li ng-class="{'active': ctrl.config == 'driver'}">
                <a data-toggle="tab" href="#" ng-click="ctrl.onConfigChange('driver')"><span class="hidden-mobile hidden-tablet">Supir</span></a>
              </li>
-             <li ng-class="{'active': ctrl.configType == 7}">
+             <li ng-class="{'active': ctrl.config == 'packingType'}">
                <a data-toggle="tab" href="#" ng-click="ctrl.onConfigChange('packingType')"><span class="hidden-mobile hidden-tablet">Packing</span></a>
              </li>
-             <li ng-class="{'active': ctrl.configType == 8}">
+             <li ng-class="{'active': ctrl.config == 'role'}">
                <a data-toggle="tab" href="#" ng-click="ctrl.onConfigChange('role')"><span class="hidden-mobile hidden-tablet">Role</span></a>
              </li>
-             <li ng-class="{'active': ctrl.configType == 9}">
+             <li ng-class="{'active': ctrl.config == 'user'}">
                <a data-toggle="tab" href="#" ng-click="ctrl.onConfigChange('user')"><span class="hidden-mobile hidden-tablet">User</span></a>
              </li>
-             <li ng-class="{'active': ctrl.configType == 10}">
+             <li ng-class="{'active': ctrl.config == 'trainType'}">
                <a data-toggle="tab" href="#" ng-click="ctrl.onConfigChange('trainType')"><span class="hidden-mobile hidden-tablet">Jenis Kereta</span></a>
              </li>
-             <li ng-class="{'active': ctrl.configType == 11}">
+             <li>
                <a class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
   								Akses <i class="fa fa-caret-down"></i>
   							</a>
                 <ul class="dropdown-menu pull-right" style="background-color: #2C3742;">
    								<li>
-   									<a data-toggle="tab" href="#" ng-click="ctrl.configType = 11">Menu</a>
+   									<a data-toggle="tab" href="#" ng-click="ctrl.onConfigChange('roleMenus')">Menu</a>
    								</li>
    								<li>
-   									<a data-toggle="tab" href="#" ng-click="ctrl.configType = 12">Report</a>
+   									<a data-toggle="tab" href="#" ng-click="ctrl.onConfigChange('roleReports')">Report</a>
    								</li>
    							</ul>
              </li>
@@ -69,7 +69,7 @@
               <div class="jarviswidget-editbox"></div>
               <div class="widget-body no-padding">
                  <div class="tab-content">
-                    <div ng-show="ctrl.configType == 1 || ctrl.configType == 3 || ctrl.configType == 6 || ctrl.configType == 7 || ctrl.configType == 8 || ctrl.configType == 10">
+                    <div ng-show="ctrl.config == 'region' || ctrl.config == 'paymentType' || ctrl.config == 'driver' || ctrl.config == 'packingType' || ctrl.config == 'trainType' || ctrl.config == 'role'">
                       <div class="widget-body-toolbar">
                         <div class="row">
                           <div class="col-xs-9 col-sm-5 col-md-5 col-lg-6">
@@ -115,7 +115,7 @@
                       </div>
                     </div>
 
-                    <div ng-show="ctrl.configType == 2">
+                    <div ng-show="ctrl.config == 'location'">
                       <div class="widget-body-toolbar">
                         <div class="row">
                           <div class="col-xs-9 col-sm-5 col-md-5 col-lg-6">
@@ -165,7 +165,7 @@
                       </div>
                     </div>
 
-                    <div ng-show="ctrl.configType == 4">
+                    <div ng-show="ctrl.config == 'client'">
                       <div class="widget-body-toolbar">
                         <div class="row">
                           <div class="col-xs-9 col-sm-5 col-md-5 col-lg-6">
@@ -182,7 +182,7 @@
                         </div>
                       </div>
                       <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-condensed table-hover smart-form has-tickbox" ng-show="ctrl.clientViewMode == 1">
+                        <table class="table table-bordered table-striped table-condensed table-hover smart-form has-tickbox">
                           <thead>
                              <tr style="color:black;">
                                <th style="text-align: center; width: 1%;">No</th>
@@ -191,8 +191,7 @@
                                <th style="text-align: center; width: 15%;">Alamat 2</th>
                                <th style="text-align: center; width: 10%;">Kontak</th>
                                <th style="text-align: center; width: 3%;">Kuota</th>
-                               <th style="text-align: center; width: 5%;">Tarif</th>
-                               <th style="text-align: center; width: 12%;">Aksi</th>
+                               <th style="text-align: center; width: 11%;">Aksi</th>
                              </tr>
                           </thead>
                           <tbody>
@@ -208,45 +207,6 @@
                                     <td> {{entity.address2}} </td>
                                     <td> {{entity.contact}} </td>
                                     <td style="text-align:center;"> {{entity.quota}} </td>
-                                    <td> <a href="#" ng-click="ctrl.viewTariffs(entity)"> {{entity.tariffs.length}} Tarif </a> </td>
-                                    <td style="text-align:left;">
-                                      <a href="#" class="txt-color-white btn-sm btn-primary" title="Edit" ng-click="ctrl.edit(entity._id)">
-                                         <i class="fa fa-edit"></i> Edit
-                                      </a>
-                                      &nbsp;
-                                      <a href="#"  class="txt-color-white btn-sm btn-danger" title="Hapus" ng-click="ctrl.delete(entity._id)">
-                                         <i class="fa fa-remove"></i> Hapus
-                                      </a>
-                                    </td>
-                               </tr>
-                          </tbody>
-                        </table>
-
-                        <table class="table table-bordered table-striped table-condensed table-hover smart-form has-tickbox" ng-show="ctrl.clientViewMode == 2">
-                          <thead>
-                             <tr style="color:black;">
-                               <th style="text-align: center; width: 1%;">No</th>
-                               <th style="text-align: center; width: 8%;">Tujuan</th>
-                               <th style="text-align: center; width: 8%;">Harga Minimum</th>
-                               <th style="text-align: center; width: 15%;">Harga 1</th>
-                               <th style="text-align: center; width: 15%;">Harga 2</th>
-                               <th style="text-align: center; width: 10%;">Harga 3</th>
-                               <th style="text-align: center; width: 12%;">Aksi</th>
-                             </tr>
-                          </thead>
-                          <tbody>
-                              <tr ng-show="ctrl.loadingData">
-                                 <td style="text-align: center; margin: 10px 0px;" colspan="100">
-                                   <img src="../assets/img/ajax-loader.gif">
-                                 </td>
-                              </tr>
-                               <tr ng-repeat="entity in ctrl.tariffs" style="color: black;" ng-show="!ctrl.loadingData">
-                                    <td style="text-align:center;"> {{$index + 1}} </td>
-                                    <td> {{entity.destination.name}} </td>
-                                    <td> {{entity.minimum}} </td>
-                                    <td> {{entity.prices[0]}} </td>
-                                    <td> {{entity.prices[1]}} </td>
-                                    <td> {{entity.prices[2]}} </td>
                                     <td style="text-align:left;">
                                       <a href="#" class="txt-color-white btn-sm btn-primary" title="Edit" ng-click="ctrl.edit(entity._id)">
                                          <i class="fa fa-edit"></i> Edit
@@ -262,7 +222,66 @@
                       </div>
                     </div>
 
-                    <div ng-show="ctrl.configType == 5">
+                    <div ng-show="ctrl.config == 'tariff'">
+                      <div class="widget-body-toolbar">
+                        <div class="row">
+                          <div class="col-xs-9 col-sm-5 col-md-5 col-lg-6">
+                            <a href="#" class="btn btn-default" style="color: black;" ng-show="ctrl.clientViewMode == 1" ng-click="ctrl.filter()">
+                               <i class="fa fa-search"></i> Cari
+                            </a>
+                            <a href="#" class="btn btn-default" style="color: black;" ng-show="ctrl.clientViewMode == 2" ng-click="ctrl.viewClient()">
+                               <i class="fa fa-arrow-left"></i> Kembali
+                            </a>
+                            <a href="#" class="btn btn-default" style="color: black;" ng-click="ctrl.add()">
+                               <i class="fa fa-plus"></i> Tambah
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-condensed table-hover smart-form has-tickbox">
+                          <thead>
+                             <tr style="color:black;">
+                               <th style="text-align: center; width: 1%;">No</th>
+                               <th style="text-align: center; width: 10%;">Client</th>
+                               <th style="text-align: center; width: 10%;">Tujuan</th>
+                               <th style="text-align: center; width: 8%;">Minimum</th>
+                               <th style="text-align: center; width: 8%;">Harga 1</th>
+                               <th style="text-align: center; width: 8%;">Harga 2</th>
+                               <th style="text-align: center; width: 8%;">Harga 3</th>
+                               <th style="text-align: center; width: 10%;">Aksi</th>
+                             </tr>
+                          </thead>
+                          <tbody>
+                              <tr ng-show="ctrl.loadingData">
+                                 <td style="text-align: center; margin: 10px 0px;" colspan="100">
+                                   <img src="../assets/img/ajax-loader.gif">
+                                 </td>
+                              </tr>
+                               <tr ng-repeat="entity in ctrl.entities" style="color: black;" ng-show="!ctrl.loadingData">
+                                    <td style="text-align:center;"> {{$index + 1}} </td>
+                                    <td> {{entity.client.name}} </td>
+                                    <td> {{entity.destination.name}} </td>
+                                    <td style="text-align: right;"> {{entity.minimum | currency: 'Rp ' : 0}} </td>
+                                    <td style="text-align: right;"> {{entity.prices[0] | currency: 'Rp ' : 0}} </td>
+                                    <td style="text-align: right;"> {{entity.prices[1] | currency: 'Rp ' : 0}} </td>
+                                    <td style="text-align: right;"> {{entity.prices[2] | currency: 'Rp ' : 0}} </td>
+                                    <td style="text-align:left;">
+                                      <a href="#" class="txt-color-white btn-sm btn-primary" title="Edit" ng-click="ctrl.edit(entity._id)">
+                                         <i class="fa fa-edit"></i> Edit
+                                      </a>
+                                      &nbsp;
+                                      <a href="#"  class="txt-color-white btn-sm btn-danger" title="Hapus" ng-click="ctrl.delete(entity._id)">
+                                         <i class="fa fa-remove"></i> Hapus
+                                      </a>
+                                    </td>
+                               </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    <div ng-show="ctrl.config == 'partner'">
                       <div class="widget-body-toolbar">
                         <div class="row">
                           <div class="col-xs-9 col-sm-5 col-md-5 col-lg-6">
@@ -312,7 +331,7 @@
                       </div>
                     </div>
 
-                    <div ng-show="ctrl.configType == 9">
+                    <div ng-show="ctrl.config == 'user'">
                       <div class="widget-body-toolbar">
                         <div class="row">
                           <div class="col-xs-9 col-sm-5 col-md-5 col-lg-6">
@@ -365,24 +384,13 @@
                     </div>
                  </div>
                </div>
-               <div class="widget-footer" ng-show="ctrl.clientViewMode != 2">
+               <div class="widget-footer">
                   <div class="input-group">
                     <button ng-disabled="(ctrl.paging.page) == 1" href="#" class="btn btn-link" ng-click="ctrl.prev()">
                         <i class="fa fa-backward"></i>
                     </button>
                       {{ctrl.paging.page}}
                     <button ng-disabled="(ctrl.entities.length == 0 || ctrl.entities.length < ctrl.paging.max)" href="#" class="btn btn-link" ng-click="ctrl.next()">
-                        <i class="fa fa-forward"></i>
-                    </button>
-                  </div>
-               </div>
-               <div class="widget-footer" ng-show="ctrl.clientViewMode == 2">
-                  <div class="input-group">
-                    <button ng-disabled="(ctrl.paging.page) == 1" href="#" class="btn btn-link" ng-click="ctrl.prevTariff()">
-                        <i class="fa fa-backward"></i>
-                    </button>
-                      {{ctrl.paging.page}}
-                    <button ng-disabled="(ctrl.entities.length == 0 || ctrl.entities.length < ctrl.paging.max)" href="#" class="btn btn-link" ng-click="ctrl.nextTariff()">
                         <i class="fa fa-forward"></i>
                     </button>
                   </div>
@@ -398,7 +406,7 @@
               <div class="jarviswidget-editbox"></div>
               <div class="widget-body no-padding">
                   <div class="widget-body-toolbar">
-                    <form class="smart-form" ng-show="ctrl.configType == 9">
+                    <form class="smart-form" ng-show="ctrl.config == 'user'">
                       <fieldset>
                         <div class="row">
                           <section class="col col-sm-12 col-md-12 col-lg-12">
@@ -459,7 +467,7 @@
                       </fieldset>
                     </form>
 
-                    <form class="smart-form" ng-show="ctrl.configType == 1 || ctrl.configType == 3 || ctrl.configType == 6 || ctrl.configType == 7 || ctrl.configType == 8 || ctrl.configType == 10">
+                    <form class="smart-form" ng-show="ctrl.config == 'region' || ctrl.config == 'paymentType' || ctrl.config == 'driver' || ctrl.config == 'packingType' || ctrl.config == 'role' || ctrl.config == 'trainType'">
                       <fieldset>
                         <div class="row">
                           <section class="col col-sm-12 col-md-12 col-lg-12">
@@ -518,7 +526,7 @@
                       </fieldset>
                     </form>
 
-                    <form class="smart-form" ng-show="ctrl.configType == 4">
+                    <form class="smart-form" ng-show="ctrl.config == 'client'">
                       <fieldset>
                         <div class="row">
                           <section class="col col-sm-12 col-md-12 col-lg-12">
@@ -569,7 +577,77 @@
                       </fieldset>
                     </form>
 
-                    <form class="smart-form" ng-show="ctrl.configType == 5">
+                    <form class="smart-form" ng-show="ctrl.config == 'tariff'">
+                      <fieldset>
+                        <div class="row">
+                          <section class="col col-sm-12 col-md-12 col-lg-12">
+                            <label class="label">
+                               Klien
+                            </label>
+                            <label class="input">
+                              <input type="text"
+                                 ng-model="ctrl.entity.client"
+                                 uib-typeahead="data as data.name for data in ctrl.suggest('client', $viewValue)"
+                                 typeahead-min-length="2"
+                                 typeahead-loading="clientInput" class="form-control" />
+                              <i ng-show="clientInput" class="glyphicon glyphicon-refresh"></i>
+                            </label>
+                          </section>
+                          <section class="col col-sm-12 col-md-12 col-lg-12">
+                            <label class="label">
+                               Tujuan
+                            </label>
+                            <label class="input">
+                              <input type="text"
+                                 ng-model="ctrl.entity.destination"
+                                 uib-typeahead="data as data.name for data in ctrl.suggest('location', $viewValue)"
+                                 typeahead-min-length="2"
+                                 typeahead-loading="locationInput" class="form-control" />
+                              <i ng-show="locationInput" class="glyphicon glyphicon-refresh"></i>
+                            </label>
+                          </section>
+                          <section class="col col-sm-12 col-md-12 col-lg-12">
+                            <label class="label">
+                               Minimum
+                            </label>
+                            <label class="input">
+                              <input type="text" ng-model="ctrl.entity.minimum" />
+                            </label>
+                          </section>
+                          <section class="col col-sm-12 col-md-12 col-lg-12">
+                            <label class="label">
+                               Harga 1
+                            </label>
+                            <label class="input">
+                              <input type="text" ng-model="ctrl.entity.price1" />
+                            </label>
+                          </section>
+                          <section class="col col-sm-12 col-md-12 col-lg-12">
+                            <label class="label">
+                               Harga 2
+                            </label>
+                            <label class="input">
+                              <input type="text" ng-model="ctrl.entity.price2" />
+                            </label>
+                          </section>
+
+                          <section class="col col-sm-12 col-md-12 col-lg-12">
+                            <label class="label">
+                               Harga 3
+                            </label>
+                            <label class="input">
+                              <input type="text" ng-model="ctrl.entity.price3" />
+                            </label>
+                          </section>
+                        </div>
+                        <footer>
+                           <button type="button" class="btn btn-default" ng-click="ctrl.toggleShowForm(false)">Cancel</button>
+                           <button type="button" class="btn btn-default" ng-click="ctrl.save()">Save</button>
+                        </footer>
+                      </fieldset>
+                    </form>
+
+                    <form class="smart-form" ng-show="ctrl.config == 'partner'">
                       <fieldset>
                         <div class="row">
                           <section class="col col-sm-12 col-md-12 col-lg-12">

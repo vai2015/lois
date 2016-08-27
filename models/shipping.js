@@ -49,6 +49,24 @@ var model = Schema({
    },
    tariff: {type: Number, default: 0},
    audited: {type: Boolean, default: false},
+   returned: {type: Boolean, default: false},
+   confirmed: {type: Boolean, default: false},
+   returnInfo: {
+      date: {type: Date, default: null},
+      filePath: {type: String, default: null},
+      stamped: {type: Boolean, default: false},
+      signed: {type: Boolean, default: false},
+      receipt: {type: Boolean, default: false},
+      accepted: {type: Boolean, default: false},
+      limasColor: {type: String, default: null},
+      relationColor: {type: String, default: null},
+      relationCode: {type: String, default: null},
+      concernedPerson: {type: String, default: null},
+      created: {
+         user: {type: refId, ref: 'User'},
+         date: {type: Date, default: null}
+      }
+   },
    inputLocation: {type: refId, ref: 'Location'},
    created: {
       date: {type: Date, default: null},
@@ -81,24 +99,6 @@ var model = Schema({
       },
       status: {type: String, default: 'Belum Terekap'},
       audited: {type: Boolean, default: false},
-      returned: {type: Boolean, default: false},
-      confirmed: {type: Boolean, default: false},
-      returnInfo: {
-         date: {type: Date, default: null},
-         filePath: {type: String, default: null},
-         stamped: {type: Boolean, default: false},
-         signed: {type: Boolean, default: false},
-         receipt: {type: Boolean, default: false},
-         accepted: {type: Boolean, default: false},
-         limasColor: {type: String, default: null},
-         relationColor: {type: String, default: null},
-         relationCode: {type: String, default: null},
-         concernedPerson: {type: String, default: null},
-         created: {
-            user: {type: refId, ref: 'User'},
-            date: {type: Date, default: null}
-         }
-      },
       recapitulations: [{
          date: {type: Date, default: null},
          quantity: {type: Number, default: 0},

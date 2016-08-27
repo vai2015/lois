@@ -26,6 +26,9 @@ var app;
             configuration.getAll = function (config, query) {
                 return app.http.get('/lois/api/' + config + '/getAll?query=' + JSON.stringify(query));
             };
+            configuration.save = function (config, data) {
+                return app.http.post('/lois/api/' + config + '/save', JSON.stringify(data));
+            };
             return configuration;
         }());
         api.configuration = configuration;

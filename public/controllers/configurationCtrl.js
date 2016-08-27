@@ -7,22 +7,6 @@ var lois;
 (function (lois) {
     var controllers;
     (function (controllers) {
-        var ConfigType;
-        (function (ConfigType) {
-            ConfigType[ConfigType["region"] = 1] = "region";
-            ConfigType[ConfigType["location"] = 2] = "location";
-            ConfigType[ConfigType["paymentType"] = 3] = "paymentType";
-            ConfigType[ConfigType["client"] = 4] = "client";
-            ConfigType[ConfigType["partner"] = 5] = "partner";
-            ConfigType[ConfigType["driver"] = 6] = "driver";
-            ConfigType[ConfigType["packingType"] = 7] = "packingType";
-            ConfigType[ConfigType["role"] = 8] = "role";
-            ConfigType[ConfigType["user"] = 9] = "user";
-            ConfigType[ConfigType["trainType"] = 10] = "trainType";
-            ConfigType[ConfigType["menuAccess"] = 11] = "menuAccess";
-            ConfigType[ConfigType["reportAccess"] = 12] = "reportAccess";
-        })(ConfigType || (ConfigType = {}));
-        ;
         var ClientViewMode;
         (function (ClientViewMode) {
             ClientViewMode[ClientViewMode["client"] = 1] = "client";
@@ -32,7 +16,64 @@ var lois;
             __extends(configurationCtrl, _super);
             function configurationCtrl($scope, Notification) {
                 _super.call(this, Notification);
+                this.loadFunc = app.api.configuration.getAll;
+                this.getFunc = app.api.configuration.get;
+                this.saveFunc = app.api.configuration.save;
             }
+            configurationCtrl.prototype.onConfigChange = function (config) {
+                this.config = config;
+                this.filter();
+            };
+            configurationCtrl.prototype.filter = function () {
+                var ctrl = this;
+                ctrl.checkedAll = false;
+                ctrl.createQuery();
+                ctrl.loadingData = true;
+                ctrl.loadFunc(ctrl.config, ctrl.query).then(function (result) {
+                    ctrl.entities = result.data;
+                }).catch(function (exception) {
+                    ctrl.notify('error', exception.data);
+                }).finally(function () {
+                    ctrl.loadingData = false;
+                });
+            };
+            configurationCtrl.prototype.edit = function (id) {
+                var ctrl = this;
+                ctrl.processing = true;
+                ctrl.showForm = true;
+                ctrl.getFunc(ctrl.config, id).then(function (result) {
+                    ctrl.entity = result.data;
+                }).catch(function (exception) {
+                    ctrl.notify('error', exception.data);
+                }).finally(function () {
+                    ctrl.processing = false;
+                });
+            };
+            configurationCtrl.prototype.save = function () {
+                var ctrl = this;
+                ctrl.processing = true;
+                ctrl.saveFunc(ctrl.config, ctrl.entity).then(function (result) {
+                    ctrl.notify('success', 'Data berhasil disimpan');
+                    ctrl.showForm = false;
+                    ctrl.filter();
+                }).catch(function (exception) {
+                    ctrl.notify('error', exception.data);
+                }).finally(function () {
+                    ctrl.processing = false;
+                });
+            };
+            configurationCtrl.prototype.delete = function (id) {
+                var confirmed = confirm('Data akan dihapus, anda yakin?');
+                if (!confirmed)
+                    return;
+                var ctrl = this;
+                ctrl.deleteFunc(ctrl.config, id).then(function (result) {
+                    ctrl.notify('success', 'Data berhasil dihapus');
+                    ctrl.filter();
+                }).catch(function (exception) {
+                    ctrl.notify('error', exception.data);
+                });
+            };
             configurationCtrl.$inject = ['$scope', 'Notification'];
             return configurationCtrl;
         }(controllers.baseCtrl));

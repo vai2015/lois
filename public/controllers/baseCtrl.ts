@@ -4,6 +4,7 @@ module lois.controllers{
      showForm: boolean;
      loadingData: boolean;
      checkedAll: boolean;
+     processing: boolean;
      loadFunc: Function;
      getFunc: Function;
      saveFunc: Function;
@@ -13,12 +14,13 @@ module lois.controllers{
      paging: any;
      entity: any;
      entities: any[];
-     
+
      constructor(public notification){
         this.showToolbar = false;
         this.showForm = false;
         this.checkedAll = false;
         this.loadingData = false;
+        this.processing = false;
         this.filters = {};
         this.query = {};
         this.paging = {page: 1, max: 10, total: 0};
@@ -73,6 +75,30 @@ module lois.controllers{
         this.query['skip'] = (this.paging.page - 1) * this.paging.max;
      }
 
+     next(): void {
+        if(this.entities.length === 0)
+         return;
+
+        this.paging.page += 1;
+        this.filter();
+     }
+
+     prev(): void {
+        if((this.paging.page - 1) <= 0)
+          return;
+
+        this.paging.page -= 1;
+        this.filter();
+     }
+
+     toggleShowForm(show: boolean): void {
+       this.showForm = show;
+       this.entity = null;
+     }
+
+     toggleCheckAll(): void {
+        this.entities.map(e => e.checked = this.checkedAll);
+     }
 
      notify(type: string, message: string): void {
        this.notification[type](message);

@@ -7,10 +7,72 @@ var lois;
                 this.notification = notification;
                 this.showToolbar = false;
                 this.showForm = false;
+                this.checkedAll = false;
+                this.loadingData = false;
+                this.processing = false;
                 this.filters = {};
                 this.query = {};
                 this.paging = { page: 1, max: 10, total: 0 };
             }
+            baseCtrl.prototype.filter = function () {
+                var ctrl = this;
+                ctrl.checkedAll = false;
+                ctrl.createQuery();
+                ctrl.loadingData = true;
+                ctrl.loadFunc(ctrl.query).then(function (result) {
+                    ctrl.entities = result.data;
+                }).catch(function (exception) {
+                    ctrl.notify('error', exception.data);
+                }).finally(function () {
+                    ctrl.loadingData = false;
+                });
+            };
+            baseCtrl.prototype.createQuery = function () {
+                this.query = {};
+                this.createPagingQuery();
+                if (this.filters['fromDate'] && this.filters['toDate']) {
+                    var from = new Date(this.filters['fromDate']);
+                    var to = new Date(this.filters['toDate']);
+                    this.query['from'] = Date.UTC(from.getFullYear(), from.getMonth(), from.getDate());
+                    this.query['to'] = Date.UTC(to.getFullYear(), to.getMonth(), to.getDate());
+                }
+                if (this.filters['recapDate']) {
+                    var recapDate = new Date(this.filters['recapDate']);
+                    this.query['recapDate'] = Date.UTC(recapDate.getFullYear(), recapDate.getMonth(), recapDate.getDate());
+                }
+                var keys = Object.keys(this.filters);
+                for (var i = 0; i < keys.length; i++) {
+                    var key = keys[i];
+                    if (this.filters[key] && this.filters[key]['_id'])
+                        this.query[key] = this.filters[key]['_id'];
+                    else
+                        this.query[key] = this.filters[key];
+                }
+            };
+            baseCtrl.prototype.createPagingQuery = function () {
+                this.query['limit'] = this.paging.max;
+                this.query['skip'] = (this.paging.page - 1) * this.paging.max;
+            };
+            baseCtrl.prototype.next = function () {
+                if (this.entities.length === 0)
+                    return;
+                this.paging.page += 1;
+                this.filter();
+            };
+            baseCtrl.prototype.prev = function () {
+                if ((this.paging.page - 1) <= 0)
+                    return;
+                this.paging.page -= 1;
+                this.filter();
+            };
+            baseCtrl.prototype.toggleShowForm = function (show) {
+                this.showForm = show;
+                this.entity = null;
+            };
+            baseCtrl.prototype.toggleCheckAll = function () {
+                var _this = this;
+                this.entities.map(function (e) { return e.checked = _this.checkedAll; });
+            };
             baseCtrl.prototype.notify = function (type, message) {
                 this.notification[type](message);
             };

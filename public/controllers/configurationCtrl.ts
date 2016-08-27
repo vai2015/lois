@@ -1,27 +1,10 @@
 module lois.controllers {
-	 enum ConfigType{
-      region=1,
-      location=2,
-      paymentType=3,
-      client=4,
-      tariff=5,
-      partner=6,
-      driver=7,
-      packingType=8,
-      role=9,
-      user=10,
-      trainType=11,
-      menuAccess=12,
-      reportAccess=13
-    };
-
-    enum ClientViewMode {
+   enum ClientViewMode {
       client = 1,
       tariff = 2
    }
 
 	class configurationCtrl extends baseCtrl{
-		configType: ConfigType;
 	    clientViewMode: ClientViewMode;
 	    selectedClient: any;
 	    tariffs: any[];
@@ -55,6 +38,50 @@ module lois.controllers {
 	           ctrl.loadingData = false;
 	        });
      	}
+
+      edit(id: any): void {
+         var ctrl = this;
+         ctrl.processing = true;
+         ctrl.showForm = true;
+
+         ctrl.getFunc(ctrl.config, id).then(result => {
+            ctrl.entity = result.data;
+         }).catch(exception => {
+            ctrl.notify('error', exception.data);
+         }).finally(() => {
+            ctrl.processing = false;
+         });
+      }
+
+      save(): void {
+       var ctrl = this;
+       ctrl.processing = true;
+
+       ctrl.saveFunc(ctrl.config, ctrl.entity).then(result => {
+          ctrl.notify('success', 'Data berhasil disimpan');
+          ctrl.showForm = false;
+          ctrl.filter();
+       }).catch(exception => {
+          ctrl.notify('error', exception.data);
+       }).finally(() => {
+          ctrl.processing = false;
+       });
+     }
+
+     delete(id): void {
+        var confirmed = confirm('Data akan dihapus, anda yakin?');
+
+        if(!confirmed)
+          return;
+
+        var ctrl = this;
+        ctrl.deleteFunc(ctrl.config, id).then(result => {
+           ctrl.notify('success', 'Data berhasil dihapus');
+           ctrl.filter();
+        }).catch(exception => {
+           ctrl.notify('error', exception.data);
+        });
+     }
 	}
 
 	app.lois.controller('configurationCtrl', configurationCtrl);

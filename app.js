@@ -12,6 +12,11 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 app.use(session({secret: 'sdfe34234fdff234fsdf', saveUninitialized: true, resave: true}));
 app.use(require('./routes/user'));
+app.use(require('./routes/region'));
+app.use(require('./routes/location'));
+app.use(require('./routes/paymentType'));
+app.use(require('./routes/client'));
+app.use(require('./routes/tariff'));
 
 if(process.env.MODE == 'production')
   app.user(compression());
@@ -36,5 +41,13 @@ app.get('/', function(req, res){
 });
 
 app.get('/lois', function(req, res){
+   res.sendFile(__dirname + '/public/views/index.html');
+});
+
+app.get('/lois/home', function(req, res){
+   res.sendFile(__dirname + '/public/views/index.html');
+});
+
+app.get('/lois/configuration', function(req, res){
    res.sendFile(__dirname + '/public/views/index.html');
 });
