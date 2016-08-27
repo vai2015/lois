@@ -8,6 +8,7 @@
  var driverController = require('../controllers/driver');
  var partnerController = require('../controllers/partner');
  var roleController = require('../controllers/role');
+ var userController = require('../controllers/user');
  var co = require('co');
  var objectId = mongoose.Types.ObjectId;
 
@@ -54,8 +55,6 @@
            result.regions.length.should.equal(6);
            result.locations.length.should.equal(74);
            result.clients.length.should.equal(9663);
-       }).catch(function(error){
-          console.log(error);
        });
     });
  });
@@ -133,8 +132,18 @@
        return co(function* (){
            var result =  yield roleController.save(roleData);
            result.nModified.should.equal(1);
-           
+
            return yield roleController.save({_id: "57c14bebb495e502157d7ce9", name: "manager"});
        });
     });
  });
+
+ describe('Login', function(){
+    it('Should retrive a correct user without error', function(){
+        return co(function*(){
+           var user = yield userController.authenticate('admin', 'admin');
+
+           user.hash.should.equal("99a90237c75259e4f918edb9414734f3888321777840be4d19fd0d162661be4a");
+        });
+    });
+ })
