@@ -13,7 +13,7 @@ describe('Get all delivery', function(){
          var recapQuery = {"defaultRegionDest": "57bedc8254fae0c013130aa8"};
          var deliveries = yield deliveryController.getAll(recapQuery);
 
-         deliveries.length.should.equal(2);
+         deliveries.length.should.equal(4);
      });
   });
 });
@@ -37,8 +37,43 @@ describe('Basic delivery 1', function(){
             "deliveryCode": "P1",
             "driverId": "57c18420b495e502157d7cec",
             "notes": "Test"
+         },
+         {
+            "shippingId": shipping._id,
+            "itemId": deliveries[1].items._id,
+            "recapitulationId": deliveries[1].items.recapitulations._id,
+            "quantity": 500,
+            "limasColor": "HHH",
+            "relationColor": "TTT",
+            "vehicleNumber": "B1234532",
+            "deliveryCode": "P1",
+            "driverId": "57c18420b495e502157d7cec",
+            "notes": "Test"
+         },
+         {
+            "shippingId": shipping._id,
+            "itemId": deliveries[2].items._id,
+            "recapitulationId": deliveries[2].items.recapitulations._id,
+            "quantity": 500,
+            "limasColor": "HHH",
+            "relationColor": "TTT",
+            "vehicleNumber": "B1234532",
+            "deliveryCode": "P1",
+            "driverId": "57c18420b495e502157d7cec",
+            "notes": "Test"
+         },
+         {
+            "shippingId": shipping._id,
+            "itemId": deliveries[2].items._id,
+            "recapitulationId": deliveries[2].items.recapitulations._id,
+            "quantity": 500,
+            "limasColor": "HHH",
+            "relationColor": "TTT",
+            "vehicleNumber": "B1234532",
+            "deliveryCode": "P1",
+            "driverId": "57c18420b495e502157d7cec",
+            "notes": "Test"
          }];
-
          yield deliveryController.delivery(viewModels, user);
 
          var shippingAfter = yield shippingController.getBySpbNumber('1-S');
@@ -72,8 +107,8 @@ describe('Basic delivery 2', function(){
          yield deliveryController.delivery(viewModels, user);
 
          var shippingAfter = yield shippingController.getBySpbNumber('1-S');
-         shippingAfter.items[1].deliveries.length.should.equal(2);
-         shippingAfter.items[1].status.should.equal('Terkirim');
+         shippingAfter.items[0].deliveries.length.should.equal(2);
+         shippingAfter.items[0].status.should.equal('Terkirim');
      });
   });
 });

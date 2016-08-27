@@ -127,7 +127,6 @@ Controller.prototype.add = function(user){
          },
          "modified": {"user": user._id}
       };
-
       return new model(shipping).save();
    });
 };
@@ -138,6 +137,7 @@ Controller.prototype.calculateCost = function(shipping, tariff){
    var minimum = tariff.minimum;
    var quota = shipping.sender.quota;
 
+   shipping.colli.quantity = 0;
    shipping.cost.total = 0.0;
 
    _.forEach(shipping.items, function(item){
@@ -157,6 +157,7 @@ Controller.prototype.calculateCost = function(shipping, tariff){
        var colliCost = colli * cost.colli;
        var discount = parseFloat(item.discount);
        var limit = 0;
+
        switch(item.itemType._id.toString()){
           case WEIGHT:
             limit = dimensions.weight * price;
@@ -187,6 +188,7 @@ Controller.prototype.calculateCost = function(shipping, tariff){
                                                               * colliCost - discount + cost.additional : 0;
           break;
        }
+       shipping.colli.quantity += colli;
        shipping.cost.total += item.cost.shipping;
    });
 

@@ -143,6 +143,7 @@ Controller.prototype.delivery = function(viewModels, user){
 
           item.colli.delivered += viewModel.quantity;
           recapitulation.available -= viewModel.quantity;
+          shipping.colli.delivered += viewModel.quantity;
 
           if(item.colli.delivered === item.colli.quantity)
             item.status = TERKIRIM;
@@ -195,6 +196,7 @@ Controller.prototype.cancelDelivery = function(viewModels, user){
            viewModel.quantity = delivery.available;
 
          item.colli.delivered -= viewModel.quantity;
+         shipping.colli.delivered -= viewModel.quantity;
          recapitulation.available += viewModel.quantity;
          delivery.available -= viewModel.quantity;
          delivery.quantity -= viewModel.quantity;

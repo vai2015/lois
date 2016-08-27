@@ -51,6 +51,10 @@ var model = Schema({
    audited: {type: Boolean, default: false},
    returned: {type: Boolean, default: false},
    confirmed: {type: Boolean, default: false},
+   colli: {
+     quantity: {type: Number, default: 0},
+     delivered: {type: Number, default: 0}
+   },
    returnInfo: {
       date: {type: Date, default: null},
       filePath: {type: String, default: null},

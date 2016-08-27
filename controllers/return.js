@@ -12,8 +12,11 @@ Controller.api = 'return';
 
 Controller.prototype.getParameters = function(query){
    var parameters = {
-     "conditions": {"$and":[{"regions.destination": query['defaultRegionDest']}, {"returned": false},
-                   {"items": {"$elemMatch": {"status": {"$all": ["Terkirim"]}}}}]}
+     "conditions": {
+       "regions.destination": query['defaultRegionDest'],
+       "returned": false,
+       "$where": "this.colli.delivered == this.colli.quantity"
+     }
    };
 
    parameters['limit'] = query['limit'] ? query['limit'] : 10;
@@ -44,6 +47,33 @@ Controller.prototype.getAll = function(parameters){
     find = find.skip(parameters['skip']).limit(parameters['limit']);
 
   return find.sort({"number": -1}).lean().exec();
+};
+
+Controller.prototype.getConfirmReturns = function(query){
+  var parameters = {"inputLocation": query['defaultLocation'], "returned": true, "confirmed": false};
+
+  var limit = query['limit'] ? query['limit'] : 10;
+  var skip = query['skip'] ? query['skip'] : 0;
+
+  if(query['spbNumber'])
+    parameters['spbNumber'] = new RegExp(query['spbNumber'], 'i');
+
+  if(query['regionDest'])
+    parameters['regions.destination'] = objectId(query['regionDest']);
+
+  if(query['destination'])
+    parameters['destination'] = objectId(query['destination']);
+
+  if(query['returnDate'])
+    parameters['returnInfo.date'] = new Date(query['returnDate']);
+
+  if(query['from'] && query['to']){
+     var fromShipping = new Date(query['fromShipping']);
+     var toShipping = new Date(query['toShipping']);
+     parameters['date'] = {"$gte" : fromShipping, "$lt": toShipping};
+  }
+
+  return model.find(parameters).sort({"number": -1}).skip(skip).limit(limit).lean().exec();
 };
 
 Controller.prototype.return = function(viewModels, user){
@@ -82,6 +112,23 @@ Controller.prototype.return = function(viewModels, user){
          yield shipping.save();
          yield notification.save();
       });
+   });
+};
+
+Controller.prototype.confirm = function(viewModels){
+   var self = this;
+
+   return co(function*(){
+       yield* _co.coEach(viewModels, function*(viewModel){
+         var shipping = yield model.findOne({_id: objectId(viewModel._id)});
+
+         if(!shipping)
+           return;
+
+         shipping.confirmed = true;
+
+         yield shipping.save();
+       });
    });
 };
 
