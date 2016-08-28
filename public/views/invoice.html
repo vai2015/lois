@@ -100,7 +100,7 @@
                           <a href="#" class="btn btn-default" style="color: black;" ng-click="ctrl.filter()">
                              <i class="fa fa-search"></i> Cari
                           </a>
-                          <a href="#" class="btn btn-default" style="color: black;" ng-click="ctrl.createInvoice()">
+                          <a href="#" class="btn btn-default" style="color: black;" ng-click="ctrl.create()">
                              <i class="fa fa-envelope"></i> Buat Tagihan
                           </a>
                         </div>
@@ -116,8 +116,7 @@
                              <th style="text-align: center; width: 8%;">Spb</th>
                              <th style="text-align: center; width: 10%;">Pengirim</th>
                              <th style="text-align: center; width: 10%;">Tujuan</th>
-                             <th style="text-align: center; width: 5%;">Koli</th>
-                             <th style="text-align: center; width: 5%;">Berat</th>
+                             <th style="text-align: center; width: 10%;">Koli</th>
                              <th style="text-align: center; width: 10%;">Bea Angkut</th>
                              <th style="text-align: center; width: 10%;">Bea Ekspedisi</th>
                              <th style="text-align: center; width: 10%;">No Tagihan</th>
@@ -135,16 +134,15 @@
                                 <td style="text-align: center;">
                                    <input type="checkbox" ng-if="!entity.audited" ng-model="entity.checked"/>
                                 </td>
-                                <td> {{entity.document.spbNumber}} </td>
-                                <td> {{entity.document.sender[0].name}} </td>
-                                <td> {{entity.document.destination[0].name}}</td>
-                                <td> {{entity.colli}} </td>
-                                <td> {{entity.weight}} </td>
-                                <td> {{entity.document.totalCost | currency: 'Rp ' : 0}} </td>
-                                <td> {{entity.document.cost.expedition | currency: 'Rp ' : 0}} </td>
-                                <td> {{entity.document.invoices.all}} </td>
-                                <td> {{entity.document.invoices.client}} </td>
-                                <td> {{entity.document.invoices.partner}} </td>
+                                <td> {{entity.spbNumber}} </td>
+                                <td> {{entity.sender.name}} </td>
+                                <td> {{entity.destination.name}}</td>
+                                <td> {{entity.colli.delivered}}</td>
+                                <td> {{entity.cost.total | currency: 'Rp ' : 0}} </td>
+                                <td> {{entity.cost.expedition | currency: 'Rp ' : 0}} </td>
+                                <td> {{entity.invoice.all}} </td>
+                                <td> {{entity.invoice.client}} </td>
+                                <td> {{entity.invoice.partner}} </td>
                             </tr>
                         </tbody>
                       </table>
@@ -199,7 +197,7 @@
                                 <td style="text-align: center;">
                                    <input type="checkbox" ng-if="!entity.audited" ng-model="entity.checked"/>
                                 </td>
-                                <td> {{entity.invoiceNumber}} </td>
+                                <td> {{entity.number}} </td>
                                 <td> {{entity.to}} </td>
                                 <td> {{entity.location}}</td>
                                 <td> {{entity.type}}</td>

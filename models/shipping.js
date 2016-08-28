@@ -42,7 +42,7 @@ var model = Schema({
       partner: {type: String, default: null},
       po: {type: String, default: null}
    },
-   invoices: {
+   invoice: {
       all: {type: String, default: null},
       client: {type: String, default: null},
       partner: {type: String, default: null}
