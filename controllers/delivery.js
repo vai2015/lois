@@ -42,7 +42,7 @@ Controller.prototype.getAll = function(query){
     if(query['from'] && query['to']){
        var fromShipping = new Date(query['from']);
        var toShipping = new Date(query['to']);
-       matches['date'] = {"$gte" : fromShipping, "$lt": toShipping};
+       matches['date'] = {"$gte" : fromShipping, "$lte": toShipping};
     }
 
     console.log(matches);

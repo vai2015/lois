@@ -67,7 +67,7 @@ Controller.prototype.getParameters = function(query){
   if(query['from'] && query['to']){
      var fromShipping = new Date(query['from']);
      var toShipping = new Date(query['to']);
-     parameters['conditions']['date'] = {"$gte" : fromShipping, "$lt": toShipping};
+     parameters['conditions']['date'] = {"$gte" : fromShipping, "$lte": toShipping};
   }
 
   return parameters;
@@ -130,9 +130,14 @@ Controller.prototype.add = function(user){
 
 Controller.prototype.calculateCost = function(shipping, tariff){
    var self = this;
-   var price = tariff.prices[shipping.tariff];
-   var minimum = tariff.minimum;
+   var price = 0;
+   var minimum = 0;
    var quota = shipping.sender.quota;
+
+   if(tariff){
+      price = tariff.prices[shipping.tariff];
+      minimum = tariff.minimum;
+   }
 
    shipping.colli.quantity = 0;
    shipping.cost.total = 0.0;
@@ -208,21 +213,14 @@ Controller.prototype.save = function(data){
 
    return co(function*(){
       var sender = yield self.clientController.get(data.sender._id ? data.sender._id : data.sender);
-      var source = yield self.locationController.get(data.sender.location._id ? data.sender.location._id : data.sender.location);
+      var source = yield self.locationController.get(sender.location ? sender.location._id : null);
       var destination = yield self.locationController.get(data.destination._id ? data.destination._id : data.destination);
 
-      if(!source)
-        throw new Error('Client location is not found');
-
       var tariff = yield self.tariffController.getTariff(sender._id, destination._id);
-
-      if(!tariff)
-        throw new Error('Tariff is not found for client ' + sender.name + ' and location ' + destination.name);
-
-      data.regions.source = source.region._id;
-      data.regions.destination = destination.region._id;
-
       self.calculateCost(data, tariff);
+
+      data.regions.source = source == null ? data.regions.source : source.region._id;
+      data.regions.destination = destination.region._id ? destination.region._id : data.regions.destination;
 
       var dataModel = new model(data);
       return model.update({_id: objectId(dataModel._id)}, dataModel);
