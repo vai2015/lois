@@ -71,6 +71,14 @@ var lois;
             baseCtrl.prototype.createQuery = function () {
                 this.query = {};
                 this.createPagingQuery();
+                var keys = Object.keys(this.filters);
+                for (var i = 0; i < keys.length; i++) {
+                    var key = keys[i];
+                    if (this.filters[key] && this.filters[key]['_id'])
+                        this.query[key] = this.filters[key]['_id'];
+                    else
+                        this.query[key] = this.filters[key];
+                }
                 if (this.filters['from'] && this.filters['to']) {
                     var from = new Date(this.filters['from']);
                     var to = new Date(this.filters['to']);
@@ -80,14 +88,6 @@ var lois;
                 if (this.filters['recapDate']) {
                     var recapDate = new Date(this.filters['recapDate']);
                     this.query['recapDate'] = Date.UTC(recapDate.getFullYear(), recapDate.getMonth(), recapDate.getDate());
-                }
-                var keys = Object.keys(this.filters);
-                for (var i = 0; i < keys.length; i++) {
-                    var key = keys[i];
-                    if (this.filters[key] && this.filters[key]['_id'])
-                        this.query[key] = this.filters[key]['_id'];
-                    else
-                        this.query[key] = this.filters[key];
                 }
             };
             baseCtrl.prototype.createPagingQuery = function () {
