@@ -6,7 +6,7 @@ var objectId = mongoose.Types.ObjectId;
 function Controller(){};
 
 Controller.prototype.getRecapitulations = function(query){
-   var matches = {"items.recapitulations.quantity" : {"$gt": 0}};
+   var matches = {"inputLocation": objectId(query['defaultLocation']), "items.recapitulations.quantity" : {"$gt": 0}};
    var limit = query['limit'] ? query['limit'] : 10;
    var skip = query['skip'] ? query['skip'] : 0;
 

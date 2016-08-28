@@ -38,6 +38,7 @@ router.post(process.env.BASE_API + 'shipping/add', auth.isAuthenticated, functio
 
 router.post(process.env.BASE_API + 'shipping/save', auth.isAuthenticated, function(req, res){
    var user = req.session.user;
+   req.body.inputLocation = user.location._id;
    controller.save(req.body).then(function(result){
       return res.status(200).send(result);
    }).catch(function(error){
