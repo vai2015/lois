@@ -117,6 +117,47 @@ Controller.prototype.getDeliveries = function(query){
    ]).sort({"number": -1}).skip(skip).limit(limit).exec();
 };
 
+Controller.prototype.getDeliveriesReport = function(viewModels, user){
+   var self = this;
+
+   var result = {
+     "title": "LAPORAN PENGANTAR BARANG",
+     "template_file": "lapdelivery.xlsx",
+     "location": user.location.name,
+     "user": user.name,
+     "date": new Date(),
+     "delivery_driver": null,
+     "delivery_car": null,
+     "report_data": []
+   };
+
+   return co(function* (){
+      yield* _co.coEach(viewModels, function*(viewModel){
+          var driver = yield driverModel.findOne({_id: objectId(viewModel.items.deliveries.driver)});
+          var user = yield userModel.findOne({_id: objectId(viewModel.items.deliveries.created.user)});
+
+          if(driver)
+            result.delivery_driver = driver.name;
+
+          result.delivery_car = viewModel.items.deliveries.vehicleNumber;
+          result.report_data.push({
+              "spb_no": viewModel.spbNumber,
+              "sender": viewModel.sender[0].name,
+              "receiver": viewModel.receiver.name,
+              "receiver_address": viewModel.receiver.address,
+              "receiver_contact": viewModel.receiver.contact,
+              "content": viewModel.items.content,
+              "total_coli": viewModel.items.colli.quantity,
+              "coli": viewModel.items.deliveries.quantity,
+              "price": viewModel.items.cost.shipping,
+              "payment_method": viewModel.paymentType[0].name
+          });
+      });
+
+      return result;
+   });
+};
+
 Controller.prototype.getReturn = function(query){
     var matches = {"regions.destination": objectId(query['defaultRegion']), "returned" : true};
     var limit = query['limit'] ? query['limit'] : 10;

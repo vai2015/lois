@@ -126,6 +126,10 @@ module app.api{
          return http.get('/lois/api/report/getDeliveries?query=' + JSON.stringify(query));
       }
 
+      static getDeliveriesReport(data: any){
+         return http.post('/lois/api/report/getDeliveriesReport', JSON.stringify(data));
+      }
+
       static getReturn(query: any){
          return http.get('/lois/api/report/getReturn?query=' + JSON.stringify(query));
       }

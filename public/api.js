@@ -131,6 +131,9 @@ var app;
             report.getDeliveries = function (query) {
                 return app.http.get('/lois/api/report/getDeliveries?query=' + JSON.stringify(query));
             };
+            report.getDeliveriesReport = function (data) {
+                return app.http.post('/lois/api/report/getDeliveriesReport', JSON.stringify(data));
+            };
             report.getReturn = function (query) {
                 return app.http.get('/lois/api/report/getReturn?query=' + JSON.stringify(query));
             };
