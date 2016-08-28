@@ -36,6 +36,7 @@ Controller.prototype.getAll = function(parameters){
 };
 
 Controller.prototype.save = function(data){
+   console.log(data);
    var dataModel = new model(data);
 
    if(!data['_id'])

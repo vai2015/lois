@@ -42,6 +42,11 @@ module lois.controllers{
         });
      }
 
+     add(): void {
+        this.entity = null;
+        this.showForm = true;
+     }
+
      edit(id: any): void {
         var ctrl = this;
         ctrl.processing = true;

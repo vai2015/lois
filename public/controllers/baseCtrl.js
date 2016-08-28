@@ -27,6 +27,10 @@ var lois;
                     ctrl.loadingData = false;
                 });
             };
+            baseCtrl.prototype.add = function () {
+                this.entity = null;
+                this.showForm = true;
+            };
             baseCtrl.prototype.edit = function (id) {
                 var ctrl = this;
                 ctrl.processing = true;

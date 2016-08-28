@@ -108,8 +108,10 @@ Controller.prototype.pay = function(viewModels, user){
 };
 
 Controller.prototype.audit = function(viewModel, user){
+  console.log(user);
   var audit = new require('../models/audit')({
      type: 'payment',
+     date: new Date(),
      data: viewModel,
      user: user._id
    });

@@ -46,7 +46,7 @@ Controller.prototype.getAll = function(parameters){
 
 Controller.prototype.save = function(data){
    var dataModel = new model(data);
-
+   
    if(!data['_id'])
      return dataModel.save();
 

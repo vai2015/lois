@@ -116,6 +116,9 @@ var app;
             configuration.save = function (config, data) {
                 return app.http.post('/lois/api/' + config + '/save', JSON.stringify(data));
             };
+            configuration.delete = function (config, id) {
+                return app.http.delete('/lois/api/' + config + '/delete?id=' + id);
+            };
             return configuration;
         }());
         api.configuration = configuration;

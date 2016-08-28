@@ -16,16 +16,18 @@ module lois.controllers {
 	       this.loadFunc = app.api.configuration.getAll;
 	       this.getFunc = app.api.configuration.get;
 	       this.saveFunc = app.api.configuration.save;
+         this.deleteFunc = app.api.configuration.delete;
+         this.showToolbar = true;
 	    }
 
 	    onConfigChange(config: string): void {
 	       this.config = config;
+         this.paging.page = 1;
 	       this.filter();
 	    }
 
 	    filter(): void{
 	        var ctrl = this;
-
 	        ctrl.checkedAll = false;
 	        ctrl.createQuery();
 	        ctrl.loadingData = true;

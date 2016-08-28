@@ -20,12 +20,11 @@ router.get(process.env.BASE_API + 'payment/getAll', auth.isAuthenticated, functi
 });
 
 router.post(process.env.BASE_API + 'payment/pay', auth.isAuthenticated, function(req, res){
-   controller.pay(req.body).then(function(result){
+   controller.pay(req.body, req.session.user).then(function(result){
        return res.status(200).send(result);
    }).catch(function(error){
        return res.status(500).send(error.message);
    });
 });
-
 
 module.exports = router;

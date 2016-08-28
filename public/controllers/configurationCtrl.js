@@ -19,9 +19,12 @@ var lois;
                 this.loadFunc = app.api.configuration.getAll;
                 this.getFunc = app.api.configuration.get;
                 this.saveFunc = app.api.configuration.save;
+                this.deleteFunc = app.api.configuration.delete;
+                this.showToolbar = true;
             }
             configurationCtrl.prototype.onConfigChange = function (config) {
                 this.config = config;
+                this.paging.page = 1;
                 this.filter();
             };
             configurationCtrl.prototype.filter = function () {

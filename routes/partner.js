@@ -20,5 +20,20 @@ router.get(process.env.BASE_API + 'partner/getAll', auth.isAuthenticated, functi
    });
 });
 
+router.post(process.env.BASE_API + 'partner/save', auth.isAuthenticated, function(req, res){
+   controller.save(req.body).then(function(result){
+       return res.status(200).send(result);
+   }).catch(function(error){
+       return res.status(500).send(error.message);
+   });
+});
+
+router.delete(process.env.BASE_API + 'partner/delete', auth.isAuthenticated, function(req, res){
+   controller.delete(req.query.id).then(function(result){
+       return res.status(200).send(result);
+   }).catch(function(error){
+       return res.status(500).send(error.message);
+   });
+});
 
 module.exports = router;

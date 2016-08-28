@@ -10,7 +10,7 @@ function Controller(){}
 Controller.api = 'tariff';
 
 Controller.prototype.get = function(id){
-   return model.findOne({_id: objectId(id)}).exec();
+   return model.findOne({_id: objectId(id)}).populate('client').populate('destination').exec();
 };
 
 Controller.prototype.getParameters = function(query){
@@ -31,8 +31,6 @@ Controller.prototype.getParameters = function(query){
   if(query['skip'] || query['skip'] == 0)
      parameters['skip'] = query['skip'];
 
-   parameters['populations'] = ['destination', 'client'];
-
    return parameters;
 };
 
@@ -42,10 +40,7 @@ Controller.prototype.getAll = function(parameters){
    if(parameters['limit'] && (parameters['skip'] || parameters['skip'] == 0))
      find = find.skip(parameters['skip']).limit(parameters['limit']);
 
-   if(parameters['populations'])
-     find = find.populate(parameters['populations'].join());
-
-   return find.sort({"name": 1}).exec();
+   return find.populate('client').populate('destination').sort({"client._id": 1}).exec();
 };
 
 Controller.prototype.getTariff = function(clientId, destinationId){

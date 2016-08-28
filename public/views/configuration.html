@@ -70,6 +70,20 @@
               <div class="widget-body no-padding">
                  <div class="tab-content">
                     <div ng-show="ctrl.config == 'region' || ctrl.config == 'paymentType' || ctrl.config == 'driver' || ctrl.config == 'packingType' || ctrl.config == 'trainType' || ctrl.config == 'role'">
+                      <div class="widget-body-toolbar" ng-show="ctrl.showToolbar">
+                          <form class="smart-form">
+                             <legend>Filter data</legend>
+                             <fieldset>
+                                <div class="row">
+                                  <section class="col col-sm-12 col-md-12 col-lg-12">
+                                    <label class="input">
+                                      <input type="text" placeholder="Nama" ng-model="ctrl.filters.name" />
+                                    </label>
+                                  </section>
+                                </div>
+                             </fieldset>
+                          </form>
+                      </div>
                       <div class="widget-body-toolbar">
                         <div class="row">
                           <div class="col-xs-9 col-sm-5 col-md-5 col-lg-6">
@@ -116,6 +130,36 @@
                     </div>
 
                     <div ng-show="ctrl.config == 'location'">
+                      <div class="widget-body-toolbar" ng-show="ctrl.showToolbar">
+                          <form class="smart-form">
+                             <legend>Filter data</legend>
+                             <fieldset>
+                                <div class="row">
+                                  <section class="col col-sm-12 col-md-12 col-lg-4">
+                                    <label class="input">
+                                      <input type="text" placeholder="Nama" ng-model="ctrl.filters.name" />
+                                    </label>
+                                  </section>
+                                  <section class="col col-sm-12 col-md-12 col-lg-4">
+                                    <label class="input">
+                                      <input type="text" placeholder="Prefix" ng-model="ctrl.filters.prefix" />
+                                    </label>
+                                  </section>
+                                  <section class="col col-sm-12 col-md-12 col-lg-4">
+                                    <label class="input">
+                                      <input type="text"
+                                         ng-model="ctrl.filters.region"
+                                         placeholder="Regional"
+                                         uib-typeahead="data as data.name for data in ctrl.suggest('region', $viewValue)"
+                                         typeahead-min-length="2"
+                                         typeahead-loading="regionFilter" class="form-control" />
+                                      <i ng-show="regionFilter" class="glyphicon glyphicon-refresh"></i>
+                                    </label>
+                                  </section>
+                                </div>
+                             </fieldset>
+                          </form>
+                      </div>
                       <div class="widget-body-toolbar">
                         <div class="row">
                           <div class="col-xs-9 col-sm-5 col-md-5 col-lg-6">
@@ -166,14 +210,25 @@
                     </div>
 
                     <div ng-show="ctrl.config == 'client'">
+                      <div class="widget-body-toolbar" ng-show="ctrl.showToolbar">
+                          <form class="smart-form">
+                             <legend>Filter data</legend>
+                             <fieldset>
+                                <div class="row">
+                                  <section class="col col-sm-12 col-md-12 col-lg-12">
+                                    <label class="input">
+                                      <input type="text" placeholder="Nama" ng-model="ctrl.filters.name" />
+                                    </label>
+                                  </section>
+                                </div>
+                             </fieldset>
+                          </form>
+                      </div>
                       <div class="widget-body-toolbar">
                         <div class="row">
                           <div class="col-xs-9 col-sm-5 col-md-5 col-lg-6">
-                            <a href="#" class="btn btn-default" style="color: black;" ng-show="ctrl.clientViewMode == 1" ng-click="ctrl.filter()">
+                            <a href="#" class="btn btn-default" style="color: black;" ng-click="ctrl.filter()">
                                <i class="fa fa-search"></i> Cari
-                            </a>
-                            <a href="#" class="btn btn-default" style="color: black;" ng-show="ctrl.clientViewMode == 2" ng-click="ctrl.viewClient()">
-                               <i class="fa fa-arrow-left"></i> Kembali
                             </a>
                             <a href="#" class="btn btn-default" style="color: black;" ng-click="ctrl.add()">
                                <i class="fa fa-plus"></i> Tambah
@@ -223,14 +278,42 @@
                     </div>
 
                     <div ng-show="ctrl.config == 'tariff'">
+                      <div class="widget-body-toolbar" ng-show="ctrl.showToolbar">
+                          <form class="smart-form">
+                             <legend>Filter data</legend>
+                             <fieldset>
+                                <div class="row">
+                                  <section class="col col-sm-12 col-md-12 col-lg-6">
+                                    <label class="input">
+                                      <input type="text"
+                                         ng-model="ctrl.filters.client"
+                                         placeholder="Klien"
+                                         uib-typeahead="data as data.name for data in ctrl.suggest('client', $viewValue)"
+                                         typeahead-min-length="2"
+                                         typeahead-loading="clientFilter" class="form-control" />
+                                      <i ng-show="clientFilter" class="glyphicon glyphicon-refresh"></i>
+                                    </label>
+                                  </section>
+                                  <section class="col col-sm-12 col-md-12 col-lg-6">
+                                    <label class="input">
+                                      <input type="text"
+                                         ng-model="ctrl.filters.destination"
+                                         placeholder="Tujuan"
+                                         uib-typeahead="data as data.name for data in ctrl.suggest('location', $viewValue)"
+                                         typeahead-min-length="2"
+                                         typeahead-loading="destinationFilter" class="form-control" />
+                                      <i ng-show="destinationFilter" class="glyphicon glyphicon-refresh"></i>
+                                    </label>
+                                  </section>
+                                </div>
+                             </fieldset>
+                          </form>
+                      </div>
                       <div class="widget-body-toolbar">
                         <div class="row">
                           <div class="col-xs-9 col-sm-5 col-md-5 col-lg-6">
-                            <a href="#" class="btn btn-default" style="color: black;" ng-show="ctrl.clientViewMode == 1" ng-click="ctrl.filter()">
+                            <a href="#" class="btn btn-default" style="color: black;" ng-click="ctrl.filter()">
                                <i class="fa fa-search"></i> Cari
-                            </a>
-                            <a href="#" class="btn btn-default" style="color: black;" ng-show="ctrl.clientViewMode == 2" ng-click="ctrl.viewClient()">
-                               <i class="fa fa-arrow-left"></i> Kembali
                             </a>
                             <a href="#" class="btn btn-default" style="color: black;" ng-click="ctrl.add()">
                                <i class="fa fa-plus"></i> Tambah
@@ -282,6 +365,20 @@
                     </div>
 
                     <div ng-show="ctrl.config == 'partner'">
+                      <div class="widget-body-toolbar" ng-show="ctrl.showToolbar">
+                          <form class="smart-form">
+                             <legend>Filter data</legend>
+                             <fieldset>
+                                <div class="row">
+                                  <section class="col col-sm-12 col-md-12 col-lg-12">
+                                    <label class="input">
+                                      <input type="text" placeholder="Nama" ng-model="ctrl.filters.name" />
+                                    </label>
+                                  </section>
+                                </div>
+                             </fieldset>
+                          </form>
+                      </div>
                       <div class="widget-body-toolbar">
                         <div class="row">
                           <div class="col-xs-9 col-sm-5 col-md-5 col-lg-6">
@@ -332,6 +429,42 @@
                     </div>
 
                     <div ng-show="ctrl.config == 'user'">
+                      <div class="widget-body-toolbar" ng-show="ctrl.showToolbar">
+                          <form class="smart-form">
+                             <legend>Filter data</legend>
+                             <fieldset>
+                                <div class="row">
+                                  <section class="col col-sm-12 col-md-12 col-lg-4">
+                                    <label class="input">
+                                      <input type="text" placeholder="Nama" ng-model="ctrl.filters.name" />
+                                    </label>
+                                  </section>
+                                  <section class="col col-sm-12 col-md-12 col-lg-4">
+                                    <label class="input">
+                                      <input type="text"
+                                         ng-model="ctrl.filters.role"
+                                         placeholder="Role"
+                                         uib-typeahead="data as data.name for data in ctrl.suggest('role', $viewValue)"
+                                         typeahead-min-length="2"
+                                         typeahead-loading="roleFilter" class="form-control" />
+                                      <i ng-show="roleFilter" class="glyphicon glyphicon-refresh"></i>
+                                    </label>
+                                  </section>
+                                  <section class="col col-sm-12 col-md-12 col-lg-4">
+                                    <label class="input">
+                                      <input type="text"
+                                         ng-model="ctrl.filters.location"
+                                         placeholder="Lokasi"
+                                         uib-typeahead="data as data.name for data in ctrl.suggest('location', $viewValue)"
+                                         typeahead-min-length="2"
+                                         typeahead-loading="locationFilter" class="form-control" />
+                                      <i ng-show="locationFilter" class="glyphicon glyphicon-refresh"></i>
+                                    </label>
+                                  </section>
+                                </div>
+                             </fieldset>
+                          </form>
+                      </div>
                       <div class="widget-body-toolbar">
                         <div class="row">
                           <div class="col-xs-9 col-sm-5 col-md-5 col-lg-6">
@@ -486,7 +619,7 @@
                       </fieldset>
                     </form>
 
-                    <form class="smart-form" ng-show="ctrl.configType == 2">
+                    <form class="smart-form" ng-show="ctrl.config == 'location'">
                       <fieldset>
                         <div class="row">
                           <section class="col col-sm-12 col-md-12 col-lg-12">
@@ -619,7 +752,7 @@
                                Harga 1
                             </label>
                             <label class="input">
-                              <input type="text" ng-model="ctrl.entity.price1" />
+                              <input type="text" ng-model="ctrl.entity.prices[0]" />
                             </label>
                           </section>
                           <section class="col col-sm-12 col-md-12 col-lg-12">
@@ -627,7 +760,7 @@
                                Harga 2
                             </label>
                             <label class="input">
-                              <input type="text" ng-model="ctrl.entity.price2" />
+                              <input type="text" ng-model="ctrl.entity.prices[1]" />
                             </label>
                           </section>
 
@@ -636,7 +769,7 @@
                                Harga 3
                             </label>
                             <label class="input">
-                              <input type="text" ng-model="ctrl.entity.price3" />
+                              <input type="text" ng-model="ctrl.entity.prices[2]" />
                             </label>
                           </section>
                         </div>

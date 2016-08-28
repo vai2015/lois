@@ -23,13 +23,14 @@ Controller.prototype.getParameters = function(query){
   if(query['location'])
     parameters['conditions']['location'] = objectId(query['location']);
 
+  if(query['role'])
+    parameters['conditions']['role'] = objectId(query['role']);
+
   if(query['limit'])
     parameters['limit'] = query['limit'];
 
   if(query['skip'] || query['skip'] == 0)
     parameters['skip'] = query['skip'];
-
-   parameters['populations'] = ['location', 'role'];
 
    return parameters;
 };
@@ -40,13 +41,15 @@ Controller.prototype.getAll = function(parameters){
    if(parameters['limit'] && (parameters['skip'] || parameters['skip'] == 0))
      find = find.skip(parameters['skip']).limit(parameters['limit']);
 
-   if(parameters['populations'])
-     find = find.populate(parameters['populations'].join());
-
-   return find.sort({"name": 1}).exec();
+   return find.populate('location').populate('role').sort({"name": 1}).exec();
 };
 
 Controller.prototype.save = function(data){
+  if(data['password']){
+     data['salt'] = crypto.randomBytes(16).toString('base64');
+     data['hash'] = crypto.createHmac('sha256', data['salt']).update(data['password']).digest('hex');
+   }
+
    var dataModel = new model(data);
 
    if(!data['_id'])

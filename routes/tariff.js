@@ -1,9 +1,9 @@
 var router = require('express').Router();
 var dotenv = require('dotenv').config();
 var auth = require('../utils/authentication');
-var controller = require('../controllers/packingType');
+var controller = require('../controllers/tariff');
 
-router.get(process.env.BASE_API + 'packingType/get', auth.isAuthenticated, function(req, res){
+router.get(process.env.BASE_API + 'tariff/get', auth.isAuthenticated, function(req, res){
    controller.get(req.query.id).then(function(result){
        return res.status(200).send(result);
    }).catch(function(error){
@@ -11,8 +11,10 @@ router.get(process.env.BASE_API + 'packingType/get', auth.isAuthenticated, funct
    });
 });
 
-router.get(process.env.BASE_API + 'packingType/getAll', auth.isAuthenticated, function(req, res){
-   var parameters = controller.getParameters(JSON.parse(req.query['query']));
+router.get(process.env.BASE_API + 'tariff/getAll', auth.isAuthenticated, function(req, res){
+   var query = JSON.parse(req.query['query']);
+   query['location'] = req.session.user.location._id;
+   var parameters = controller.getParameters(query);
    controller.getAll(parameters).then(function(result){
        return res.status(200).send(result);
    }).catch(function(error){
@@ -20,7 +22,7 @@ router.get(process.env.BASE_API + 'packingType/getAll', auth.isAuthenticated, fu
    });
 });
 
-router.post(process.env.BASE_API + 'packingType/save', auth.isAuthenticated, function(req, res){
+router.post(process.env.BASE_API + 'tariff/save', auth.isAuthenticated, function(req, res){
    controller.save(req.body).then(function(result){
        return res.status(200).send(result);
    }).catch(function(error){
@@ -28,7 +30,7 @@ router.post(process.env.BASE_API + 'packingType/save', auth.isAuthenticated, fun
    });
 });
 
-router.delete(process.env.BASE_API + 'packingType/delete', auth.isAuthenticated, function(req, res){
+router.delete(process.env.BASE_API + 'tariff/delete', auth.isAuthenticated, function(req, res){
    controller.delete(req.query.id).then(function(result){
        return res.status(200).send(result);
    }).catch(function(error){

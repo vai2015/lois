@@ -22,4 +22,23 @@ router.get(process.env.BASE_API + 'client/getAll', auth.isAuthenticated, functio
    });
 });
 
+router.post(process.env.BASE_API + 'client/save', auth.isAuthenticated, function(req, res){
+   var data = req.body;
+   data.location = req.session.user.location;
+
+   controller.save(data).then(function(result){
+       return res.status(200).send(result);
+   }).catch(function(error){
+       return res.status(500).send(error.message);
+   });
+});
+
+router.delete(process.env.BASE_API + 'client/delete', auth.isAuthenticated, function(req, res){
+   controller.delete(req.query.id).then(function(result){
+       return res.status(200).send(result);
+   }).catch(function(error){
+       return res.status(500).send(error.message);
+   });
+});
+
 module.exports = router;

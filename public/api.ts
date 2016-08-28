@@ -111,6 +111,10 @@ module app.api{
      static save(config: string, data: any){
        return app.http.post('/lois/api/' + config + '/save', JSON.stringify(data));
      }
+
+     static delete(config: string, id: any){
+       return app.http.delete('/lois/api/' + config + '/delete?id=' + id);
+     }
    }
 
    export class autocomplete{

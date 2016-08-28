@@ -16,13 +16,16 @@ Controller.prototype.getParameters = function(query){
   var parameters = {"conditions": {}};
 
   if(query['name'])
-     parameters['conditions']['name'] = new RegExp(query['name'], 'i');
+    parameters['conditions']['name'] = new RegExp(query['name'], 'i');
+
+  if(query['prefix'])
+    parameters['conditions']['prefix'] = new RegExp(query['prefix'], 'i');
 
   if(query['region'])
     parameters['conditions']['region'] = query['region'];
 
   if(query['limit'])
-     parameters['limit'] = query['limit'];
+    parameters['limit'] = query['limit'];
 
   if(query['skip'] || query['skip'] == 0)
      parameters['skip'] = query['skip'];
