@@ -68,7 +68,7 @@ var lois;
                         limasColor: entity.viewModel.limasColor,
                         relationColor: entity.viewModel.relationColor,
                         deliveryCode: entity.viewModel.deliveryCode,
-                        driver: _this.driver._id,
+                        driver: _this.filterType === FilterType.delivery ? _this.driver._id : null,
                         vehicleNumber: _this.vehicleNumber
                     };
                     if (_this.filterType === FilterType.cancelDelivery)

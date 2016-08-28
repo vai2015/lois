@@ -69,7 +69,7 @@ module lois.controllers {
             limasColor: entity.viewModel.limasColor,
             relationColor: entity.viewModel.relationColor,
             deliveryCode: entity.viewModel.deliveryCode,
-            driver: this.driver._id,
+            driver: this.filterType === FilterType.delivery ? this.driver._id : null, 
             vehicleNumber: this.vehicleNumber
           };
 
