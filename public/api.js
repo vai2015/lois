@@ -125,15 +125,55 @@ var app;
             report.getRecapitulations = function (query) {
                 return app.http.get('/lois/api/report/getRecapitulations?query=' + JSON.stringify(query));
             };
+            report.getRecapitulationsReport = function (data) {
+                return app.http.post('/lois/api/report/getRecapitulationsReport', JSON.stringify(data));
+            };
             report.getDeliveries = function (query) {
                 return app.http.get('/lois/api/report/getDeliveries?query=' + JSON.stringify(query));
             };
             report.getReturn = function (query) {
                 return app.http.get('/lois/api/report/getReturn?query=' + JSON.stringify(query));
             };
+            report.getUnconfirmed = function (query) {
+                return app.http.get('/lois/api/report/getUnconfirmed?query=' + JSON.stringify(query));
+            };
             return report;
         }());
         api.report = report;
+        var reportPrint = (function () {
+            function reportPrint() {
+            }
+            reportPrint.printRecapitulation = function (data) {
+                var config = {
+                    "headers": { "content-type": "application/x-www-form-urlencoded; charset=UTF-8" },
+                    "responseType": "arraybuffer"
+                };
+                return app.http.post('http://limassentosa.net/report-engine/recapitulation', JSON.stringify(data), config);
+            };
+            reportPrint.printDelivery = function (data) {
+                var config = {
+                    "headers": { "content-type": "application/x-www-form-urlencoded; charset=UTF-8" },
+                    "responseType": "arraybuffer"
+                };
+                return app.http.post('http://limassentosa.net/report-engine/delivery', JSON.stringify(data), config);
+            };
+            reportPrint.printReturn = function (data) {
+                var config = {
+                    "headers": { "content-type": "application/x-www-form-urlencoded; charset=UTF-8" },
+                    "responseType": "arraybuffer"
+                };
+                return app.http.post('http://limassentosa.net/report-engine/return', JSON.stringify(data), config);
+            };
+            reportPrint.printInvoice = function (data) {
+                var config = {
+                    "headers": { "content-type": "application/x-www-form-urlencoded; charset=UTF-8" },
+                    "responseType": "arraybuffer"
+                };
+                return app.http.post('http://limassentosa.net/report-engine/invoice', JSON.stringify(data), config);
+            };
+            return reportPrint;
+        }());
+        api.reportPrint = reportPrint;
         var configuration = (function () {
             function configuration() {
             }

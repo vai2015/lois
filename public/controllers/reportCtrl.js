@@ -31,6 +31,8 @@ var lois;
                         break;
                     case 'Rekapitulasi':
                         this.loadFunc = app.api.report.getRecapitulations;
+                        this.dataFunc = app.api.report.getRecapitulationsReport;
+                        this.renderFunc = app.api.reportPrint.printRecapitulation;
                         break;
                     case 'Pengiriman':
                         this.loadFunc = app.api.report.getDeliveries;
@@ -38,10 +40,31 @@ var lois;
                     case 'Retur':
                         this.loadFunc = app.api.report.getReturn;
                         break;
+                    case 'SJ Belum Kembali':
+                        this.loadFunc = app.api.report.getUnconfirmed;
+                        break;
                 }
                 this.filters = {};
                 this.paging.page = 1;
                 this.filter();
+            };
+            reportCtrl.prototype.print = function () {
+                var checkedEntities = this.entities.filter(function (e) { return e.checked; });
+                if (checkedEntities.length === 0) {
+                    this.notify('warning', 'Tidak ada data yang pilih');
+                    return;
+                }
+                var ctrl = this;
+                ctrl.loadingData = true;
+                ctrl.dataFunc(checkedEntities).then(function (result) {
+                    ctrl.renderFunc(result.data).then(function (buffer) {
+                        var blob = new Blob([buffer.data], { type: 'application/pdf' });
+                        var url = URL.createObjectURL(blob);
+                        window.open(url, '_blank');
+                    });
+                }).finally(function () {
+                    ctrl.loadingData = false;
+                });
             };
             reportCtrl.$inject = ['$scope', 'Notification'];
             return reportCtrl;

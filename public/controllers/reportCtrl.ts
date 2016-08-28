@@ -2,8 +2,8 @@ module lois.controllers {
   class reportCtrl extends baseCtrl{
      reports: any[];
      activeReport: string;
-     renderApi: Function;
-     dataApi: Function;
+     renderFunc: Function;
+     dataFunc: Function;
 
      static $inject = ['$scope', 'Notification'];
 
@@ -32,6 +32,8 @@ module lois.controllers {
          break;
          case 'Rekapitulasi':
            this.loadFunc = app.api.report.getRecapitulations;
+           this.dataFunc = app.api.report.getRecapitulationsReport;
+           this.renderFunc = app.api.reportPrint.printRecapitulation;
          break;
          case 'Pengiriman':
            this.loadFunc = app.api.report.getDeliveries;
@@ -39,11 +41,35 @@ module lois.controllers {
          case 'Retur':
            this.loadFunc = app.api.report.getReturn;
          break;
+         case 'SJ Belum Kembali':
+           this.loadFunc = app.api.report.getUnconfirmed;
+         break;
        }
 
        this.filters = {};
        this.paging.page = 1;
        this.filter();
+     }
+
+     print(): void {
+        var checkedEntities = this.entities.filter(e => e.checked);
+
+        if(checkedEntities.length === 0){
+           this.notify('warning', 'Tidak ada data yang pilih');
+           return;
+        }
+
+        var ctrl = this;
+        ctrl.loadingData = true;
+        ctrl.dataFunc(checkedEntities).then(result => {
+           ctrl.renderFunc(result.data).then(buffer => {
+              var blob = new Blob([buffer.data], {type:'application/pdf'});
+              var url = URL.createObjectURL(blob);
+              window.open(url, '_blank');
+           });
+        }).finally(() => {
+          ctrl.loadingData = false;
+       });
      }
   }
 

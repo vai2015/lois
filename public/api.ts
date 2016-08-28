@@ -118,6 +118,10 @@ module app.api{
          return http.get('/lois/api/report/getRecapitulations?query=' + JSON.stringify(query));
       }
 
+      static getRecapitulationsReport(data: any){
+         return http.post('/lois/api/report/getRecapitulationsReport', JSON.stringify(data));
+      }
+
       static getDeliveries(query: any){
          return http.get('/lois/api/report/getDeliveries?query=' + JSON.stringify(query));
       }
@@ -125,7 +129,49 @@ module app.api{
       static getReturn(query: any){
          return http.get('/lois/api/report/getReturn?query=' + JSON.stringify(query));
       }
+
+      static getUnconfirmed(query: any){
+         return http.get('/lois/api/report/getUnconfirmed?query=' + JSON.stringify(query));
+      }
    }
+
+   export class reportPrint{
+     static printRecapitulation(data: any){
+         var config = {
+            "headers": {"content-type": "application/x-www-form-urlencoded; charset=UTF-8"},
+            "responseType": "arraybuffer"
+         };
+
+         return app.http.post('http://limassentosa.net/report-engine/recapitulation', JSON.stringify(data), config);
+     }
+
+     static printDelivery(data: any){
+         var config = {
+            "headers": {"content-type": "application/x-www-form-urlencoded; charset=UTF-8"},
+            "responseType": "arraybuffer"
+         };
+
+         return app.http.post('http://limassentosa.net/report-engine/delivery', JSON.stringify(data), config);
+     }
+
+     static printReturn(data: any){
+         var config = {
+            "headers": {"content-type": "application/x-www-form-urlencoded; charset=UTF-8"},
+            "responseType": "arraybuffer"
+         };
+
+         return app.http.post('http://limassentosa.net/report-engine/return', JSON.stringify(data), config);
+     }
+
+     static printInvoice(data: any){
+         var config = {
+            "headers": {"content-type": "application/x-www-form-urlencoded; charset=UTF-8"},
+            "responseType": "arraybuffer"
+         };
+
+         return app.http.post('http://limassentosa.net/report-engine/invoice', JSON.stringify(data), config);
+     }
+  }
 
    export class configuration {
      static get(config: string, id: any){
