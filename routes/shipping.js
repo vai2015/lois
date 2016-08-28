@@ -16,7 +16,10 @@ router.get(process.env.BASE_API + 'shipping/get', auth.isAuthenticated, function
 });
 
 router.get(process.env.BASE_API + 'shipping/getAll', auth.isAuthenticated, function(req, res){
-   var parameters = controller.getParameters(JSON.parse(req.query['query']));
+   var query = JSON.parse(req.query['query']);
+   query['location'] = req.session.user.location._id;
+
+   var parameters = controller.getParameters(query);
    controller.getAll(parameters).then(function(result){
        return res.status(200).send(result);
    }).catch(function(error){

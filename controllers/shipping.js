@@ -38,7 +38,7 @@ Controller.prototype.getBySpbNumber = function(spbNumber){
 };
 
 Controller.prototype.getParameters = function(query){
-  var parameters = {"conditions": {}};
+  var parameters = {"conditions": {"inputLocation" : query['location']}};
 
   parameters['limit'] = query['limit'] ? query['limit'] : 10;
   parameters['skip'] = query['skip'] ? query['skip'] : 0;

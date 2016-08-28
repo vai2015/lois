@@ -69,10 +69,10 @@ module app {
           url: '/return',
           templateUrl: '/views/return.html',
           controller: 'returnCtrl as ctrl'
-       }).state('site.main.returnConfirm', {
-          url: '/return-confirm',
-          templateUrl: '/views/returnConfirm.html',
-          controller: 'returnConfirmCtrl as ctrl'
+       }).state('site.main.confirmReturn', {
+          url: '/confirm-return',
+          templateUrl: '/views/confirmReturn.html',
+          controller: 'confirmReturnCtrl as ctrl'
        }).state('site.main.payment', {
           url: '/payment',
           templateUrl: '/views/payment.html',

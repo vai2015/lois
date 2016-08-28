@@ -32,8 +32,8 @@ Controller.prototype.getAll = function(query){
      matches['destination'] = objectId(query['destination']);
 
    if(query['from'] && query['to']){
-      var fromShipping = new Date(query['fromShipping']);
-      var toShipping = new Date(query['toShipping']);
+      var fromShipping = new Date(query['from']);
+      var toShipping = new Date(query['to']);
       matches['date'] = {"$gte" : fromShipping, "$lt": toShipping};
    }
 
@@ -61,8 +61,8 @@ Controller.prototype.getAllCancel = function(query){
     matches['destination'] = objectId(query['destination']);
 
   if(query['from'] && query['to']){
-     var fromShipping = new Date(query['fromShipping']);
-     var toShipping = new Date(query['toShipping']);
+     var fromShipping = new Date(query['from']);
+     var toShipping = new Date(query['to']);
      matches['date'] = {"$gte" : fromShipping, "$lt": toShipping};
   }
 
@@ -160,7 +160,6 @@ Controller.prototype.cancelRecap = function(viewModels){
 
           if(!recapitulation || recapitulation.available === 0)
             return;
-
 
           if(viewModel.quantity > recapitulation.available)
             viewModel.quantity = recapitulation.available;

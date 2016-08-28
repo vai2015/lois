@@ -11,13 +11,20 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 app.use(session({secret: 'sdfe34234fdff234fsdf', saveUninitialized: true, resave: true}));
 app.use(require('./routes/user'));
+app.use(require('./routes/region'));
 app.use(require('./routes/location'));
+app.use(require('./routes/trainType'));
+app.use(require('./routes/driver'));
 app.use(require('./routes/client'));
 app.use(require('./routes/paymentType'));
 app.use(require('./routes/itemType'));
 app.use(require('./routes/packingType'));
 app.use(require('./routes/partner'));
 app.use(require('./routes/shipping'));
+app.use(require('./routes/recapitulation'));
+app.use(require('./routes/delivery'));
+app.use(require('./routes/return'));
+app.use(require('./routes/payment'));
 
 if(process.env.MODE == 'production')
   app.use(compression());

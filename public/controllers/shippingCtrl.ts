@@ -50,6 +50,30 @@ module lois.controllers {
         });
      }
 
+     edit(entity: any): void {
+        if(entity.confirmed){
+           this.notify('warning', 'Pengiriman ini telah dikonfirmasi');
+           return;
+        }
+
+        if(entity.audited){
+           this.notify('warning', 'Pengiriman ini sedang diaudit oleh manager');
+           return;
+        }
+
+        var ctrl = this;
+        ctrl.processing = true;
+        ctrl.showForm = true;
+
+        ctrl.getFunc(entity._id).then(result => {
+           ctrl.entity = result.data;
+        }).catch(exception => {
+           ctrl.notify('error', exception.data);
+        }).finally(() => {
+           ctrl.processing = false;
+        });
+     }
+
      addItem(): void {
        this.selectedItem = this.constructItem();
        this.showForm = true;

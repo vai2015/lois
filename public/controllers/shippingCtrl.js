@@ -51,6 +51,26 @@ var lois;
                     ctrl.loadingData = false;
                 });
             };
+            shippingCtrl.prototype.edit = function (entity) {
+                if (entity.confirmed) {
+                    this.notify('warning', 'Pengiriman ini telah dikonfirmasi');
+                    return;
+                }
+                if (entity.audited) {
+                    this.notify('warning', 'Pengiriman ini sedang diaudit oleh manager');
+                    return;
+                }
+                var ctrl = this;
+                ctrl.processing = true;
+                ctrl.showForm = true;
+                ctrl.getFunc(entity._id).then(function (result) {
+                    ctrl.entity = result.data;
+                }).catch(function (exception) {
+                    ctrl.notify('error', exception.data);
+                }).finally(function () {
+                    ctrl.processing = false;
+                });
+            };
             shippingCtrl.prototype.addItem = function () {
                 this.selectedItem = this.constructItem();
                 this.showForm = true;

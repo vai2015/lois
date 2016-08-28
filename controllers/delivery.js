@@ -40,11 +40,12 @@ Controller.prototype.getAll = function(query){
       matches['destination'] = objectId(query['destination']);
 
     if(query['from'] && query['to']){
-       var fromShipping = new Date(query['fromShipping']);
-       var toShipping = new Date(query['toShipping']);
+       var fromShipping = new Date(query['from']);
+       var toShipping = new Date(query['to']);
        matches['date'] = {"$gte" : fromShipping, "$lt": toShipping};
     }
 
+    console.log(matches);
     return model.aggregate([
        {$unwind: "$items"},
        {$unwind: "$items.recapitulations"},
@@ -79,8 +80,8 @@ Controller.prototype.getAllCancel = function(query){
     matches['destination'] = objectId(query['destination']);
 
   if(query['from'] && query['to']){
-     var fromShipping = new Date(query['fromShipping']);
-     var toShipping = new Date(query['toShipping']);
+     var fromShipping = new Date(query['from']);
+     var toShipping = new Date(query['to']);
      matches['date'] = {"$gte" : fromShipping, "$lt": toShipping};
   }
 

@@ -31,7 +31,7 @@
                               </section>
                               <section class="col col-sm-12 col-md-12 col-lg-4">
                                  <label class="input">
-                                   <input type="text" placeholder="Penerima" ng-model="ctrl.filters.receiverName" />
+                                   <input type="text" placeholder="Penerima" ng-model="ctrl.filters.receiver" />
                                  </label>
                               </section>
                               <section class="col col-sm-12 col-md-12 col-lg-4">
@@ -80,7 +80,7 @@
                                 </section>
                                 <section class="col col-sm-12 col-md-12 col-lg-4">
                                    <label class="input">
-                                     <input type="text" placeholder="Status Bayar" ng-model="ctrl.query.paymentStatus" />
+                                     <input type="text" placeholder="Status Bayar" ng-model="ctrl.filters.paymentStatus" />
                                    </label>
                                 </section>
                                 <section class="col col-sm-12 col-md-12 col-lg-4">
@@ -146,7 +146,7 @@
                              <th style="text-align: center; width:3%;">Retur</th>
                              <th style="text-align: center; width:8%;">SJ Balik</th>
                              <th style="text-align: center; width:3%;">Audit</th>
-                             <th style="text-align: center; width:15%;">Aksi</th>
+                             <th style="text-align: center; width:18%;">Aksi</th>
                            </tr>
                          </thead>
                          <tbody>
@@ -193,7 +193,7 @@
                                   <i class="fa fa-remove" />
                                </td>
                                <td style="text-align:center;">
-                                 <a href="#" class="txt-color-white btn-sm btn-primary" title="Edit" ng-click="ctrl.edit(entity._id)">
+                                 <a href="#" class="txt-color-white btn-sm btn-primary" title="Edit" ng-click="ctrl.edit(entity)">
                                     <i class="fa fa-edit"></i> Edit
                                  </a>
                                  &nbsp;
