@@ -23,6 +23,7 @@ module lois.controllers {
 	    onConfigChange(config: string): void {
 	       this.config = config;
          this.paging.page = 1;
+         this.filters = {};
 	       this.filter();
 	    }
 

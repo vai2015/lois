@@ -25,6 +25,7 @@ var lois;
             configurationCtrl.prototype.onConfigChange = function (config) {
                 this.config = config;
                 this.paging.page = 1;
+                this.filters = {};
                 this.filter();
             };
             configurationCtrl.prototype.filter = function () {
