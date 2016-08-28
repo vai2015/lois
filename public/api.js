@@ -128,6 +128,9 @@ var app;
             report.getDeliveries = function (query) {
                 return app.http.get('/lois/api/report/getDeliveries?query=' + JSON.stringify(query));
             };
+            report.getReturn = function (query) {
+                return app.http.get('/lois/api/report/getReturn?query=' + JSON.stringify(query));
+            };
             return report;
         }());
         api.report = report;

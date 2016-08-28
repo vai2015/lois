@@ -121,6 +121,10 @@ module app.api{
       static getDeliveries(query: any){
          return http.get('/lois/api/report/getDeliveries?query=' + JSON.stringify(query));
       }
+
+      static getReturn(query: any){
+         return http.get('/lois/api/report/getReturn?query=' + JSON.stringify(query));
+      }
    }
 
    export class configuration {

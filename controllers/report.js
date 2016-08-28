@@ -31,7 +31,7 @@ Controller.prototype.getRecapitulations = function(query){
 };
 
 Controller.prototype.getDeliveries = function(query){
-   var matches = {"region.destination": objectId(query['defaultRegion']), "items.deliveries.quantity" : {"$gt": 0}};
+   var matches = {"regions.destination": objectId(query['defaultRegion']), "items.deliveries.quantity" : {"$gt": 0}};
    var limit = query['limit'] ? query['limit'] : 10;
    var skip = query['skip'] ? query['skip'] : 0;
 
@@ -54,6 +54,26 @@ Controller.prototype.getDeliveries = function(query){
       {$lookup: {"from": "clients", "localField": "sender", "foreignField": "_id", "as": "sender"}},
       {$lookup: {"from": "paymentTypes", "localField": "payment.type", "foreignField": "_id", "as": "paymentType"}}
    ]).sort({"number": -1}).skip(skip).limit(limit).exec();
+};
+
+Controller.prototype.getReturn = function(query){
+    var matches = {"regions.destination": objectId(query['defaultRegion']), "returned" : true};
+    var limit = query['limit'] ? query['limit'] : 10;
+    var skip = query['skip'] ? query['skip'] : 0;
+
+    if(query['spbNumber'])
+      matches['spbNumber'] = new RegExp(query['spbNumber'], 'i');
+
+    if(query['paymentType'])
+      matches['payment.type'] = objectId(query['paymentType']);
+
+    if(query['date'])
+      matches['returnInfo.date'] = new Date(query['date']);
+
+    if(query['from'] && query['to'])
+      matches['date'] = {"$gte" : new Date(query['from']), "$lte": new Date(query['to'])};
+
+    return model.find(matches).populate('sender').skip(skip).limit(limit).exec();
 };
 
 module.exports = new Controller();
