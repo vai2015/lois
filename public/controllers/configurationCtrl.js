@@ -7,11 +7,6 @@ var lois;
 (function (lois) {
     var controllers;
     (function (controllers) {
-        var ClientViewMode;
-        (function (ClientViewMode) {
-            ClientViewMode[ClientViewMode["client"] = 1] = "client";
-            ClientViewMode[ClientViewMode["tariff"] = 2] = "tariff";
-        })(ClientViewMode || (ClientViewMode = {}));
         var configurationCtrl = (function (_super) {
             __extends(configurationCtrl, _super);
             function configurationCtrl($scope, Notification) {

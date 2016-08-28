@@ -1,11 +1,5 @@
 module lois.controllers {
-   enum ClientViewMode {
-      client = 1,
-      tariff = 2
-   }
-
 	class configurationCtrl extends baseCtrl{
-	    clientViewMode: ClientViewMode;
 	    selectedClient: any;
 	    tariffs: any[];
 	    config: string;

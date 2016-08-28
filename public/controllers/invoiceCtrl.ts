@@ -22,11 +22,22 @@ module lois.controllers {
 
       if(this.tab === 'create')
         this.loadFunc = app.api.invoice.getAll;
-        
+
       else if(this.tab === 'list')
         this.loadFunc = app.api.invoice.getList;
 
       this.filter();
+    }
+
+    print(entity): void {
+        var ctrl = this;
+        app.api.report.getInvoiceReport(entity).then(result => {
+          app.api.reportPrint.printInvoice(result.data).then(buffer => {
+            var blob = new Blob([buffer.data], {type:'application/pdf'});
+            var url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
+          });
+        });
     }
 
     create(): void {

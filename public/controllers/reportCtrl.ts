@@ -10,7 +10,6 @@ module lois.controllers {
      constructor($scope, Notification){
         super(Notification);
         this.showToolbar = true;
-        this.loadFunc = app.api.report.getRecapitulations;
         this.init();
      }
 
@@ -18,7 +17,6 @@ module lois.controllers {
         var ctrl = this;
         app.api.user.getSession().then(result => {
            ctrl.reports = result.data['reports'];
-           ctrl.activeReport = ctrl.reports[0].name;
         });
      }
 
@@ -27,8 +25,14 @@ module lois.controllers {
 
         switch(report){
          case 'Belum Terbayar':
+           this.loadFunc = app.api.report.getUnpaid;
+           this.dataFunc = app.api.report.getUnpaidReport;
+           this.renderFunc = app.api.reportPrint.printUnpaid;
          break;
          case 'Terbayar':
+           this.loadFunc = app.api.report.getPaid;
+           this.dataFunc = app.api.report.getPaidReport;
+           this.renderFunc = app.api.reportPrint.printPaid;
          break;
          case 'Rekapitulasi':
            this.loadFunc = app.api.report.getRecapitulations;
@@ -42,9 +46,23 @@ module lois.controllers {
          break;
          case 'Retur':
            this.loadFunc = app.api.report.getReturn;
+           this.dataFunc = app.api.report.getReturnReport;
+           this.renderFunc = app.api.reportPrint.printReturn;
          break;
          case 'SJ Belum Kembali':
            this.loadFunc = app.api.report.getUnconfirmed;
+           this.dataFunc = app.api.report.getUnconfirmedReport;
+           this.renderFunc = app.api.reportPrint.printUnconfirmed;
+         break;
+         case 'Daftar Kiriman':
+           this.loadFunc = app.api.report.getDeliveryList;
+           this.dataFunc = app.api.report.getDeliveryListReport;
+           this.renderFunc = app.api.reportPrint.printDeliveryList;
+         break;
+         case 'Komisi':
+           this.loadFunc = app.api.report.getCommisions;
+           this.dataFunc = app.api.report.getCommisionsReport;
+           this.renderFunc = app.api.reportPrint.printCommision;
          break;
        }
 

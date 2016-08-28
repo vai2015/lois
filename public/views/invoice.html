@@ -194,9 +194,6 @@
                       <table class="table table-bordered table-striped table-condensed table-hover smart-form has-tickbox">
                         <thead>
                            <tr style="color:black;">
-                             <th style="text-align: center; width: 1%;">
-                               <input type="checkbox" ng-model="ctrl.checkedAll" ng-click="ctrl.toggleCheckAll()" ng-true-value="true" ng-false-value="false"/>
-                             </th>
                              <th style="text-align: center; width: 8%;">No Tagihan</th>
                              <th style="text-align: center; width: 10%;">Tertagih</th>
                              <th style="text-align: center; width: 10%;">Lokasi</th>
@@ -212,9 +209,6 @@
                              </td>
                           </tr>
                             <tr ng-repeat="entity in ctrl.entities" style="color: black;" ng-show="!ctrl.loadingData">
-                                <td style="text-align: center;">
-                                   <input type="checkbox" ng-if="!entity.audited" ng-model="entity.checked"/>
-                                </td>
                                 <td> {{entity.number}} </td>
                                 <td> {{entity.to}} </td>
                                 <td> {{entity.location}}</td>

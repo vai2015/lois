@@ -113,8 +113,13 @@ module lois.controllers{
         }
 
         if(this.filters['recapDate']){
-           var recapDate = new Date(this.filters['recapDate']);
-           this.query['recapDate'] = Date.UTC(recapDate.getFullYear(), recapDate.getMonth(), recapDate.getDate());
+           var date = new Date(this.filters['recapDate']);
+           this.query['recapDate'] = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+        }
+
+        if(this.filters['transferDate']){
+           var date = new Date(this.filters['transferDate']);
+           this.query['transferDate'] = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
         }
      }
 
