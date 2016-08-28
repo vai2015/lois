@@ -3,12 +3,15 @@ var dotenv = require('dotenv').config();
 var co = require('co');
 var mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGO_DSN);
+if(process.env.MODE == 'production')
+  mongoose.connect(process.env.MONGO_DSN);
+else if(process.env.MODE == 'development')
+  mongoose.connect(process.env.MONGO_DSN_TEST);
 
 db.configure({
    host     : process.env.MYSQL_MIGRATION_HOST,
    user     : process.env.MYSQL_MIGRATION_USER,
-   password : '',
+   password : process.env.MYSQL_MIGRATION_PASSWORD,
    database : process.env.MYSQL_MIGRATION_DB
 });
 
