@@ -28,6 +28,7 @@ app.use(require('./routes/delivery'));
 app.use(require('./routes/return'));
 app.use(require('./routes/payment'));
 app.use(require('./routes/invoice'));
+app.use(require('./routes/report'));
 
 if(process.env.MODE == 'production')
   app.use(compression());

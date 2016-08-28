@@ -113,6 +113,12 @@ module app.api{
      }
    }
 
+   export class report {
+      static getRecapitulations(query: any){
+         return http.get('/lois/api/report/getRecapitulations?query=' + JSON.stringify(query));
+      }
+   }
+
    export class configuration {
      static get(config: string, id: any){
         return app.http.get('/lois/api/' + config + '/get?id=' + id);

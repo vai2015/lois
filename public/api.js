@@ -119,6 +119,15 @@ var app;
             return invoice;
         }());
         api.invoice = invoice;
+        var report = (function () {
+            function report() {
+            }
+            report.getRecapitulations = function (query) {
+                return app.http.get('/lois/api/report/getRecapitulations?query=' + JSON.stringify(query));
+            };
+            return report;
+        }());
+        api.report = report;
         var configuration = (function () {
             function configuration() {
             }

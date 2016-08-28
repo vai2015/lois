@@ -71,9 +71,9 @@ var lois;
             baseCtrl.prototype.createQuery = function () {
                 this.query = {};
                 this.createPagingQuery();
-                if (this.filters['fromDate'] && this.filters['toDate']) {
-                    var from = new Date(this.filters['fromDate']);
-                    var to = new Date(this.filters['toDate']);
+                if (this.filters['from'] && this.filters['to']) {
+                    var from = new Date(this.filters['from']);
+                    var to = new Date(this.filters['to']);
                     this.query['from'] = Date.UTC(from.getFullYear(), from.getMonth(), from.getDate());
                     this.query['to'] = Date.UTC(to.getFullYear(), to.getMonth(), to.getDate());
                 }
