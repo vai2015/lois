@@ -33,18 +33,21 @@ if(process.env.MODE == 'production')
   app.use(compression());
 
 app.listen(process.env.PORT, function(error){
-   if(error)
-      console.log(error);
-
-   else{
-     mongoose.connect(process.env.MONGO_DSN);
-
-     mongoose.connection.on('open', function (ref) {
-       console.log('Connected to mongo server.');
-     });
-
-     console.log('Server is running on port ' + process.env.PORT);
+   if(error){
+     console.log(error);
+     return;
    }
+
+   if(process.env.MODE == 'production')
+       mongoose.connect(process.env.MONGO_DSN);
+   else if(process.env.MODE == 'development')
+      mongoose.connect(process.env.MONGO_DSN_TEST);
+
+   mongoose.connection.on('open', function (ref) {
+     console.log('Connected to mongo server.');
+   });
+
+   console.log('Server is running on port ' + process.env.PORT);
 });
 
 app.get('/', function(req, res){
