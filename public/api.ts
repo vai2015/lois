@@ -31,6 +31,16 @@ module app.api{
       }
    }
 
+   export class deliveryOrder {
+      static getAll(query: any){
+         return app.http.get('/lois/api/deliveryOrder/getAll?query=' + JSON.stringify(query));
+      }
+
+      static getDataReport(data: any){
+         return app.http.post('/lois/api/deliveryOrder/getDataReport', JSON.stringify(data));
+      }
+   }
+
    export class recapitulation{
       static getAll(query: any){
          return app.http.get('/lois/api/recapitulation/getAll?query=' + JSON.stringify(query));
@@ -184,6 +194,15 @@ module app.api{
    }
 
    export class reportPrint{
+     static printDeliveryOrder(data: any){
+         var config = {
+            "headers": {"content-type": "application/x-www-form-urlencoded; charset=UTF-8"},
+            "responseType": "arraybuffer"
+         };
+
+         return app.http.post('http://limassentosa.net:8000/report-engine/suratjalan', JSON.stringify(data), config);
+     }
+
      static printPaid(data: any){
          var config = {
             "headers": {"content-type": "application/x-www-form-urlencoded; charset=UTF-8"},

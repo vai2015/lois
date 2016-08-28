@@ -43,7 +43,7 @@ Controller.prototype.getParameters = function(query){
   parameters['limit'] = query['limit'] ? query['limit'] : 10;
   parameters['skip'] = query['skip'] ? query['skip'] : 0;
 
-  if(query['name'])
+  if(query['spbNumber'])
      parameters['conditions']['spbNumber'] = new RegExp(query['spbNumber'], 'i');
 
   if(query['receiver'])

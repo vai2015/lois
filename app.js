@@ -23,6 +23,7 @@ app.use(require('./routes/itemType'));
 app.use(require('./routes/packingType'));
 app.use(require('./routes/partner'));
 app.use(require('./routes/shipping'));
+app.use(require('./routes/deliveryOrder'));
 app.use(require('./routes/recapitulation'));
 app.use(require('./routes/delivery'));
 app.use(require('./routes/return'));

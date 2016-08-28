@@ -35,6 +35,18 @@ var app;
             return shipping;
         }());
         api.shipping = shipping;
+        var deliveryOrder = (function () {
+            function deliveryOrder() {
+            }
+            deliveryOrder.getAll = function (query) {
+                return app.http.get('/lois/api/deliveryOrder/getAll?query=' + JSON.stringify(query));
+            };
+            deliveryOrder.getDataReport = function (data) {
+                return app.http.post('/lois/api/deliveryOrder/getDataReport', JSON.stringify(data));
+            };
+            return deliveryOrder;
+        }());
+        api.deliveryOrder = deliveryOrder;
         var recapitulation = (function () {
             function recapitulation() {
             }
@@ -179,6 +191,13 @@ var app;
         var reportPrint = (function () {
             function reportPrint() {
             }
+            reportPrint.printDeliveryOrder = function (data) {
+                var config = {
+                    "headers": { "content-type": "application/x-www-form-urlencoded; charset=UTF-8" },
+                    "responseType": "arraybuffer"
+                };
+                return app.http.post('http://limassentosa.net:8000/report-engine/suratjalan', JSON.stringify(data), config);
+            };
             reportPrint.printPaid = function (data) {
                 var config = {
                     "headers": { "content-type": "application/x-www-form-urlencoded; charset=UTF-8" },
