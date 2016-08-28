@@ -27,8 +27,6 @@ Controller.prototype.getParameters = function(query){
   if(query['skip'] || query['skip'] == 0)
      parameters['skip'] = query['skip'];
 
-   parameters['populations'] = ['role'];
-
    return parameters;
 };
 
@@ -37,9 +35,6 @@ Controller.prototype.getAll = function(parameters){
 
    if(parameters['limit'] && (parameters['skip'] || parameters['skip'] == 0))
      find = find.skip(parameters['skip']).limit(parameters['limit']);
-
-   if(parameters['populations'])
-     find = find.populate(parameters['populations'].join());
 
    return find.sort({"position": 1}).exec();
 };
