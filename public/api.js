@@ -125,6 +125,9 @@ var app;
             report.getRecapitulations = function (query) {
                 return app.http.get('/lois/api/report/getRecapitulations?query=' + JSON.stringify(query));
             };
+            report.getDeliveries = function (query) {
+                return app.http.get('/lois/api/report/getDeliveries?query=' + JSON.stringify(query));
+            };
             return report;
         }());
         api.report = report;

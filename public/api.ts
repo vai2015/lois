@@ -117,6 +117,10 @@ module app.api{
       static getRecapitulations(query: any){
          return http.get('/lois/api/report/getRecapitulations?query=' + JSON.stringify(query));
       }
+
+      static getDeliveries(query: any){
+         return http.get('/lois/api/report/getDeliveries?query=' + JSON.stringify(query));
+      }
    }
 
    export class configuration {

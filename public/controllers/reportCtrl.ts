@@ -34,7 +34,7 @@ module lois.controllers {
            this.loadFunc = app.api.report.getRecapitulations;
          break;
          case 'Pengiriman':
-
+           this.loadFunc = app.api.report.getDeliveries;
          break;
          case 'Retur':
 

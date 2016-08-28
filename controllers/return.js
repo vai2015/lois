@@ -32,8 +32,8 @@ Controller.prototype.getParameters = function(query){
      parameters['conditions']['regions.source'] = objectId(query['regionSource']);
 
    if(query['from'] && query['to']){
-      var fromShipping = new Date(query['fromShipping']);
-      var toShipping = new Date(query['toShipping']);
+      var fromShipping = new Date(query['from']);
+      var toShipping = new Date(query['to']);
       parameters['conditions']['date'] = {"$gte" : fromShipping, "$lte": toShipping};
    }
 

@@ -30,4 +30,30 @@ Controller.prototype.getRecapitulations = function(query){
    ]).sort({"number": -1}).skip(skip).limit(limit).exec();
 };
 
+Controller.prototype.getDeliveries = function(query){
+   var matches = {"region.destination": objectId(query['defaultRegion']), "items.deliveries.quantity" : {"$gt": 0}};
+   var limit = query['limit'] ? query['limit'] : 10;
+   var skip = query['skip'] ? query['skip'] : 0;
+
+   if(query['spbNumber'])
+     matches['spbNumber'] = new RegExp(query['spbNumber'], 'i');
+
+   if(query['destination'])
+     matches['destination'] = objectId(query['destination']);
+
+   if(query['driver'])
+     matches['items.deliveries'] = {"$elemMatch": {"driver": objectId(query['driver'])}};
+
+   if(query['from'] && query['to'])
+     matches['date'] = {"$gte" : new Date(query['from']), "$lte": new Date(query['to'])};
+
+   return model.aggregate([
+      {$unwind: "$items"},
+      {$unwind: "$items.deliveries"},
+      {$match: matches},
+      {$lookup: {"from": "clients", "localField": "sender", "foreignField": "_id", "as": "sender"}},
+      {$lookup: {"from": "paymentTypes", "localField": "payment.type", "foreignField": "_id", "as": "paymentType"}}
+   ]).sort({"number": -1}).skip(skip).limit(limit).exec();
+};
+
 module.exports = new Controller();
