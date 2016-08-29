@@ -8,18 +8,18 @@ var co = require('co');
 var _ = require('lodash');
 var objectId = mongoose.Types.ObjectId;
 
-var DEFAULT_LOCATION = "57bedddcc06122040d626411";
-var DEFAULT_REGION = "57bedc8254fae0c013130aa9";
-var DEFAULT_CLIENT = "57c15819b495e502157d7cea";
-var DEFAULT_PAYMENT_TYPE = "57bede7533df7f1c060f8db0";
-var DEFAULT_PARTNER = "57c1589eb495e502157d7ceb";
-var WEIGHT = "57bedeaa6a797e9c1d9fdab0";
-var VOLUME = "57bedeaa6a797e9c1d9fdab1";
-var COLLI = "57bedeaa6a797e9c1d9fdab2";
-var MOM = "57bedeaa6a797e9c1d9fdab3";
-var JMW = "57bedeaa6a797e9c1d9fdab5";
-var SMW = "57bedeaa6a797e9c1d9fdab6";
-var CW = "57bedeaa6a797e9c1d9fdab7";
+var DEFAULT_LOCATION = "57c45ac08e8ddc7019605687";
+var DEFAULT_REGION = "57c459f9d1bb7304270c4552";
+var DEFAULT_CLIENT = "57c45d368e4f6580202789e1";
+var DEFAULT_PAYMENT_TYPE = "57c46a82398059b414b37864";
+var DEFAULT_PARTNER = "57c46a80398059b414b37854";
+var WEIGHT = "57c46a80398059b414b37850";
+var VOLUME = "57c46a81398059b414b37857";
+var COLLI = "57c46a82398059b414b37868";
+var MOM = "57c46a82398059b414b3786b";
+var JMW = "57c46a82398059b414b37870";
+var SMW = "57c46a82398059b414b37872";
+var CW = "57c46a82398059b414b37874";
 
 function Controller(){
   this.tariffController = require('../controllers/tariff');

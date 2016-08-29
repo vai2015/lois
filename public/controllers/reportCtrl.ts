@@ -16,7 +16,8 @@ module lois.controllers {
      init(): void {
         var ctrl = this;
         app.api.user.getSession().then(result => {
-           ctrl.reports = result.data['reports'];
+           var roleReports = <Array<any>> result.data['reports'];
+           ctrl.reports = roleReports.map(e => e.report);
         });
      }
 

@@ -17,7 +17,8 @@ var lois;
             reportCtrl.prototype.init = function () {
                 var ctrl = this;
                 app.api.user.getSession().then(function (result) {
-                    ctrl.reports = result.data['reports'];
+                    var roleReports = result.data['reports'];
+                    ctrl.reports = roleReports.map(function (e) { return e.report; });
                 });
             };
             reportCtrl.prototype.onReportChange = function (report) {

@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var model = require('../models/roleMenu');
+var menuModel = require('../models/menu');
 var roleModel = require('../models/role');
 var co = require('co');
 var objectId = mongoose.Types.ObjectId;
@@ -15,11 +16,11 @@ Controller.prototype.get = function(id){
 Controller.prototype.getParameters = function(query){
   var parameters = {"conditions": {}};
 
-  if(query['name'])
-     parameters['conditions']['name'] = new RegExp(query['name'], 'i');
+  if(query['menu'])
+     parameters['conditions']['menu'] = objectId(query['menu']);
 
   if(query['role'])
-    parameters['conditions']['roles'] = objectId(query['role']);
+    parameters['conditions']['role'] = objectId(query['role']);
 
   if(query['limit'])
      parameters['limit'] = query['limit'];
@@ -36,7 +37,7 @@ Controller.prototype.getAll = function(parameters){
    if(parameters['limit'] && (parameters['skip'] || parameters['skip'] == 0))
      find = find.skip(parameters['skip']).limit(parameters['limit']);
 
-   return find.sort({"position": 1}).exec();
+   return find.populate('menu').populate('role').sort({"position": 1}).exec();
 };
 
 Controller.prototype.save = function(data){

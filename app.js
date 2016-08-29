@@ -13,6 +13,8 @@ app.use(session({secret: 'sdfe34234fdff234fsdf', saveUninitialized: true, resave
 app.use(require('./routes/user'));
 app.use(require('./routes/region'));
 app.use(require('./routes/location'));
+app.use(require('./routes/menu'));
+app.use(require('./routes/report'));
 app.use(require('./routes/trainType'));
 app.use(require('./routes/driver'));
 app.use(require('./routes/role'));
@@ -29,7 +31,7 @@ app.use(require('./routes/delivery'));
 app.use(require('./routes/return'));
 app.use(require('./routes/payment'));
 app.use(require('./routes/invoice'));
-app.use(require('./routes/report'));
+app.use(require('./routes/reportData'));
 
 if(process.env.MODE == 'production')
   app.use(compression());

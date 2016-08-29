@@ -1,4 +1,4 @@
-module app.api{
+ module app.api{
    export class user {
       static authenticate(data: any){
          return app.http.post('/lois/api/user/authenticate', JSON.stringify(data));
@@ -125,71 +125,71 @@ module app.api{
 
    export class report {
       static getRecapitulations(query: any){
-         return http.get('/lois/api/report/getRecapitulations?query=' + JSON.stringify(query));
+         return http.get('/lois/api/reportData/getRecapitulations?query=' + JSON.stringify(query));
       }
 
       static getRecapitulationsReport(data: any){
-         return http.post('/lois/api/report/getRecapitulationsReport', JSON.stringify(data));
+         return http.post('/lois/api/reportData/getRecapitulationsReport', JSON.stringify(data));
       }
 
       static getDeliveries(query: any){
-         return http.get('/lois/api/report/getDeliveries?query=' + JSON.stringify(query));
+         return http.get('/lois/api/reportData/getDeliveries?query=' + JSON.stringify(query));
       }
 
       static getDeliveriesReport(data: any){
-         return http.post('/lois/api/report/getDeliveriesReport', JSON.stringify(data));
+         return http.post('/lois/api/reportData/getDeliveriesReport', JSON.stringify(data));
       }
 
       static getReturn(query: any){
-         return http.get('/lois/api/report/getReturn?query=' + JSON.stringify(query));
+         return http.get('/lois/api/reportData/getReturn?query=' + JSON.stringify(query));
       }
 
       static getReturnReport(data: any){
-         return http.post('/lois/api/report/getReturnReport', JSON.stringify(data));
+         return http.post('/lois/api/reportData/getReturnReport', JSON.stringify(data));
       }
 
       static getUnconfirmed(query: any){
-         return http.get('/lois/api/report/getUnconfirmed?query=' + JSON.stringify(query));
+         return http.get('/lois/api/reportData/getUnconfirmed?query=' + JSON.stringify(query));
       }
 
       static getUnconfirmedReport(data: any){
-         return http.post('/lois/api/report/getUnconfirmedReport', JSON.stringify(data));
+         return http.post('/lois/api/reportData/getUnconfirmedReport', JSON.stringify(data));
       }
 
       static getPaid(query: any){
-         return http.get('/lois/api/report/getPaid?query=' + JSON.stringify(query));
+         return http.get('/lois/api/reportData/getPaid?query=' + JSON.stringify(query));
       }
 
       static getPaidReport(data: any){
-         return http.post('/lois/api/report/getPaidReport', JSON.stringify(data));
+         return http.post('/lois/api/reportData/getPaidReport', JSON.stringify(data));
       }
 
       static getUnpaid(query: any){
-         return http.get('/lois/api/report/getUnpaid?query=' + JSON.stringify(query));
+         return http.get('/lois/api/reportData/getUnpaid?query=' + JSON.stringify(query));
       }
 
       static getUnpaidReport(data: any){
-         return http.post('/lois/api/report/getUnpaidReport', JSON.stringify(data));
+         return http.post('/lois/api/reportData/getUnpaidReport', JSON.stringify(data));
       }
 
       static getDeliveryList(query: any){
-         return http.get('/lois/api/report/getDeliveryList?query=' + JSON.stringify(query));
+         return http.get('/lois/api/reportData/getDeliveryList?query=' + JSON.stringify(query));
       }
 
       static getDeliveryListReport(data: any){
-         return http.post('/lois/api/report/getDeliveryListReport', JSON.stringify(data));
+         return http.post('/lois/api/reportData/getDeliveryListReport', JSON.stringify(data));
       }
 
       static getCommisions(query: any){
-         return http.get('/lois/api/report/getCommisions?query=' + JSON.stringify(query));
+         return http.get('/lois/api/reportData/getCommisions?query=' + JSON.stringify(query));
       }
 
       static getCommisionsReport(data: any){
-         return http.post('/lois/api/report/getCommisionsReport', JSON.stringify(data));
+         return http.post('/lois/api/reportData/getCommisionsReport', JSON.stringify(data));
       }
 
       static getInvoiceReport(data: any){
-         return http.post('/lois/api/report/getInvoiceReport', JSON.stringify(data));
+         return http.post('/lois/api/reportData/getInvoiceReport', JSON.stringify(data));
       }
    }
 

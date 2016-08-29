@@ -143,7 +143,6 @@
                              <th style="text-align: center; width:10%">Pembayaran</th>
                              <th style="text-align: center; width:12%;">Status</th>
                              <th style="text-align: center; width:10%;">Total</th>
-                             <th style="text-align: center; width:3%;">Retur</th>
                              <th style="text-align: center; width:8%;">SJ Balik</th>
                              <th style="text-align: center; width:3%;">Audit</th>
                              <th style="text-align: center; width:18%;">Aksi</th>
@@ -174,12 +173,6 @@
                                  </p>
                                </td>
                                <td>{{entity.cost.total | currency: 'Rp ' : 0}}</td>
-                               <td style="text-align:center;" ng-if="entity.returned">
-                                  <i class="fa fa-check" />
-                               </td>
-                               <td style="text-align:center;" ng-if="!entity.returned">
-                                  <i class="fa fa-remove" />
-                               </td>
                                <td style="text-align:center;" ng-if="entity.confirmed">
                                   <i class="fa fa-check" />
                                </td>

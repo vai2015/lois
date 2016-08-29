@@ -3,7 +3,6 @@ var Schema = mongoose.Schema;
 var refId = mongoose.Schema.Types.ObjectId;
 
 var model = new Schema({
-   id: {type: Number, default: null},
    client: {type: refId, ref: 'Client'},
    destination: {type: refId, ref: 'Location'},
    minimum: {type: Number, default: 0},

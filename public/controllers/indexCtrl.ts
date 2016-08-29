@@ -12,7 +12,8 @@ module lois.controllers{
       init(): void {
         var ctrl = this;
         app.api.user.getSession().then(result => {
-           ctrl.menus = <Array<any>> result.data['menus'];
+           var roleMenus = <Array<any>> result.data['menus'];
+           ctrl.menus = roleMenus.map(e => e.menu);
            ctrl.user = result.data['name'];
         })
       }

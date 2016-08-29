@@ -8,7 +8,7 @@ var objectId = mongoose.Types.ObjectId;
 function Controller(){}
 
 Controller.prototype.getParameters = function(query){
-   var parameters = {"conditions": {"inputLocation": objectId(query['defaultLocation']), "sender": {"$ne": objectId("57c15819b495e502157d7cea")}}};
+   var parameters = {"conditions": {"inputLocation": objectId(query['defaultLocation']), "sender": {"$ne": objectId("57c45d368e4f6580202789e1")}}};
    parameters['limit'] = query['limit'] ? query['limit'] : 10;
    parameters['skip'] = query['skip'] ? query['skip'] : 0;
 

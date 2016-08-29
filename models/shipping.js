@@ -20,10 +20,11 @@ var model = Schema({
       location: {type: refId, ref: 'Location'},
       status: {type: String, default: 'Belum Terbayar'},
       phases: [{
-         date: {type: Date, default: null},
+         transferDate: {type: Date, default: null},
          bank: {type: String, default: null},
          notes: {type: String, default: null},
-         amount: {type: Number, default: 0.0}
+         amount: {type: Number, default: 0.0},
+         date: {type: Date, default: Date.now},
       }],
       paid: {type: Number, default: 0.0}
    },
@@ -72,11 +73,11 @@ var model = Schema({
    inputLocation: {type: refId, ref: 'Location'},
    created: {
       date: {type: Date, default: null},
-      by: {type: refId, ref: 'User'}
+      user: {type: refId, ref: 'User'}
    },
    modified: {
       date: {type: Date, default: Date.now},
-      by: {type: refId, ref: 'User'}
+      user: {type: refId, ref: 'User'}
    },
    items: [{
       itemType: {type: refId, ref: 'ItemType'},

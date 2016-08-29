@@ -93,7 +93,7 @@ Controller.prototype.pay = function(viewModels, user){
          }
 
          shipping.payment.phases.push({
-             date: new Date(viewModel.date),
+             transferDate: new Date(viewModel.date),
              bank: viewModel.bank,
              notes: viewModel.notes,
              amount: parseFloat(viewModel.amount)

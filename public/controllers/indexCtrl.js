@@ -10,7 +10,8 @@ var lois;
             indexCtrl.prototype.init = function () {
                 var ctrl = this;
                 app.api.user.getSession().then(function (result) {
-                    ctrl.menus = result.data['menus'];
+                    var roleMenus = result.data['menus'];
+                    ctrl.menus = roleMenus.map(function (e) { return e.menu; });
                     ctrl.user = result.data['name'];
                 });
             };
