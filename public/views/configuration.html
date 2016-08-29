@@ -56,10 +56,10 @@
   							</a>
                 <ul class="dropdown-menu pull-right" style="background-color: #2C3742;">
    								<li>
-   									<a data-toggle="tab" href="#" ng-click="ctrl.onConfigChange('roleMenus')">Menu</a>
+   									<a data-toggle="tab" href="#" ng-click="ctrl.onConfigChange('roleMenu')">Menu</a>
    								</li>
    								<li>
-   									<a data-toggle="tab" href="#" ng-click="ctrl.onConfigChange('roleReports')">Report</a>
+   									<a data-toggle="tab" href="#" ng-click="ctrl.onConfigChange('roleReport')">Report</a>
    								</li>
    							</ul>
              </li>
@@ -516,15 +516,21 @@
                       </div>
                     </div>
 
-                    <div ng-show="ctrl.config == 'roleMenus'">
+                    <div ng-show="ctrl.config == 'roleMenu'">
                       <div class="widget-body-toolbar" ng-show="ctrl.showToolbar">
                           <form class="smart-form">
                              <legend>Filter data</legend>
                              <fieldset>
                                 <div class="row">
-                                  <section class="col col-sm-12 col-md-12 col-lg-4">
+                                  <section class="col col-sm-12 col-md-12 col-lg-6">
                                     <label class="input">
-                                      <input type="text" placeholder="Nama" ng-model="ctrl.filters.name" />
+                                      <input type="text"
+                                         ng-model="ctrl.filters.menu"
+                                         placeholder="Menu"
+                                         uib-typeahead="data as data.name for data in ctrl.suggest('menu', $viewValue)"
+                                         typeahead-min-length="2"
+                                         typeahead-loading="menuFilter" class="form-control" />
+                                      <i ng-show="menuFilter" class="glyphicon glyphicon-refresh"></i>
                                     </label>
                                   </section>
                                   <section class="col col-sm-12 col-md-12 col-lg-6">
@@ -572,9 +578,87 @@
                               </tr>
                                <tr ng-repeat="entity in ctrl.entities" style="color: black;" ng-show="!ctrl.loadingData">
                                     <td style="text-align:center;"> {{$index + 1}} </td>
-                                    <td> {{entity.name}} </td>
-                                    <td> {{entity.address}} </td>
-                                    <td> {{entity.contact}} </td>
+                                    <td> {{entity.menu.name}} </td>
+                                    <td> {{entity.role.name}} </td>
+                                    <td style="text-align:left;">
+                                      <a href="#" class="txt-color-white btn-sm btn-primary" title="Edit" ng-click="ctrl.edit(entity._id)">
+                                         <i class="fa fa-edit"></i> Edit
+                                      </a>
+                                      &nbsp;
+                                      <a href="#"  class="txt-color-white btn-sm btn-danger" title="Hapus" ng-click="ctrl.delete(entity._id)">
+                                         <i class="fa fa-remove"></i> Hapus
+                                      </a>
+                                    </td>
+                               </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    <div ng-show="ctrl.config == 'roleReport'">
+                      <div class="widget-body-toolbar" ng-show="ctrl.showToolbar">
+                          <form class="smart-form">
+                             <legend>Filter data</legend>
+                             <fieldset>
+                                <div class="row">
+                                  <section class="col col-sm-12 col-md-12 col-lg-6">
+                                    <label class="input">
+                                      <input type="text"
+                                         ng-model="ctrl.filters.report"
+                                         placeholder="Report"
+                                         uib-typeahead="data as data.name for data in ctrl.suggest('report', $viewValue)"
+                                         typeahead-min-length="2"
+                                         typeahead-loading="reportFilter" class="form-control" />
+                                      <i ng-show="reportFilter" class="glyphicon glyphicon-refresh"></i>
+                                    </label>
+                                  </section>
+                                  <section class="col col-sm-12 col-md-12 col-lg-6">
+                                    <label class="input">
+                                      <input type="text"
+                                         ng-model="ctrl.filters.role"
+                                         placeholder="Role"
+                                         uib-typeahead="data as data.name for data in ctrl.suggest('role', $viewValue)"
+                                         typeahead-min-length="2"
+                                         typeahead-loading="roleFilter" class="form-control" />
+                                      <i ng-show="roleFilter" class="glyphicon glyphicon-refresh"></i>
+                                    </label>
+                                  </section>
+                                </div>
+                             </fieldset>
+                          </form>
+                      </div>
+                      <div class="widget-body-toolbar">
+                        <div class="row">
+                          <div class="col-xs-9 col-sm-5 col-md-5 col-lg-6">
+                            <a href="#" class="btn btn-default" style="color: black;" ng-click="ctrl.filter()">
+                               <i class="fa fa-search"></i> Cari
+                            </a>
+                            <a href="#" class="btn btn-default" style="color: black;" ng-click="ctrl.add()">
+                               <i class="fa fa-plus"></i> Tambah
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-condensed table-hover smart-form has-tickbox">
+                          <thead>
+                             <tr style="color:black;">
+                               <th style="text-align: center; width: 1%;">No</th>
+                               <th style="text-align: center; width: 8%;">Report</th>
+                               <th style="text-align: center; width: 15%;">Role</th>
+                               <th style="text-align: center; width: 7%;">Aksi</th>
+                             </tr>
+                          </thead>
+                          <tbody>
+                              <tr ng-show="ctrl.loadingData">
+                                 <td style="text-align: center; margin: 10px 0px;" colspan="100">
+                                   <img src="../assets/img/ajax-loader.gif">
+                                 </td>
+                              </tr>
+                               <tr ng-repeat="entity in ctrl.entities" style="color: black;" ng-show="!ctrl.loadingData">
+                                    <td style="text-align:center;"> {{$index + 1}} </td>
+                                    <td> {{entity.report.name}} </td>
+                                    <td> {{entity.role.name}} </td>
                                     <td style="text-align:left;">
                                       <a href="#" class="txt-color-white btn-sm btn-primary" title="Edit" ng-click="ctrl.edit(entity._id)">
                                          <i class="fa fa-edit"></i> Edit
@@ -879,6 +963,80 @@
                             </label>
                             <label class="input">
                               <input type="text" ng-model="ctrl.entity.contact" />
+                            </label>
+                          </section>
+                        </div>
+                        <footer>
+                           <button type="button" class="btn btn-default" ng-click="ctrl.toggleShowForm(false)">Cancel</button>
+                           <button type="button" class="btn btn-default" ng-click="ctrl.save()">Save</button>
+                        </footer>
+                      </fieldset>
+                    </form>
+
+                    <form class="smart-form" ng-show="ctrl.config == 'roleMenu'">
+                      <fieldset>
+                        <div class="row">
+                          <section class="col col-sm-12 col-md-12 col-lg-12">
+                            <label class="label">
+                               Menu
+                            </label>
+                            <label class="input">
+                              <input type="text"
+                                 ng-model="ctrl.entity.menu"
+                                 uib-typeahead="data as data.name for data in ctrl.suggest('menu', $viewValue)"
+                                 typeahead-min-length="2"
+                                 typeahead-loading="menuInput" class="form-control" />
+                              <i ng-show="menuInput" class="glyphicon glyphicon-refresh"></i>
+                            </label>
+                          </section>
+                          <section class="col col-sm-12 col-md-12 col-lg-12">
+                            <label class="label">
+                               Role
+                            </label>
+                            <label class="input">
+                              <input type="text"
+                                 ng-model="ctrl.entity.role"
+                                 uib-typeahead="data as data.name for data in ctrl.suggest('role', $viewValue)"
+                                 typeahead-min-length="2"
+                                 typeahead-loading="roleInput" class="form-control" />
+                              <i ng-show="roleInput" class="glyphicon glyphicon-refresh"></i>
+                            </label>
+                          </section>
+                        </div>
+                        <footer>
+                           <button type="button" class="btn btn-default" ng-click="ctrl.toggleShowForm(false)">Cancel</button>
+                           <button type="button" class="btn btn-default" ng-click="ctrl.save()">Save</button>
+                        </footer>
+                      </fieldset>
+                    </form>
+
+                    <form class="smart-form" ng-show="ctrl.config == 'roleReport'">
+                      <fieldset>
+                        <div class="row">
+                          <section class="col col-sm-12 col-md-12 col-lg-12">
+                            <label class="label">
+                               Report
+                            </label>
+                            <label class="input">
+                              <input type="text"
+                                 ng-model="ctrl.entity.report"
+                                 uib-typeahead="data as data.name for data in ctrl.suggest('report', $viewValue)"
+                                 typeahead-min-length="2"
+                                 typeahead-loading="reportInput" class="form-control" />
+                              <i ng-show="reportInput" class="glyphicon glyphicon-refresh"></i>
+                            </label>
+                          </section>
+                          <section class="col col-sm-12 col-md-12 col-lg-12">
+                            <label class="label">
+                               Role
+                            </label>
+                            <label class="input">
+                              <input type="text"
+                                 ng-model="ctrl.entity.role"
+                                 uib-typeahead="data as data.name for data in ctrl.suggest('role', $viewValue)"
+                                 typeahead-min-length="2"
+                                 typeahead-loading="roleInput" class="form-control" />
+                              <i ng-show="roleInput" class="glyphicon glyphicon-refresh"></i>
                             </label>
                           </section>
                         </div>

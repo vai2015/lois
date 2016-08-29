@@ -15,6 +15,8 @@ app.use(require('./routes/region'));
 app.use(require('./routes/location'));
 app.use(require('./routes/menu'));
 app.use(require('./routes/report'));
+app.use(require('./routes/roleMenu'));
+app.use(require('./routes/roleReport'));
 app.use(require('./routes/trainType'));
 app.use(require('./routes/driver'));
 app.use(require('./routes/role'));

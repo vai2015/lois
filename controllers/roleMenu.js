@@ -10,7 +10,7 @@ function Controller(){}
 Controller.api = 'roleMenu';
 
 Controller.prototype.get = function(id){
-   return model.findOne({_id: objectId(id)}).exec();
+   return model.findOne({_id: objectId(id)}).populate('menu').populate('role').exec();
 };
 
 Controller.prototype.getParameters = function(query){
@@ -28,6 +28,7 @@ Controller.prototype.getParameters = function(query){
   if(query['skip'] || query['skip'] == 0)
      parameters['skip'] = query['skip'];
 
+    console.log(parameters.conditions);
    return parameters;
 };
 

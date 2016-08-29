@@ -10,7 +10,7 @@ function Controller(){}
 Controller.api = 'roleReport';
 
 Controller.prototype.get = function(id){
-   return model.findOne({_id: objectId(id)}).exec();
+   return model.findOne({_id: objectId(id)}).populate('report').populate('role').exec();
 };
 
 Controller.prototype.getParameters = function(query){
