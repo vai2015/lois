@@ -335,6 +335,7 @@ Migration.migrateShippingItems = function(limit, skip){
              if(!shipping)
                return;
 
+               shipping.items = [];
                var item = {
                    itemType: yield itemTypeModel.findOne({"number": row.item_type_id}),
                    packingType: yield packingTypeModel.findOne({"number": row.packing_type_id}),
@@ -391,7 +392,7 @@ Migration.migrateShippingItems = function(limit, skip){
 //Migration.migrateTariffs(100000, 0);
 
 //Parameter 1 = location id, parameter 2 = limit, parameter 3 = skip
-//Migration.migrateShippings(24, 100000, 0);
+//Migration.migrateShippings(24, 100000, 100000);
 
 //Parameter 1 = limit, parameter 2 = skip
-Migration.migrateShippingItems(50000, 100000);
+Migration.migrateShippingItems(271495, 0);
