@@ -77,7 +77,7 @@ Controller.prototype.reject = function(viewModel){
 };
 
 Controller.prototype.processPayment = function(data, shipping){
-    var totalPaid =  _.sumBy(shipping.payment.phases, "amount") + parseFloat(data.amount);
+    var totalPaid =  shipping.payment.paid + parseFloat(data.amount);
 
     if(totalPaid >= shipping.cost.total)
        shipping.payment.status = TERBAYAR;

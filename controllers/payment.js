@@ -71,7 +71,7 @@ Controller.prototype.pay = function(viewModels, user){
             return;
 
          var previousStatus = shipping.payment.status;
-         var totalPaid = _.sumBy(shipping.payment.phases, "amount") + parseFloat(viewModel.amount);
+         var totalPaid = shipping.payment.paid + parseFloat(viewModel.amount);
 
          if(totalPaid >= shipping.cost.total)
             shipping.payment.status = TERBAYAR;
@@ -109,7 +109,8 @@ Controller.prototype.pay = function(viewModels, user){
 };
 
 Controller.prototype.audit = function(viewModel, notes, user){
-
+  viewModel.date = new Date();
+  
   var audit = new require('../models/audit')({
      type: 'payment',
      notes: notes,
