@@ -21,11 +21,20 @@ Controller.prototype.getRecapitulations = function(query){
    if(query['destination'])
      matches['destination'] = objectId(query['destination']);
 
-   if(query['regionDest'])
+   if(query['regionSource'])
      matches['regions.source'] = objectId(query['regionSource']);
 
+   if(query['regionDest'])
+     matches['regions.destination'] = objectId(query['regionDest']);
+
+   if(query['trainType'])
+     matches['items.recapitulations.trainType'] = objectId(query['trainType']);
+
+   if(query['driver'])
+     matches['items.recapitulations.driver'] = objectId(query['driver']);
+
    if(query['recapDate'])
-     matches['items.recapitulations.date'] = new Date(query['recapDate']);
+     matches['items.recapitulations.modified.date'] = new Date(query['recapDate']);
 
    if(query['vehicleNumber'])
      matches['items.recapitulations.vehicleNumber'] = query['vehicleNumber'];
@@ -119,6 +128,9 @@ Controller.prototype.getDeliveries = function(query){
 
    if(query['driver'])
      matches['items.deliveries.driver'] = objectId(query['driver']);
+
+   if(query['deliveryDate'])
+     matches['items.deliveries.modified.date'] = new Date(query['deliveryDate']);
 
    if(query['from'] && query['to'])
      matches['date'] = {"$gte" : new Date(query['from']), "$lte": new Date(query['to'])};
@@ -313,7 +325,7 @@ Controller.prototype.getPaid = function(query){
     if(query['from'] && query['to'])
       matches['date'] = {"$gte" : new Date(query['from']), "$lte": new Date(query['to'])};
 
-    return model.find(matches).populate('sender').skip(skip).limit(limit).exec();
+    return model.find(matches).populate('sender').populate('payment.type').skip(skip).limit(limit).exec();
 };
 
 Controller.prototype.getPaidReport = function(viewModels, user){

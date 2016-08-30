@@ -93,6 +93,14 @@ var lois;
                     var date = new Date(this.filters['transferDate']);
                     this.query['transferDate'] = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
                 }
+                if (this.filters['paymentDate']) {
+                    var date = new Date(this.filters['paymentDate']);
+                    this.query['paymentDate'] = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+                }
+                if (this.filters['deliveryDate']) {
+                    var date = new Date(this.filters['deliveryDate']);
+                    this.query['deliveryDate'] = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+                }
             };
             baseCtrl.prototype.createPagingQuery = function () {
                 this.query['limit'] = this.paging.max;
