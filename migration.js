@@ -255,6 +255,10 @@ Migration.migrateShippings = function(){
 
        co(function* (){
            yield* _co.coEach(rows, function*(row){
+             
+              if(row.location_id < 1)
+                return;
+
               var inputLocation = yield locationModel.findOne({"number": row.location_id});
               var sender = yield clientModel.findOne({"number": row.sender_id});
               var destination = yield locationModel.findOne({"number": row.destination_id});

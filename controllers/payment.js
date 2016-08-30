@@ -71,7 +71,7 @@ Controller.prototype.pay = function(viewModels, user){
             return;
 
          var previousStatus = shipping.payment.status;
-         var totalPaid = _.sumBy(shipping.payment.phases, 'amount') + parseFloat(viewModel.amount);
+         var totalPaid = _.sumBy(shipping.payment.phases, "amount") + parseFloat(viewModel.amount);
 
          if(totalPaid >= shipping.cost.total)
             shipping.payment.status = TERBAYAR;
@@ -84,22 +84,23 @@ Controller.prototype.pay = function(viewModels, user){
             shipping.payment.status = previousStatus;
             shipping.audited = true;
 
-            viewModel.notes = 'Perubahan status dari ' + previousStatus + ' ke ' + shipping.payment.status + ' dengan perubahan harga '
-                              + viewModel.paid;
+            var notes = 'Perubahan status dari ' + previousStatus + ' ke ' + shipping.payment.status + ' dengan perubahan harga ' +
+                         viewModel.amount;
 
             yield shipping.save();
-            yield self.audit(viewModel, user);
+            yield self.audit(viewModel,notes, user);
             return;
          }
 
          shipping.payment.phases.push({
-             transferDate: new Date(viewModel.date),
+             transferDate: new Date(viewModel.transferDate),
+             date: new Date(),
              bank: viewModel.bank,
              notes: viewModel.notes,
              amount: parseFloat(viewModel.amount)
          });
 
-         shipping.payment.paid += parseFloat(viewModel.amount);
+         shipping.payment.paid = totalPaid;
          shipping.audited = false;
          shipping.payment.type = objectId(viewModel.paymentTypeId);
          shipping.save();
@@ -107,10 +108,11 @@ Controller.prototype.pay = function(viewModels, user){
    });
 };
 
-Controller.prototype.audit = function(viewModel, user){
-  console.log(user);
+Controller.prototype.audit = function(viewModel, notes, user){
+
   var audit = new require('../models/audit')({
      type: 'payment',
+     notes: notes,
      date: new Date(),
      data: viewModel,
      user: user._id

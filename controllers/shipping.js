@@ -79,8 +79,8 @@ Controller.prototype.getAll = function(parameters){
   if(parameters['limit'] && (parameters['skip'] || parameters['skip'] == 0))
     find = find.skip(parameters['skip']).limit(parameters['limit']);
 
-  return find.sort({"number": -1}).populate('sender').populate('destination').populate('payment.type')
-                                  .populate('items.itemType').populate('items.packingType').lean().exec();
+  return find.populate('sender').populate('destination').populate('payment.type')
+                                  .populate('items.itemType').populate('items.packingType').sort({"number": -1}).lean().exec();
 };
 
 Controller.prototype.add = function(user){
@@ -217,6 +217,7 @@ Controller.prototype.save = function(data){
       var destination = yield self.locationController.get(data.destination._id ? data.destination._id : data.destination);
 
       var tariff = yield self.tariffController.getTariff(sender._id, destination._id);
+
       self.calculateCost(data, tariff);
 
       data.regions.source = source == null ? data.regions.source : source.region._id;

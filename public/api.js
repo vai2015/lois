@@ -291,5 +291,29 @@ var app;
             return autocomplete;
         }());
         api.autocomplete = autocomplete;
+        var notification = (function () {
+            function notification() {
+            }
+            notification.getAll = function (query) {
+                return app.http.get('/lois/api/notification/getAll?query=' + JSON.stringify(query));
+            };
+            notification.delete = function (id) {
+                return app.http.delete('/lois/api/notification/delete?id=' + id);
+            };
+            return notification;
+        }());
+        api.notification = notification;
+        var audit = (function () {
+            function audit() {
+            }
+            audit.getAll = function (query) {
+                return app.http.get('/lois/api/audit/getAll?query=' + JSON.stringify(query));
+            };
+            audit.process = function (data) {
+                return app.http.post('/lois/api/audit/process', JSON.stringify(data));
+            };
+            return audit;
+        }());
+        api.audit = audit;
     })(api = app.api || (app.api = {}));
 })(app || (app = {}));

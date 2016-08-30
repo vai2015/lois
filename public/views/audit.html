@@ -3,7 +3,7 @@
     <article class="col col-sm-12 col-md-12 col-lg-12">
       <div class="jarviswidget jarviswidget-color-blueDark" role="widget">
         <header role="heading" data-block="header">
-          <span class="widget-icon"> <i class="fa fa-notification"></i></span>
+          <span class="widget-icon"> <i class="fa fa-exclamation-circle"></i></span>
           <h2>Audit</h2>
           <div class="jarviswidget-ctrls" role="menu">
              <a href="#" ng-click="ctrl.showToolbar = !ctrl.showToolbar"
@@ -70,10 +70,11 @@
                   <table class="table table-bordered table-striped table-condensed table-hover smart-form has-tickbox">
                     <thead>
                       <tr style="color:black;">
-                        <th style="text-align: center; width: 8%;">Jenis</th>
+                        <th style="text-align: center; width: 5%;">Jenis</th>
                         <th style="text-align: center; width: 5%;">Tanggal</th>
-                        <th style="text-align: center; width: 10%;">Event</th>
-                        <th style="text-align: center; width: 5%;">Aksi</th>
+                        <th style="text-align: center; width: 25%;">Event</th>
+                        <th style="text-align: center; width: 5%;">Petugas</th>
+                        <th style="text-align: center; width: 8%;">Aksi</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -87,10 +88,13 @@
                              {{entity.type}}
                           </td>
                           <td>
-                             {{entity.date}}
+                             {{entity.date | date:'dd-MM-yyyy'}}
                           </td>
                           <td>
-                             {{entity.data.notes}}
+                             {{entity.notes}}
+                          </td>
+                          <td>
+                             {{entity.user.name}}
                           </td>
                           <td style="text-align:center;">
                             <a href="#" class="txt-color-white btn-sm btn-primary" title="Remove" ng-click="ctrl.process('approved', entity)">

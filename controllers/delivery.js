@@ -45,7 +45,6 @@ Controller.prototype.getAll = function(query){
        matches['date'] = {"$gte" : fromShipping, "$lte": toShipping};
     }
 
-    console.log(matches);
     return model.aggregate([
        {$unwind: "$items"},
        {$unwind: "$items.recapitulations"},

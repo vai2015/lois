@@ -307,5 +307,25 @@
      static getAll(name: string, keyword: string){
          return app.http.get('/lois/api/' + name + '/getAll?query=' + JSON.stringify({"name" : keyword}));
      }
-  }
+   }
+
+   export class notification{
+     static getAll(query: any){
+        return app.http.get('/lois/api/notification/getAll?query=' + JSON.stringify(query));
+     }
+
+     static delete(id: any){
+       return app.http.delete('/lois/api/notification/delete?id=' + id);
+     }
+   }
+
+   export class audit{
+     static getAll(query: any){
+        return app.http.get('/lois/api/audit/getAll?query=' + JSON.stringify(query));
+     }
+
+     static process(data: any){
+       return app.http.post('/lois/api/audit/process', JSON.stringify(data));
+     }
+   }
 }

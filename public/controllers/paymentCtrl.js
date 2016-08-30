@@ -40,7 +40,7 @@ var lois;
                         bank: entity.viewModel.bank,
                         notes: entity.viewModel.notes,
                         amount: entity.viewModel.amount,
-                        date: Date.UTC(transferDate.getFullYear(), transferDate.getMonth(), transferDate.getDate()),
+                        transferDate: Date.UTC(transferDate.getFullYear(), transferDate.getMonth(), transferDate.getDate()),
                         paymentTypeId: _this.paymentType ? _this.paymentType._id : entity.payment.type._id
                     });
                 });

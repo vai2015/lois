@@ -81,6 +81,14 @@ var app;
                 url: '/configuration',
                 templateUrl: '/views/configuration.html',
                 controller: 'configurationCtrl as ctrl'
+            }).state('site.main.notification', {
+                url: '/notification',
+                templateUrl: '/views/notification.html',
+                controller: 'notificationCtrl as ctrl'
+            }).state('site.main.audit', {
+                url: '/audit',
+                templateUrl: '/views/audit.html',
+                controller: 'auditCtrl as ctrl'
             });
         }]);
     app.lois.factory('principal', ['$q', '$http', function ($q, $http) {
