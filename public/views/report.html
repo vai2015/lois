@@ -160,12 +160,21 @@
                                   <label class="input">
                                     <div class="input-group">
                                       <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                      <input datepicker class="form-control" placeholder="Tanggal Bayar"
+                                            id="payment-date" type="text"ng-model="ctrl.filters.paymentDate" />
+                                    </div>
+                                  </label>
+                               </section>
+                               <section class="col col-sm-12 col-md-12 col-lg-6">
+                                  <label class="input">
+                                    <div class="input-group">
+                                      <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                                       <input datepicker class="form-control" placeholder="Dari Tanggal"
                                             id="from-transaction-date" type="text"ng-model="ctrl.filters.from" />
                                     </div>
                                   </label>
                                 </section>
-                                <section class="col col-sm-12 col-md-12 col-lg-3">
+                                <section class="col col-sm-12 col-md-12 col-lg-6">
                                    <label class="input">
                                      <div class="input-group">
                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
@@ -509,12 +518,33 @@
                             <legend>Filter data</legend>
                             <fieldset>
                               <div class="row">
-                                <section class="col col-sm-12 col-md-12 col-lg-4">
-                                  <label class="input">
-                                    <input type="text" placeholder="Spb" ng-model="ctrl.filters.spbNumber" />
-                                  </label>
-                                </section>
-                              <section class="col col-sm-12 col-md-12 col-lg-4">
+                              <section class="col col-sm-12 col-md-12 col-lg-3">
+                                <label class="input">
+                                  <input type="text" placeholder="Spb" ng-model="ctrl.filters.spbNumber" />
+                                </label>
+                              </section>
+                              <section class="col col-sm-12 col-md-12 col-lg-3">
+                                 <label class="input">
+                                   <input type="text"
+                                      ng-model="ctrl.filters.regionSource"
+                                      placeholder="Regional Asal"
+                                      uib-typeahead="data as data.name for data in ctrl.suggest('region', $viewValue)"
+                                      typeahead-min-length="2"
+                                      typeahead-loading="regionSourceFilter" class="form-control" />
+                                   <i ng-show="regionSourceFilter" class="glyphicon glyphicon-refresh"></i>
+                                 </label>
+                              </section>
+                              <section class="col col-sm-12 col-md-12 col-lg-3">
+                                <label class="input">
+                                  <input type="text" placeholder="Kode pengiriman" ng-model="ctrl.filters.vehicleNumber" />
+                                </label>
+                              </section>
+                              <section class="col col-sm-12 col-md-12 col-lg-3">
+                                <label class="input">
+                                  <input type="text" placeholder="No Mobil" ng-model="ctrl.filters.deliveryCode" />
+                                </label>
+                              </section>
+                              <section class="col col-sm-12 col-md-12 col-lg-3">
                                  <label class="input">
                                    <input type="text"
                                       ng-model="ctrl.filters.destination"
@@ -525,7 +555,7 @@
                                    <i ng-show="destinationFilter" class="glyphicon glyphicon-refresh"></i>
                                  </label>
                                </section>
-                               <section class="col col-sm-12 col-md-12 col-lg-4">
+                               <section class="col col-sm-12 col-md-12 col-lg-3">
                                   <label class="input">
                                     <input type="text"
                                        ng-model="ctrl.filters.driver"
@@ -536,7 +566,16 @@
                                     <i ng-show="driverFilter" class="glyphicon glyphicon-refresh"></i>
                                   </label>
                                 </section>
-                                <section class="col col-sm-12 col-md-12 col-lg-6">
+                                <section class="col col-sm-12 col-md-12 col-lg-3">
+                                   <label class="input">
+                                     <div class="input-group">
+                                       <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                       <input datepicker class="form-control" placeholder="Tanggal Kirim"
+                                             id="from-transaction-date" type="text"ng-model="ctrl.filters.deliveryDate" />
+                                     </div>
+                                   </label>
+                                 </section>
+                                <section class="col col-sm-12 col-md-12 col-lg-3">
                                    <label class="input">
                                      <div class="input-group">
                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
@@ -879,6 +918,17 @@
                       </div>
                    </div>
 
+               </div>
+            </div>
+            <div class="widget-footer" ng-show="ctrl.entities.length >= ctrl.paging.max">
+               <div class="input-group">
+                 <button ng-disabled="(ctrl.paging.page) == 1" href="#" class="btn btn-link" ng-click="ctrl.prev()">
+                     <i class="fa fa-backward"></i>
+                 </button>
+                   {{ctrl.paging.page}}
+                 <button ng-disabled="ctrl.entities.length == 0" href="#" class="btn btn-link" ng-click="ctrl.next()">
+                     <i class="fa fa-forward"></i>
+                 </button>
                </div>
             </div>
         </div>

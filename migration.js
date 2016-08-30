@@ -246,9 +246,8 @@ Migration.migrateTariffs = function(limit, skip){
   });
 };
 
-Migration.migrateShippings = function(locationId, limit, skip){
-   var query = 'SELECT *, SUBSTRING_INDEX(SUBSTRING_INDEX(spb_number, "-", 1)," ",1) as number FROM transaction a LEFT JOIN data b ON a.data_id = b.id ' +
-               'WHERE b.location_id = ' + locationId + ' LIMIT ' + limit + ' OFFSET ' + skip;
+Migration.migrateShippings = function(){
+   var query = 'SELECT *, SUBSTRING_INDEX(SUBSTRING_INDEX(spb_number, "-", 1)," ",1) as number FROM transaction a LEFT JOIN data b ON a.data_id = b.id ';
 
    db.query(query).spread(function(rows){
        var id = _.map(rows, 'spb_number');
@@ -256,7 +255,7 @@ Migration.migrateShippings = function(locationId, limit, skip){
 
        co(function* (){
            yield* _co.coEach(rows, function*(row){
-              var inputLocation = yield locationModel.findOne({"number": locationId});
+              var inputLocation = yield locationModel.findOne({"number": row.location_id});
               var sender = yield clientModel.findOne({"number": row.sender_id});
               var destination = yield locationModel.findOne({"number": row.destination_id});
               var regionSource = yield regionModel.findOne({"number": row.region_source_id});
@@ -322,8 +321,8 @@ Migration.migrateShippings = function(locationId, limit, skip){
    });
 };
 
-Migration.migrateShippingItems = function(limit, skip){
-   var query = 'SELECT * FROM shipment LIMIT ' + limit + ' OFFSET ' + skip;
+Migration.migrateShippingItems = function(){
+   var query = 'SELECT * FROM shipment';
    db.query(query).spread(function(rows){
        co(function*(){
            var colliQuantity = 0;

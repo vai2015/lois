@@ -18,6 +18,12 @@ Controller.prototype.getRecapitulations = function(query){
    if(query['spbNumber'])
      matches['spbNumber'] = new RegExp(query['spbNumber'], 'i');
 
+   if(query['destination'])
+     matches['destination'] = objectId(query['destination']);
+
+   if(query['regionDest'])
+     matches['regions.source'] = objectId(query['regionSource']);
+
    if(query['recapDate'])
      matches['items.recapitulations.date'] = new Date(query['recapDate']);
 
@@ -102,8 +108,17 @@ Controller.prototype.getDeliveries = function(query){
    if(query['destination'])
      matches['destination'] = objectId(query['destination']);
 
+   if(query['regionSource'])
+     matches['regions.source'] = objectId(query['regionSource']);
+
+   if(query['deliveryCode'])
+     matches['items.deliveries.deliveryCode'] = query['deliveryCode'];
+
+   if(query['vehicleNumber'])
+     matches['items.deliveries.vehicleNumber'] = query['vehicleNumber'];
+
    if(query['driver'])
-     matches['items.deliveries'] = {"$elemMatch": {"driver": objectId(query['driver'])}};
+     matches['items.deliveries.driver'] = objectId(query['driver']);
 
    if(query['from'] && query['to'])
      matches['date'] = {"$gte" : new Date(query['from']), "$lte": new Date(query['to'])};
@@ -286,8 +301,14 @@ Controller.prototype.getPaid = function(query){
     if(query['spbNumber'])
       matches['spbNumber'] = new RegExp(query['spbNumber'], 'i');
 
+    if(query['paymentType'])
+      matches['payment.type'] = objectId(query['paymentType']);
+
+    if(query['paymentDate'])
+      matches['payment.phases'] = {"$elemMatch": {"date": new Date(query['paymentDate'])}};
+
     if(query['transferDate'])
-      matches['payment.phases'] = {"$elemMatch": {"date": new Date(query['transferDate'])}};
+      matches['payment.phases'] = {"$elemMatch": {"transferDate": new Date(query['transferDate'])}};
 
     if(query['from'] && query['to'])
       matches['date'] = {"$gte" : new Date(query['from']), "$lte": new Date(query['to'])};
@@ -352,6 +373,9 @@ Controller.prototype.getUnpaid = function(query){
 
     if(query['spbNumber'])
       matches['spbNumber'] = new RegExp(query['spbNumber'], 'i');
+
+    if(query['paymentType'])
+      matches['payment.type'] = objectId(query['paymentType']);
 
     if(query['invoice'])
       matches['$or'] = [{"invoice.all": query['invoice']}, {"invoice.client": query['invoice']}, {"invoice.partner": query['invoice']}];
