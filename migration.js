@@ -268,7 +268,7 @@ Migration.migrateShippings = function(locationId, limit, skip){
               var data = new shippingModel({
                  number: row.id,
                  spbNumber: row.spb_number,
-                 date: ("0000-00-00" || "0000-00-00 00:00:00") ? null : row.date,
+                 date: row.date === ("0000-00-00" || "0000-00-00 00:00:00") ? null : row.date,
                  sender: sender._id,
                  destination: destination._id,
                  regions: {
