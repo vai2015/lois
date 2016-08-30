@@ -107,9 +107,9 @@ Controller.prototype.recap = function(viewModels, user){
              "limasColor": viewModel.limasColor,
              "relationColor": viewModel.relationColor,
              "vehicleNumber": viewModel.vehicleNumber,
-             "driver": viewModel.driverId,
+             "driver": viewModel.driver,
              "notes": viewModel.notes,
-             "trainType": viewModel.trainTypeId,
+             "trainType": viewModel.trainType,
              "departureDate": new Date(viewModel.departureDate),
              "created": {
                 "user": user._id,
