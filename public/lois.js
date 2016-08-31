@@ -1,3 +1,4 @@
+/// <reference path="libs/typings/angularjs/angular.d.ts"/>
 var app;
 (function (app) {
     app.lois = angular.module('lois', [

@@ -9,6 +9,10 @@ module lois.controllers {
         this.deleteFunc = app.api.notification.delete;
         this.filter();
      }
+
+     viewFile(file: string): void {
+       window.open('berita_acara/' + file, '_blank');
+     }
    }
 
    app.lois.controller('notificationCtrl', notificationCtrl);

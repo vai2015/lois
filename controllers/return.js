@@ -47,7 +47,7 @@ Controller.prototype.getAll = function(parameters){
   if(parameters['limit'] && (parameters['skip'] || parameters['skip'] == 0))
     find = find.skip(parameters['skip']).limit(parameters['limit']);
 
-  return find.sort({"number": -1}).lean().exec();
+  return find.lean().exec();
 };
 
 Controller.prototype.getConfirmReturns = function(query){
@@ -105,7 +105,7 @@ Controller.prototype.return = function(viewModels, user){
          shipping.returned = true;
 
          var notification = new notificationModel();
-         notification.event = 'Retur spb ' + shipping.spbNumber + (viewModel.accepted ? 'diterima' : 'ditolak');
+         notification.event = 'Retur spb ' + shipping.spbNumber + ' ' + (viewModel.accepted ? 'diterima' : 'ditolak');
          notification.filePath = shipping.returnInfo.filePath;
          notification.date = new Date();
          notification.user = user._id;

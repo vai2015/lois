@@ -2,20 +2,22 @@ var router = require('express').Router();
 var dotenv = require('dotenv').config();
 var auth = require('../utils/authentication');
 var controller = require('../controllers/return');
-var multer  = require('multer')
 
-var storage =   multer.diskStorage({
-  destination: function (req, file, callback) {
-    callback(null, '../berita_acara/');
-  },
-  filename: function (req, file, callback) {
-    callback(null, file.fieldname + '-' + Date.now());
-  }
+var multer = require('multer');
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './public/berita_acara/')
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '.pdf')
+    }
 });
 
-var upload = multer({ storage : storage});
+var upload = multer({ storage: storage });
 
-router.post(process.env.BASE_API + 'return/upload', upload.single('file'));
+router.post(process.env.BASE_API + 'return/uploads', upload.single('file'), function(req, res){
+    res.status(200).send(req.file);
+});
 
 router.get('/lois/return', function(req, res){
    res.redirect('/lois');

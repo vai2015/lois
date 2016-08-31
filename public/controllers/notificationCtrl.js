@@ -15,6 +15,9 @@ var lois;
                 this.deleteFunc = app.api.notification.delete;
                 this.filter();
             }
+            notificationCtrl.prototype.viewFile = function (file) {
+                window.open('berita_acara/' + file, '_blank');
+            };
             notificationCtrl.$inject = ['$scope', 'Notification'];
             return notificationCtrl;
         }(controllers.baseCtrl));

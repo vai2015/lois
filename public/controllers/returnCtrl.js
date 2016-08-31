@@ -15,12 +15,31 @@ var lois;
                 this.loadFunc = app.api._return.getAll;
                 this.filter();
             }
+            returnCtrl.prototype.filter = function () {
+                var ctrl = this;
+                ctrl.checkedAll = false;
+                ctrl.createQuery();
+                ctrl.loadingData = true;
+                ctrl.loadFunc(ctrl.query).then(function (result) {
+                    ctrl.entities = result.data;
+                    ctrl.entities.map(function (e) {
+                        e['viewModel'] = {};
+                    });
+                }).catch(function (error) {
+                    ctrl.notify('error', error.data);
+                }).finally(function () {
+                    ctrl.loadingData = false;
+                });
+            };
             returnCtrl.prototype.upload = function (file, entity) {
                 var fd = new FormData();
                 fd.append('file', file);
-                console.log(fd);
+                entity['viewModel']['filePath'] = [];
+                var ctrl = this;
                 app.api._return.upload(fd).then(function (result) {
-                    console.log(result.data);
+                    entity['viewModel']['filePath'] = result.data['filename'];
+                }).catch(function (error) {
+                    ctrl.notify('error', error.data);
                 });
             };
             returnCtrl.prototype.process = function () {
@@ -42,6 +61,7 @@ var lois;
                         signed: entity.viewModel.signed,
                         notes: entity.viewModel.notes,
                         received: entity.viewModel.received,
+                        filePath: entity.viewModel.filePath,
                         concernedPerson: entity.viewModel.concernedPerson
                     });
                 });

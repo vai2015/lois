@@ -9,14 +9,37 @@ module lois.controllers {
           this.showToolbar = true;
           this.loadFunc = app.api._return.getAll;
           this.filter();
+      }
+
+      filter(): void {
+          var ctrl = this;
+          ctrl.checkedAll = false;
+          ctrl.createQuery();
+          ctrl.loadingData = true;
+          
+          ctrl.loadFunc(ctrl.query).then(result => {
+             ctrl.entities = result.data;
+             ctrl.entities.map(e => {
+                e['viewModel'] = {};
+             });
+          }).catch(error => {
+              ctrl.notify('error', error.data);
+          }).finally(() => {
+              ctrl.loadingData = false;
+          });
        }
 
        upload(file, entity): void{
           var fd = new FormData();
           fd.append('file', file);
-          console.log(fd);
+          
+          entity['viewModel']['filePath'] = [];
+
+          var ctrl = this;
           app.api._return.upload(fd).then(result => {
-              console.log(result.data);
+             entity['viewModel']['filePath'] = result.data['filename'];
+          }).catch(error => {
+             ctrl.notify('error', error.data);
           });
        }
 
@@ -42,6 +65,7 @@ module lois.controllers {
                signed: entity.viewModel.signed,
                notes: entity.viewModel.notes,
                received: entity.viewModel.received,
+               filePath: entity.viewModel.filePath,
                concernedPerson: entity.viewModel.concernedPerson
              });
          });

@@ -146,11 +146,11 @@
                               <input type="text" class="form-control" ng-model="entity.viewModel.notes" />
                           </td>
                           <td tyle="text-align:center;">
-                            <a href="#" ng-if="entity.viewModel.eventFilePath == null" ngf-select="ctrl.upload($file, entity)" ng-model="ctrl.files">
+                            <a href="#" ng-if="entity.viewModel.filePath == null" ngf-select="ctrl.upload($file, entity)" ng-model="ctrl.files">
                               Upload
                             </a>
-                            <a href="#" ng-if="entity.viewModel.eventFilePath != null" ngf-select="ctrl.upload($file, entity)" ng-model="ctrl.files">
-                              {{entity.eventFilePath}}
+                            <a href="#" ng-if="entity.viewModel.filePath != null" ngf-select="ctrl.upload($file, entity)" ng-model="ctrl.files">
+                              {{entity.viewModel.filePath}}
                             </a>
                           </td>
                           <td>

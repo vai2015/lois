@@ -47,7 +47,8 @@ app.listen(process.env.PORT, function(error){
    }
 
    if(process.env.MODE == 'production')
-       mongoose.connect(process.env.MONGO_DSN);
+      mongoose.connect(process.env.MONGO_DSN);
+
    else if(process.env.MODE == 'development')
       mongoose.connect(process.env.MONGO_DSN_TEST);
 

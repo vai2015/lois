@@ -49,7 +49,7 @@ Controller.prototype.getAll = function(query){
        {$unwind: "$items"},
        {$unwind: "$items.recapitulations"},
        {$match: matches}
-    ]).skip(skip).limit(limit).sort({"number": -1}).exec();
+    ]).sort({"_id": -1}).skip(skip).limit(limit).exec();
 };
 
 Controller.prototype.getAllCancel = function(query){
@@ -88,7 +88,7 @@ Controller.prototype.getAllCancel = function(query){
      {$unwind: "$items"},
      {$unwind: "$items.deliveries"},
      {$match: matches}
-  ]).skip(skip).limit(limit).sort({"number": -1}).exec();
+  ]).sort({"_id": -1}).skip(skip).limit(limit).exec();
 };
 
 Controller.prototype.delivery = function(viewModels, user){

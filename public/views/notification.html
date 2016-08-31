@@ -72,6 +72,7 @@
                       <tr style="color:black;">
                         <th style="text-align: center; width: 8%;">Event</th>
                         <th style="text-align: center; width: 5%;">Tanggal</th>
+                        <th style="text-align: center; width: 10%;">File</th>
                         <th style="text-align: center; width: 10%;">Petugas</th>
                         <th style="text-align: center; width: 5%;">Aksi</th>
                       </tr>
@@ -87,7 +88,10 @@
                              {{entity.event}}
                           </td>
                           <td>
-                             {{entity.date}}
+                             {{entity.date | date:'dd-MM-yyyy'}}
+                          </td>
+                          <td>
+                             <a href="#" ng-click="ctrl.viewFile(entity.filePath)">{{entity.filePath}}</a>
                           </td>
                           <td>
                              {{entity.user.name}}

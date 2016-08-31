@@ -32,7 +32,7 @@ Controller.prototype.getAll = function(parameters){
    if(parameters['limit'] && (parameters['skip'] || parameters['skip'] == 0))
      find = find.skip(parameters['skip']).limit(parameters['limit']);
 
-   return find.sort({"name": 1}).exec();
+   return find.populate('user', {"hash": 0, "salt": 0}).sort({"name": 1}).exec();
 };
 
 Controller.prototype.save = function(data){

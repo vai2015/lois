@@ -99,7 +99,7 @@ var app;
                 return app.http.post('/lois/api/return/confirm', JSON.stringify(data));
             };
             _return.upload = function (data) {
-                return app.http.post('/lois/api/return/upload', JSON.stringify(data));
+                return app.http.post('/lois/api/return/uploads', data, { headers: { 'Content-Type': undefined } });
             };
             return _return;
         }());

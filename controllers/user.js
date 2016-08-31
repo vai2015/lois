@@ -67,7 +67,7 @@ Controller.prototype.authenticate = function(userName, password){
 
       var hash = user.hash;
       var currentHash = crypto.createHmac('sha256', user.salt).update(password).digest('hex');
-
+     
       if(hash !== currentHash)
         throw new Error('Password is not found');
 
