@@ -7,6 +7,7 @@ module lois.controllers {
         super(Notification);
         this.loadFunc = app.api.notification.getAll;
         this.deleteFunc = app.api.notification.delete;
+        this.filter();
      }
    }
 

@@ -4,6 +4,8 @@ var clientModel = require('../models/client');
 var locationModel = require('../models/location');
 var paymentTypeModel = require('../models/paymentType');
 var partnerModel = require('../models/partner');
+var itemTypeModel = require('../models/itemType');
+var auditModel = require('../models/audit');
 var co = require('co');
 var _ = require('lodash');
 var objectId = mongoose.Types.ObjectId;
@@ -79,8 +81,13 @@ Controller.prototype.getAll = function(parameters){
   if(parameters['limit'] && (parameters['skip'] || parameters['skip'] == 0))
     find = find.skip(parameters['skip']).limit(parameters['limit']);
 
-  return find.populate('sender').populate('destination').populate('payment.type')
-                                  .populate('items.itemType').populate('items.packingType').sort({"number": -1}).lean().exec();
+  return find.sort({"number": -1}).populate('sender')
+                                  .populate('destination')
+                                  .populate('payment.type')
+                                  .populate('items.itemType')
+                                  .populate('items.packingType')
+                                  .lean()
+                                  .exec();
 };
 
 Controller.prototype.add = function(user){
@@ -108,27 +115,18 @@ Controller.prototype.add = function(user){
          "spbNumber": spbNumber,
          "sender": DEFAULT_CLIENT,
          "destination": DEFAULT_LOCATION,
-         "regions": {
-           "source": DEFAULT_REGION,
-           "destination": DEFAULT_REGION
-         },
-         "payment": {
-            "type": DEFAULT_PAYMENT_TYPE,
-            "location": DEFAULT_LOCATION
-         },
+         "regions": {"source": DEFAULT_REGION, "destination": DEFAULT_REGION},
+         "payment": {"type": DEFAULT_PAYMENT_TYPE, "location": DEFAULT_LOCATION},
          "partner": DEFAULT_PARTNER,
          "inputLocation": user.location._id,
-         "created": {
-           "user": user._id,
-           "date": new Date()
-         },
+         "created": {"user": user._id, "date": new Date()},
          "modified": {"user": user._id}
       };
       return new model(shipping).save();
    });
 };
 
-Controller.prototype.calculateCost = function(shipping, tariff){
+Controller.prototype.calculateCost = function(shipping, tariff, user, audit){
    var self = this;
    var price = 0;
    var minimum = 0;
@@ -208,7 +206,7 @@ Controller.prototype.calculateCost = function(shipping, tariff){
      shipping.cost.total /= 0.98;
 };
 
-Controller.prototype.save = function(data){
+Controller.prototype.save = function(data, user){
    var self = this;
 
    return co(function*(){
@@ -218,7 +216,7 @@ Controller.prototype.save = function(data){
 
       var tariff = yield self.tariffController.getTariff(sender._id, destination._id);
 
-      self.calculateCost(data, tariff);
+      yield self.calculateCost(data, tariff, user, true);
 
       data.regions.source = source == null ? data.regions.source : source.region._id;
       data.regions.destination = destination.region._id ? destination.region._id : data.regions.destination;
@@ -227,5 +225,61 @@ Controller.prototype.save = function(data){
       return model.update({_id: objectId(dataModel._id)}, dataModel);
    });
 };
+
+Controller.prototype.audit = function(shippingId, item, user){
+   var auditData = new auditModel();
+   var itemType = item.itemType._id ? item.itemType._id : item.itemType;
+
+   return co(function*(){
+      var prevShipping = yield model.findOne({"_id": shippingId});
+      var curItemType = yield itemTypeModel.findOne({"_id": objectId(itemType)});
+
+      if(!prevShipping)
+        return null;
+
+      var itemNotes = [];
+
+      var prevItem = _.find(prevShipping.items, function(prevItem){
+          return prevItem._id.toString() === item._id.toString();
+      });
+
+      if(prevItem.dimensions.length !== item.dimensions.length)
+        itemNotes.push('Perubahan dimensi panjang dari ' + prevItem.dimensions.length + ' ke ' + item.dimensions.length);
+
+      if(prevItem.dimensions.width !== item.dimensions.width)
+        itemNotes.push('Perubahan dimensi lebar dari ' + prevItem.dimensions.width + ' ke ' + item.dimensions.width);
+
+      if(prevItem.dimensions.height !== item.dimensions.height)
+        itemNotes.push('Perubahan dimensi tinggi dari ' + prevItem.dimensions.height + ' ke ' + item.dimensions.height);
+
+      if(prevItem.dimensions.weight !== item.dimensions.weight)
+        itemNotes.push('Perubahan dimensi berat dari ' + prevItem.dimensions.weight + ' ke ' + item.dimensions.weight);
+
+      if(prevItem.colli.quantity !== item.colli.quantity)
+        itemNotes.push('Perubahan coli dari ' + prevItem.colli.quantity + ' ke ' + item.colli.quantity);
+
+      if(prevItem.cost.additional !== item.cost.additional)
+        itemNotes.push('Perubahan biaya tambahan dari ' + prevItem.cost.additional + ' ke ' + item.cost.additional);
+
+      if(prevItem.cost.discount !== item.cost.discount)
+        itemNotes.push('Perubahan diskon dari ' + prevItem.cost.discount + ' ke ' + item.cost.discount);
+
+      if(prevItem.itemType.toString() !== item.itemType._id.toString())
+        itemNotes.push('Perubahan jenis barang ke ' + curItemType.name);
+
+
+      if(itemNotes.length > 0) {
+          auditData.notes = itemNotes.join();
+          auditData.type = 'price';
+          auditData.date = new Date();
+          auditData.data = item;
+          auditData.user = user._id
+          console.log(auditData);
+          return yield auditData.save();
+      }
+
+      return null;
+   });
+}
 
 module.exports = new Controller();

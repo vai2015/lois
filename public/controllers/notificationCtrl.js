@@ -13,6 +13,7 @@ var lois;
                 _super.call(this, Notification);
                 this.loadFunc = app.api.notification.getAll;
                 this.deleteFunc = app.api.notification.delete;
+                this.filter();
             }
             notificationCtrl.$inject = ['$scope', 'Notification'];
             return notificationCtrl;

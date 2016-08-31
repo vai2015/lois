@@ -70,7 +70,7 @@ Controller.prototype.getAllCancel = function(query){
      {$unwind: "$items"},
      {$unwind: "$items.recapitulations"},
      {$match: matches}
-  ]).skip(skip).limit(limit).sort({"number": -1}).exec();
+  ]).sort({"number": -1}).skip(skip).limit(limit).exec();
 };
 
 Controller.prototype.recap = function(viewModels, user){

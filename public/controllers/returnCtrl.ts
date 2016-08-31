@@ -37,6 +37,7 @@ module lois.controllers {
                limasColor: entity.viewModel.limasColor,
                relationColor: entity.viewModel.relationColor,
                relationCode: entity.viewModel.relationCode,
+               accepted: entity.viewModel.accepted,
                stamped: entity.viewModel.stamped,
                signed: entity.viewModel.signed,
                notes: entity.viewModel.notes,
