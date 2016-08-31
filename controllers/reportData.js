@@ -202,7 +202,7 @@ Controller.prototype.getReturn = function(query){
     if(query['from'] && query['to'])
       matches['date'] = {"$gte" : new Date(query['from']), "$lte": new Date(query['to'])};
 
-    return model.find(matches).populate('sender').skip(skip).limit(limit).exec();
+    return model.find(matches).sort({"number": 1}).populate('sender').skip(skip).limit(limit).exec();
 };
 
 Controller.prototype.getReturnReport = function(viewModels, user){
@@ -276,7 +276,7 @@ Controller.prototype.getUnconfirmed = function(query){
     if(query['from'] && query['to'])
       matches['date'] = {"$gte" : new Date(query['from']), "$lte": new Date(query['to'])};
 
-    return model.find(matches).populate('sender').populate('destination').skip(skip).limit(limit).exec();
+    return model.find(matches).sort({"number": 1}).populate('sender').populate('destination').skip(skip).limit(limit).exec();
 };
 
 Controller.prototype.getUnconfirmedReport = function(viewModels, user){
@@ -325,7 +325,7 @@ Controller.prototype.getPaid = function(query){
     if(query['from'] && query['to'])
       matches['date'] = {"$gte" : new Date(query['from']), "$lte": new Date(query['to'])};
 
-    return model.find(matches).populate('sender').populate('payment.type').skip(skip).limit(limit).exec();
+    return model.find(matches).sort({"number": -1}).populate('sender').populate('payment.type').skip(skip).limit(limit).exec();
 };
 
 Controller.prototype.getPaidReport = function(viewModels, user){
@@ -395,7 +395,7 @@ Controller.prototype.getUnpaid = function(query){
     if(query['from'] && query['to'])
       matches['date'] = {"$gte" : new Date(query['from']), "$lte": new Date(query['to'])};
 
-    return model.find(matches).populate('sender').populate('payment.type').skip(skip).limit(limit).exec();
+    return model.find(matches).sort({"number": -1}).populate('sender').populate('payment.type').skip(skip).limit(limit).exec();
 };
 
 Controller.prototype.getUnpaidReport = function(viewModels, user){
@@ -457,7 +457,8 @@ Controller.prototype.getDeliveryList = function(query){
     if(query['from'] && query['to'])
       matches['date'] = {"$gte" : new Date(query['from']), "$lte": new Date(query['to'])};
 
-    return model.find(matches).populate('sender').populate('destination').populate('regions.destination').populate('payment.type')
+    return model.find(matches).sort({"number": -1})
+                .populate('sender').populate('destination').populate('regions.destination').populate('payment.type')
                 .skip(skip).limit(limit).exec();
 };
 
@@ -518,7 +519,7 @@ Controller.prototype.getCommisions = function(query){
     if(query['from'] && query['to'])
       matches['date'] = {"$gte" : new Date(query['from']), "$lte": new Date(query['to'])};
 
-    return model.find(matches).populate('sender').populate('destination').populate('regions.destination').populate('payment.type')
+    return model.find(matches).sort({"number": -1}).populate('sender').populate('destination').populate('regions.destination').populate('payment.type')
                 .skip(skip).limit(limit).exec();
 };
 
