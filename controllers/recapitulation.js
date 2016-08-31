@@ -38,9 +38,10 @@ Controller.prototype.getAll = function(query){
    }
 
    return model.aggregate([
-      {$unwind: "$items"},
-      {$match: matches}
-   ]).sort({"_id": -1}).skip(skip).limit(limit).exec();
+	  {$sort : { "_id" : -1} },
+	  {$match: matches},
+      {$unwind: "$items"}
+   ]).skip(skip).limit(limit).exec();
 };
 
 Controller.prototype.getAllCancel = function(query){
@@ -67,10 +68,11 @@ Controller.prototype.getAllCancel = function(query){
   }
 
   return model.aggregate([
+	 {$sort : { "_id" : -1} },
+	 {$match: matches},
      {$unwind: "$items"},
-     {$unwind: "$items.recapitulations"},
-     {$match: matches}
-  ]).sort({"_id": -1}).skip(skip).limit(limit).exec();
+     {$unwind: "$items.recapitulations"}
+  ]).skip(skip).limit(limit).exec();
 };
 
 Controller.prototype.recap = function(viewModels, user){

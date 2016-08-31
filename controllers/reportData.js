@@ -43,11 +43,12 @@ Controller.prototype.getRecapitulations = function(query){
      matches['date'] = {"$gte" : new Date(query['from']), "$lt": new Date(query['to'])};
 
    return model.aggregate([
+		{$sort : { "_id" : -1} },
+		{$match: matches},
       {$unwind: "$items"},
       {$unwind: "$items.recapitulations"},
-      {$match: matches},
       {$lookup: {"from": "clients", "localField": "sender", "foreignField": "_id", "as": "sender"}}
-   ]).sort({"number": -1}).skip(skip).limit(limit).exec();
+   ]).skip(skip).limit(limit).exec();
 };
 
 Controller.prototype.getRecapitulationsReport = function(viewModels, user){
@@ -136,12 +137,13 @@ Controller.prototype.getDeliveries = function(query){
      matches['date'] = {"$gte" : new Date(query['from']), "$lte": new Date(query['to'])};
 
    return model.aggregate([
+		{$sort : { "_id" : -1} },
+		{$match: matches},
       {$unwind: "$items"},
       {$unwind: "$items.deliveries"},
-      {$match: matches},
       {$lookup: {"from": "clients", "localField": "sender", "foreignField": "_id", "as": "sender"}},
       {$lookup: {"from": "paymentTypes", "localField": "payment.type", "foreignField": "_id", "as": "paymentType"}}
-   ]).sort({"number": -1}).skip(skip).limit(limit).exec();
+   ]).skip(skip).limit(limit).exec();
 };
 
 Controller.prototype.getDeliveriesReport = function(viewModels, user){
