@@ -15,64 +15,72 @@ function Controller(){}
 Controller.api = 'recapitulation';
 
 Controller.prototype.getAll = function(query){
-   var matches = {"inputLocation": objectId(query['defaultLocation']), "items.colli.available": {"$gt": 0}};
    var limit = query['limit'] ? query['limit'] : 10;
    var skip = query['skip'] ? query['skip'] : 0;
 
+   var shippingMatches = {"inputLocation": objectId(query['defaultLocation'])};
+
    if(query['spbNumber'])
-     matches['spbNumber'] = new RegExp(query['spbNumber'], 'i');
+     shippingMatches['spbNumber'] = new RegExp(query['spbNumber'], 'i');
 
    if(query['regionDest'])
-     matches['regions.destination'] = objectId(query['regionDest']);
+     shippingMatches['regions.destination'] = objectId(query['regionDest']);
 
    if(query['regionSource'])
-     matches['regions.source'] = objectId(query['regionSource']);
+     shippingMatches['regions.source'] = objectId(query['regionSource']);
 
    if(query['destination'])
-     matches['destination'] = objectId(query['destination']);
+     shippingMatches['destination'] = objectId(query['destination']);
 
    if(query['from'] && query['to']){
       var fromShipping = new Date(query['from']);
       var toShipping = new Date(query['to']);
-      matches['date'] = {"$gte" : fromShipping, "$lte": toShipping};
+      shippingMatches['date'] = {"$gte" : fromShipping, "$lte": toShipping};
    }
 
    return model.aggregate([
-	  {$sort : { "_id" : -1} },
-	  {$match: matches},
-      {$unwind: "$items"}
-   ]).skip(skip).limit(limit).exec();
+    {$match: shippingMatches},
+	  {$sort : {"_id" : -1}},
+	  {$match: {"items.colli.available": {"$gt": 0}}},
+    {$unwind: "$items"},
+    {$skip: skip},
+    {$limit: limit}
+   ]).exec();
 };
 
 Controller.prototype.getAllCancel = function(query){
-  var matches = {"inputLocation": objectId(query['defaultLocation']), "items.recapitulations.available": {"$gt": 0}};
   var limit = query['limit'] ? query['limit'] : 10;
   var skip = query['skip'] ? query['skip'] : 0;
 
+  var shippingMatches = {"inputLocation": objectId(query['defaultLocation'])};
+
   if(query['spbNumber'])
-    matches['spbNumber'] = new RegExp(query['spbNumber'], 'i');
+    shippingMatches['spbNumber'] = new RegExp(query['spbNumber'], 'i');
 
   if(query['regionDest'])
-    matches['regions.destination'] = objectId(query['regionDest']);
+    shippingMatches['regions.destination'] = objectId(query['regionDest']);
 
   if(query['regionSource'])
-    matches['regions.source'] = objectId(query['regionSource']);
+    shippingMatches['regions.source'] = objectId(query['regionSource']);
 
   if(query['destination'])
-    matches['destination'] = objectId(query['destination']);
+    shippingMatches['destination'] = objectId(query['destination']);
 
   if(query['from'] && query['to']){
      var fromShipping = new Date(query['from']);
      var toShipping = new Date(query['to']);
-     matches['date'] = {"$gte" : fromShipping, "$lt": toShipping};
+     shippingMatches['date'] = {"$gte" : fromShipping, "$lte": toShipping};
   }
 
   return model.aggregate([
-	 {$sort : { "_id" : -1} },
-	 {$match: matches},
-     {$unwind: "$items"},
-     {$unwind: "$items.recapitulations"}
-  ]).skip(skip).limit(limit).exec();
+   {$match: shippingMatches},
+   {$sort : {"_id" : -1}},
+   {$unwind: "$items"},
+   {$match: {"items.recapitulations": {"$elemMatch": {"available": {"$gt": 0}}}}},
+   {$unwind: "$items.recapitulations"},
+   {$skip: skip},
+   {$limit: limit}
+  ]).exec();
 };
 
 Controller.prototype.recap = function(viewModels, user){
