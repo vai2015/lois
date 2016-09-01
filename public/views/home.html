@@ -108,7 +108,7 @@
                                 </td>
                              </tr>
                               <tr ng-repeat="entity in ctrl.entities" ng-show="!ctrl.loadingData" style="color:black;">
-                                   <td> {{$index + 1}} </td>
+                                   <td> {{((ctrl.paging.page - 1) * ctrl.paging.max) + $index + 1}} </td>
                                    <td> <a href="#">{{entity.category[0].name ? entity.category[0].name : entity._id}} </a></td>
                                    <td> {{entity.colli}} </td>
                                    <td> {{entity.weight}} </td>

@@ -112,7 +112,7 @@
                                </td>
                             </tr>
                             <tr ng-repeat="entity in ctrl.entities" style="color:black;" ng-show="!ctrl.loadingData">
-                              <td style="text-align:center;">{{$index + 1}}</td>
+                              <td style="text-align:center;">{{((ctrl.paging.page - 1) * ctrl.paging.max) + $index + 1}}</td>
                               <td>{{entity.name}}</td>
                               <td style="text-align:left;">
                                 <a href="#" class="txt-color-white btn-sm btn-primary" title="Edit" ng-click="ctrl.edit(entity._id)">
@@ -190,7 +190,7 @@
                                  </td>
                               </tr>
                               <tr ng-repeat="entity in ctrl.entities" style="color:black;" ng-show="!ctrl.loadingData">
-                                <td style="text-align:center;">{{$index + 1}}</td>
+                                <td style="text-align:center;">{{((ctrl.paging.page - 1) * ctrl.paging.max) + $index + 1}}</td>
                                 <td>{{entity.name}}</td>
                                 <td>{{entity.prefix}}</td>
                                 <td>{{entity.region.name}}</td>
@@ -256,7 +256,7 @@
                                  </td>
                               </tr>
                                <tr ng-repeat="entity in ctrl.entities" style="color: black;" ng-show="!ctrl.loadingData">
-                                    <td style="text-align:center;"> {{$index + 1}} </td>
+                                    <td style="text-align:center;"> {{((ctrl.paging.page - 1) * ctrl.paging.max) + $index + 1}} </td>
                                     <td> {{entity.name}} </td>
                                     <td> {{entity.address1}} </td>
                                     <td> {{entity.address2}} </td>
@@ -342,7 +342,7 @@
                                  </td>
                               </tr>
                                <tr ng-repeat="entity in ctrl.entities" style="color: black;" ng-show="!ctrl.loadingData">
-                                    <td style="text-align:center;"> {{$index + 1}} </td>
+                                    <td style="text-align:center;"> {{((ctrl.paging.page - 1) * ctrl.paging.max) + $index + 1}} </td>
                                     <td> {{entity.client.name}} </td>
                                     <td> {{entity.destination.name}} </td>
                                     <td style="text-align: right;"> {{entity.minimum | currency: 'Rp ' : 0}} </td>
@@ -409,7 +409,7 @@
                                  </td>
                               </tr>
                                <tr ng-repeat="entity in ctrl.entities" style="color: black;" ng-show="!ctrl.loadingData">
-                                    <td style="text-align:center;"> {{$index + 1}} </td>
+                                    <td style="text-align:center;"> {{((ctrl.paging.page - 1) * ctrl.paging.max) + $index + 1}} </td>
                                     <td> {{entity.name}} </td>
                                     <td> {{entity.address}} </td>
                                     <td> {{entity.contact}} </td>
@@ -496,7 +496,7 @@
                                  </td>
                               </tr>
                                <tr ng-repeat="entity in ctrl.entities" style="color: black;" ng-show="!ctrl.loadingData">
-                                    <td style="text-align:center;"> {{$index + 1}} </td>
+                                    <td style="text-align:center;"> {{((ctrl.paging.page - 1) * ctrl.paging.max) + $index + 1}} </td>
                                     <td> {{entity.name}} </td>
                                     <td> {{entity.userName}} </td>
                                     <td> {{entity.role.name}} </td>
@@ -577,7 +577,7 @@
                                  </td>
                               </tr>
                                <tr ng-repeat="entity in ctrl.entities" style="color: black;" ng-show="!ctrl.loadingData">
-                                    <td style="text-align:center;"> {{$index + 1}} </td>
+                                    <td style="text-align:center;"> {{((ctrl.paging.page - 1) * ctrl.paging.max) + $index + 1}}</td>
                                     <td> {{entity.menu.name}} </td>
                                     <td> {{entity.role.name}} </td>
                                     <td style="text-align:left;">
@@ -656,7 +656,7 @@
                                  </td>
                               </tr>
                                <tr ng-repeat="entity in ctrl.entities" style="color: black;" ng-show="!ctrl.loadingData">
-                                    <td style="text-align:center;"> {{$index + 1}} </td>
+                                    <td style="text-align:center;"> {{((ctrl.paging.page - 1) * ctrl.paging.max) + $index + 1}} </td>
                                     <td> {{entity.report.name}} </td>
                                     <td> {{entity.role.name}} </td>
                                     <td style="text-align:left;">
