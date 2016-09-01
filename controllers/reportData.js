@@ -519,6 +519,9 @@ Controller.prototype.getCommisions = function(query){
     if(query['spbNumber'])
       matches['spbNumber'] = new RegExp(query['spbNumber'], 'i');
 
+    if(query['regionDest'])
+      matches['regions.destination'] = objectId(query['regionDest']);
+
     if(query['from'] && query['to'])
       matches['date'] = {"$gte" : new Date(query['from']), "$lte": new Date(query['to'])};
 
