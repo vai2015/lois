@@ -52,99 +52,11 @@ var model = Schema({
    audited: {type: Boolean, default: false},
    returned: {type: Boolean, default: false},
    confirmed: {type: Boolean, default: false},
-   colli: {
-     quantity: {type: Number, default: 0},
-     delivered: {type: Number, default: 0}
-   },
-   returnInfo: {
-      date: {type: Date, default: null},
-      filePath: {type: String, default: null},
-      stamped: {type: Boolean, default: false},
-      signed: {type: Boolean, default: false},
-      receipt: {type: Boolean, default: false},
-      accepted: {type: Boolean, default: false},
-      limasColor: {type: String, default: null},
-      relationColor: {type: String, default: null},
-      relationCode: {type: String, default: null},
-      notes: {type: String, default: null},
-      concernedPerson: {type: String, default: null},
-      created: {type: refId, ref: 'User'}
-   },
+   colli: {quantity: {type: Number, default: 0}, delivered: {type: Number, default: 0}},
+   returnInfo: {type: refId, ref: 'ReturnInfo'},
    inputLocation: {type: refId, ref: 'Location'},
-   created: {
-      date: {type: Date, default: null},
-      user: {type: refId, ref: 'User'}
-   },
-   modified: {
-      date: {type: Date, default: Date.now},
-      user: {type: refId, ref: 'User'}
-   },
-   items: [{
-      itemType: {type: refId, ref: 'ItemType'},
-      packingType: {type: refId, ref: 'PackingType'},
-      content: {type: String, default: null},
-      dimensions: {
-         length: {type: Number, default: 0},
-         width: {type: Number, default: 0},
-         height: {type: Number, default: 0},
-         weight: {type: Number, default: 0}
-      },
-      colli:{
-         quantity: {type: Number, default: 0},
-         available: {type: Number, default: 0},
-         delivered: {type: Number, default: 0}
-      },
-      cost:{
-         colli: {type: Number, default: 0},
-         additional: {type: Number, default: 0},
-         discount: {type: Number, default: 0},
-         shipping: {type: Number, default: 0}
-      },
-      status: {type: String, default: 'Belum Terekap'},
-      audited: {type: Boolean, default: false},
-      recapitulations: [{
-         date: {type: Date, default: null},
-         quantity: {type: Number, default: 0},
-         available: {type: Number, default: 0},
-         weight: {type: Number, default: 0},
-         limasColor: {type: String, default: null},
-         relationColor: {type: String, default: null},
-         vehicleNumber: {type: String, default: null},
-         departureDate: {type: Date, default: null},
-         notes: {type: String, default: null},
-         trainType: {type: refId, ref: 'TrainType'},
-         driver: {type: refId, ref: 'Driver'},
-         created: {
-            user: {type: refId, ref: 'User'},
-            date: {type: Date, default: null}
-         },
-         modified: {
-            user: {type: refId, ref: 'User'},
-            date: {type: Date, default: Date.now}
-         }
-      }],
-      deliveries: [{
-         recapitulation: {type: refId},
-         date: {type: Date, default: null},
-         quantity: {type: Number, default: 0},
-         available: {type: Number, default: 0},
-         weight: {type: Number, default: 0},
-         limasColor: {type: String, default: null},
-         relationColor: {type: String, default: null},
-         vehicleNumber: {type: String, default: null},
-         deliveryCode: {type: String, default: null},
-         notes: {type: String, default: null},
-         driver: {type: refId, ref: 'Driver'},
-         created: {
-            user: {type: refId, ref: 'User'},
-            date: {type: Date, default: null}
-         },
-         modified: {
-            user: {type: refId, ref: 'User'},
-            date: {type: Date, default: Date.now}
-         }
-      }]
-   }]
+   created: {date: {type: Date, default: null}, user: {type: refId, ref: 'User'}},
+   modified: {date: {type: Date, default: Date.now}, user: {type: refId, ref: 'User'}}
 }, {versionKey: false, collection: 'shippings'});
 
 module.exports = mongoose.model('Shipping', model);

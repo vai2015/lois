@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
-var model = require('../models/shipping');
+var model = require('../models/recapitulation');
+var shippingModel = require('../models/shipping');
+var shippingItemModel = require('../models/shippingItem');
 var co = require('co');
 var _co = require('co-lodash');
 var _ = require('lodash');
@@ -12,132 +14,120 @@ var TERKIRIM_SEBAGIAN = 'Terkirim Sebagian';
 
 function Controller(){}
 
-Controller.api = 'recapitulation';
-
 Controller.prototype.getAll = function(query){
    var limit = query['limit'] ? query['limit'] : 10;
    var skip = query['skip'] ? query['skip'] : 0;
 
-   var shippingMatches = {"inputLocation": objectId(query['defaultLocation'])};
+   var matches = {"inputLocation": objectId(query['defaultLocation']), "colli.available": {"$gt": 0}};
 
    if(query['spbNumber'])
-     shippingMatches['spbNumber'] = new RegExp(query['spbNumber'], 'i');
+     matches['shipping.spbNumber'] = new RegExp(query['spbNumber'], 'i');
 
    if(query['regionDest'])
-     shippingMatches['regions.destination'] = objectId(query['regionDest']);
+     matches['shipping.regions.destination'] = objectId(query['regionDest']);
 
    if(query['regionSource'])
-     shippingMatches['regions.source'] = objectId(query['regionSource']);
+     matches['shipping.regions.source'] = objectId(query['regionSource']);
 
    if(query['destination'])
-     shippingMatches['destination'] = objectId(query['destination']);
+     matches['shipping.destination'] = objectId(query['destination']);
 
    if(query['from'] && query['to']){
       var fromShipping = new Date(query['from']);
       var toShipping = new Date(query['to']);
-      shippingMatches['date'] = {"$gte" : fromShipping, "$lte": toShipping};
+      matches['shipping.date'] = {"$gte" : fromShipping, "$lte": toShipping};
    }
 
-   return model.aggregate([
-    {$match: shippingMatches},
-	  {$sort : {"number" : -1}},
-	  {$match: {"items.colli.available": {"$gt": 0}}},
-    {$unwind: "$items"},
-    {$skip: skip},
-    {$limit: limit}
-   ]).exec();
-};
+   return shippingItemModel.find(matches)
+                           .populate("shipping")
+                           .sort({"number": -1})
+                           .skip(skip)
+                           .limit(limit)
+                           .lean()
+                           .exec()
+}
 
 Controller.prototype.getAllCancel = function(query){
   var limit = query['limit'] ? query['limit'] : 10;
   var skip = query['skip'] ? query['skip'] : 0;
 
-  var shippingMatches = {"inputLocation": objectId(query['defaultLocation'])};
+  var matches = {"inputLocation": objectId(query['defaultLocation']), "available": {"$gt": 0}};
 
   if(query['spbNumber'])
-    shippingMatches['spbNumber'] = new RegExp(query['spbNumber'], 'i');
+    matches['shipping.spbNumber'] = new RegExp(query['spbNumber'], 'i');
 
   if(query['regionDest'])
-    shippingMatches['regions.destination'] = objectId(query['regionDest']);
+    matches['shipping.regions.destination'] = objectId(query['regionDest']);
 
   if(query['regionSource'])
-    shippingMatches['regions.source'] = objectId(query['regionSource']);
+    matches['shipping.regions.source'] = objectId(query['regionSource']);
 
   if(query['destination'])
-    shippingMatches['destination'] = objectId(query['destination']);
+    matches['shipping.destination'] = objectId(query['destination']);
 
   if(query['from'] && query['to']){
      var fromShipping = new Date(query['from']);
      var toShipping = new Date(query['to']);
-     shippingMatches['date'] = {"$gte" : fromShipping, "$lte": toShipping};
+     matches['shipping.date'] = {"$gte" : fromShipping, "$lte": toShipping};
   }
 
-  return model.aggregate([
-   {$match: shippingMatches},
-   {$sort : {"number" : -1}},
-   {$unwind: "$items"},
-   {$match: {"items.recapitulations": {"$elemMatch": {"available": {"$gt": 0}}}}},
-   {$unwind: "$items.recapitulations"},
-   {$skip: skip},
-   {$limit: limit}
-  ]).exec();
-};
+  return model.find(matches)
+              .populate('shipping')
+              .populate("shippingItem")
+              .sort({"number": -1})
+              .skip(skip)
+              .limit(limit)
+              .lean()
+              .exec()
+}
 
-Controller.prototype.recap = function(viewModels, user){
+Controller.prototype.recap = function(viewModels){
    var self = this;
-   return co(function*(){
+
+   return co(function* (){
       yield* _co.coEach(viewModels, function*(viewModel){
           viewModel.quantity = _.parseInt(viewModel.quantity);
 
           if(viewModel.quantity === 0)
             return;
 
-          var shipping = yield model.findOne({_id: objectId(viewModel.shippingId)});
+          var shippingItem = yield shippingItemModel.findOne({_id: objectId(viewModel._id)});
 
-          if(!shipping)
-            return;
-
-          var item = _.find(shipping.items, function(item){
-             return item._id.toString() === viewModel.itemId.toString();
-          });
-
-          if(!item || item.colli.available === 0)
+          if(!shippingItem)
             return;
 
           if(viewModel.quantity > item.colli.available)
-            viewModel.quantity = item.colli.available;
+             viewModel.quantity = item.colli.quantity;
 
-          item.colli.available -= viewModel.quantity;
+          shippingItem.colli.available -= viewModel.quantity;
 
-          var recapitulation = {
+          var recapitulation = new model({
+             "shipping": viewModel.shipping._id,
+             "shippingItem": shippingItem._id,
              "date": new Date(),
              "quantity": viewModel.quantity,
              "available": viewModel.quantity,
-             "weight": (item.dimensions.weight / item.colli.quantity) * viewModel.quantity,
+             "weight": (shippingItem.dimensions.weight / shippingItem.colli.quantity) * viewModel.quantity,
              "limasColor": viewModel.limasColor,
              "relationColor": viewModel.relationColor,
              "vehicleNumber": viewModel.vehicleNumber,
-             "driver": viewModel.driver,
+             "departureDate": new Date(viewModel.departureDate),
              "notes": viewModel.notes,
              "trainType": viewModel.trainType,
-             "departureDate": new Date(viewModel.departureDate),
-             "created": {
-                "user": user._id,
-                "date": new Date()
-             },
-             "modified":{ "user": user._id}
-          };
+             "driver": viewModel.driver,
+             "created": {"user": user._id, "date": new Date()},
+             "modified": {"user": user._id}
+          });
 
-          item.recapitulations.push(recapitulation);
-
-          if(item.status === TERKIRIM_SEBAGIAN)
-             item.status = TERKIRIM_SEBAGIAN;
-          else if(item.colli.available === 0)
-             item.status = TEREKAP;
+          if(shippingItem.status === TERKIRIM_SEBAGIAN)
+             shippingItem.status = TERKIRIM_SEBAGIAN;
+          else if(shippingItem.colli.available === 0)
+             shippingItem.status = TEREKAP;
           else
-             item.status = TEREKAP_SEBAGIAN;
+             shippingItem.status = TEREKAP_SEBAGIAN;
 
-          yield shipping.save();
+          yield recapitulation.save();
+          yield shippingItem.save();
       });
    });
 };
@@ -145,48 +135,37 @@ Controller.prototype.recap = function(viewModels, user){
 Controller.prototype.cancelRecap = function(viewModels){
    var self = this;
 
-   return co(function*(){
-      yield* _co.coEach(viewModels, function*(viewModel){
-          viewModel.quantity = _.parseInt(viewModel.quantity);
+   return co(function* (){
+       yield* _co.coEach(viewModels, function*(viewModel){
+           viewModel.quantity = _.parseInt(viewModel.quantity);
 
-          if(viewModel.quantity === 0)
-            return;
+           if(viewModel.quantity === 0)
+             return;
 
-          var shipping = yield model.findOne({_id: objectId(viewModel.shippingId)});
+           var shippingItem = yield shippingItemModel.findOne({_id: objectId(viewModel.shippingItem._id)});
 
-          if(!shipping)
-            return;
+           if(!shippingItem)
+             return;
 
-          var item = _.find(shipping.items, function(item){
-             return item._id.toString() === viewModel.itemId.toString();
-          });
+           var recapitulation = yield model.findOne({_id: objectId(viewModel._id)});
 
-          if(!item)
-            return;
+           if(!recapitulation)
+             return;
 
-          var recapitulation = _.find(item.recapitulations, function(recapitulation){
-             return recapitulation._id.toString() === viewModel.recapitulationId.toString();
-          });
-
-          if(!recapitulation || recapitulation.available === 0)
-            return;
-
-          if(viewModel.quantity > recapitulation.available)
-            viewModel.quantity = recapitulation.available;
-
-           item.colli.available += viewModel.quantity;
+           shippingItem.colli.available += viewModel.quantity;
            recapitulation.available -= viewModel.quantity;
            recapitulation.quantity -= viewModel.quantity;
-           recapitulation.weight = (item.dimensions.weight / item.colli.quantity) * recapitulation.available;
+           recapitulation.weight = (shippingItem.dimensions.weight / shippingItem.colli.quantity) * viewModel.quantity;
 
-           if(item.colli.available === item.colli.quantity)
-              item.status = BELUM_TEREKAP;
+           if(shippingItem.colli.available === shippingItem.colli.quantity)
+             shippingItem.status = BELUM_TEREKAP;
            else
-              item.status = TEREKAP_SEBAGIAN;
+             shippingItem.status = TEREKAP_SEBAGIAN;
 
-          yield shipping.save();
-      });
+           yield recapitulation.save();
+           yield shippingItem.save();
+       });
    });
-};
+}
 
 module.exports = new Controller();

@@ -47,9 +47,9 @@ Controller.prototype.getAll = function(query){
 
     return model.aggregate([
       {$match: shippingMatches},
+      {$match: recapMatches},
       {$sort : {"number" : -1}},
       {$unwind: "$items"},
-  		{$match: recapMatches},
       {$unwind: "$items.recapitulations"},
       {$skip: skip},
       {$limit: limit}
