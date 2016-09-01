@@ -16,7 +16,7 @@ Controller.api = 'delivery';
 
 Controller.prototype.getAll = function(query){
     var shippingMatches = {"regions.destination": objectId(query['defaultRegionDest'])};
-    var recapMatches = {"items": {"$elemMatch": {"recapitulations": {"$elemMatch": {"available": {"$gt": 0}}}}}};
+    var recapMatches = {};
 
     var limit = query['limit'] ? query['limit'] : 10;
     var skip = query['skip'] ? query['skip'] : 0;
@@ -28,10 +28,10 @@ Controller.prototype.getAll = function(query){
       shippingMatches['regions.destination'] = objectId(query['regionDest']);
 
     if(query['recapDriver'])
-      recapMatches['items.recapitulations'] = {"$elemMatch": {"driver": objectId(query['recapDriver'])}};
+      recapMatches['items.recapitulations.driver'] = objectId(query['recapDriver']);
 
     if(query['recapDate'])
-      recapMatches['items.recapitulations'] = {"$elemMatch": {"created.date": new Date(query['recapDate'])}};
+      recapMatches['items.recapitulations.date'] = new Date(query['recapDate']);
 
     if(query['regionSource'])
       shippingMatches['regions.source'] = objectId(query['regionSource']);
@@ -47,10 +47,12 @@ Controller.prototype.getAll = function(query){
 
     return model.aggregate([
       {$match: shippingMatches},
-      {$match: recapMatches},
+      {$match:  {"items": {"$elemMatch": {"recapitulations": {"$elemMatch": {"available": {"$ne": 0}}}}}}},
       {$sort : {"number" : -1}},
       {$unwind: "$items"},
       {$unwind: "$items.recapitulations"},
+      {$match: {"items.recapitulations.available": {"$gt": 0}}},
+      {$match: recapMatches},
       {$skip: skip},
       {$limit: limit}
     ]).exec();
@@ -89,11 +91,12 @@ Controller.prototype.getAllCancel = function(query){
 
   return model.aggregate([
     {$match: shippingMatches},
-    {$match: {"items.deliveries": {"$elemMatch": {"available": {"$gt": 0}}}}},
+    {$match: {"items": {$elemMatch: {"deliveries": {$elemMatch: {"available": {"$ne": 0}}}}}}},
     {$match: recapMatches},
     {$sort : {"number" : -1}},
     {$unwind: "$items"},
     {$unwind: "$items.deliveries"},
+    {$match: {"items.deliveries.available": {"$gt": 0}}},
     {$skip: skip},
     {$limit: limit}
   ]).exec();

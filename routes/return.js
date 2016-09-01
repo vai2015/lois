@@ -30,8 +30,8 @@ router.get('/lois/confirm-return', function(req, res){
 router.get(process.env.BASE_API + 'return/getAll', auth.isAuthenticated, function(req, res){
    var query = JSON.parse(req.query['query']);
    query['defaultRegionDest'] = req.session.user.location.region;
-   var parameters = controller.getParameters(query);
-   controller.getAll(parameters).then(function(result){
+
+   controller.getAll(query).then(function(result){
        return res.status(200).send(result);
    }).catch(function(error){
        return res.status(500).send(error.message);

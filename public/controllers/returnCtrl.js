@@ -21,7 +21,8 @@ var lois;
                 ctrl.createQuery();
                 ctrl.loadingData = true;
                 ctrl.loadFunc(ctrl.query).then(function (result) {
-                    ctrl.entities = result.data;
+                    var shippings = result.data.map(function (e) { return e.shipping[0]; });
+                    ctrl.entities = shippings;
                     ctrl.entities.map(function (e) {
                         e['viewModel'] = {};
                     });

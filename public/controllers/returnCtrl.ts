@@ -16,9 +16,10 @@ module lois.controllers {
           ctrl.checkedAll = false;
           ctrl.createQuery();
           ctrl.loadingData = true;
-          
+
           ctrl.loadFunc(ctrl.query).then(result => {
-             ctrl.entities = result.data;
+             var shippings = result.data.map(e => e.shipping[0]);
+             ctrl.entities = shippings;
              ctrl.entities.map(e => {
                 e['viewModel'] = {};
              });
@@ -32,7 +33,7 @@ module lois.controllers {
        upload(file, entity): void{
           var fd = new FormData();
           fd.append('file', file);
-          
+
           entity['viewModel']['filePath'] = [];
 
           var ctrl = this;

@@ -13,10 +13,7 @@ Controller.api = 'return';
 Controller.prototype.getParameters = function(query){
    var parameters = {
      "conditions": {
-       "regions.destination": query['defaultRegionDest'],
-       "returned": false,
-       "colli.quantity": {"$gt": 0},
-       "items" : {"$elemMatch": {"status": {"$all": ["Terkirim"]}}},
+       "regions.destination": query['defaultRegionDest']
      }
    };
 
@@ -41,13 +38,34 @@ Controller.prototype.getParameters = function(query){
    return parameters;
 };
 
-Controller.prototype.getAll = function(parameters){
-  var find = model.find(parameters.conditions);
+Controller.prototype.getAll = function(query){
+  var limit = query['limit'] ? query['limit'] : 10;
+  var skip = query['skip'] ? query['skip'] : 0;
+  var matches = {"regions.destination": objectId(query['defaultRegionDest'])};
 
-  if(parameters['limit'] && (parameters['skip'] || parameters['skip'] == 0))
-    find = find.skip(parameters['skip']).limit(parameters['limit']);
+  if(query['spbNumber'])
+    matches['spbNumber'] = new RegExp(query['spbNumber'], 'i');
 
-  return find.lean().exec();
+  if(query['destination'])
+    matches['destination'] = objectId(query['destination']);
+
+  if(query['regionSource'])
+    matches['regions.source'] = objectId(query['regionSource']);
+
+  if(query['from'] && query['to']){
+     var fromShipping = new Date(query['from']);
+     var toShipping = new Date(query['to']);
+     matches['date'] = {"$gte" : fromShipping, "$lte": toShipping};
+  }
+
+  return model.aggregate([
+     {$match: matches},
+     {$match: {"items": {$elemMatch: {"status": "Terkirim"}}}},
+     {$unwind: "$items"},
+     {$match: {"items.status": "Terkirim"}},
+     {$group: {_id: "$_id", shipping: {$push: "$$ROOT"}}},
+     {$skip: skip},
+     {$limit: limit}]).exec();
 };
 
 Controller.prototype.getConfirmReturns = function(query){
