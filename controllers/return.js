@@ -41,7 +41,7 @@ Controller.prototype.getParameters = function(query){
 Controller.prototype.getAll = function(query){
   var limit = query['limit'] ? query['limit'] : 10;
   var skip = query['skip'] ? query['skip'] : 0;
-  var matches = {"regions.destination": objectId(query['defaultRegionDest'])};
+  var matches = {"regions.destination": objectId(query['defaultRegionDest']), "returned": false};
 
   if(query['spbNumber'])
     matches['spbNumber'] = new RegExp(query['spbNumber'], 'i');
