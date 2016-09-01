@@ -69,7 +69,11 @@ Controller.prototype.getParameters = function(query){
   if(query['from'] && query['to']){
      var fromShipping = new Date(query['from']);
      var toShipping = new Date(query['to']);
-     parameters['conditions']['date'] = {"$gte" : fromShipping, "$lte": toShipping};
+
+     if(query['from'] === query['to'])
+       parameters['conditions']['date'] = fromShipping;
+     else
+       parameters['conditions']['date'] = {"$gte" : fromShipping, "$lte": toShipping};
   }
 
   return parameters;
