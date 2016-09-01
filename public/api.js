@@ -17,6 +17,30 @@ var app;
             return user;
         }());
         api.user = user;
+        var home = (function () {
+            function home() {
+            }
+            home.getOverall = function (query) {
+                return app.http.get('/lois/api/home/getOverall?query=' + JSON.stringify(query));
+            };
+            home.getDestinations = function (query) {
+                return app.http.get('/lois/api/home/getDestinations?query=' + JSON.stringify(query));
+            };
+            home.getSenders = function (query) {
+                return app.http.get('/lois/api/home/getSenders?query=' + JSON.stringify(query));
+            };
+            home.getPaymentTypes = function (query) {
+                return app.http.get('/lois/api/home/getPaymentTypes?query=' + JSON.stringify(query));
+            };
+            home.getPaymentStatuses = function (query) {
+                return app.http.get('/lois/api/home/getPaymentStatuses?query=' + JSON.stringify(query));
+            };
+            home.getRegions = function (query) {
+                return app.http.get('/lois/api/home/getRegions?query=' + JSON.stringify(query));
+            };
+            return home;
+        }());
+        api.home = home;
         var shipping = (function () {
             function shipping() {
             }

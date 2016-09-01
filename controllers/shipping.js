@@ -220,7 +220,7 @@ Controller.prototype.save = function(data, user){
 
       var tariff = yield self.tariffController.getTariff(sender._id, destination._id);
 
-      yield self.calculateCost(data, tariff, user, true);
+      self.calculateCost(data, tariff, user, true);
 
       data.regions.source = source == null ? data.regions.source : source.region._id;
       data.regions.destination = destination.region._id ? destination.region._id : data.regions.destination;

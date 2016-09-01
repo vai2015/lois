@@ -352,6 +352,7 @@ Controller.prototype.getPaidReport = function(viewModels, user){
          var totalWeight = _.sumBy(viewModel.items, 'dimensions.weight');
          var contents = _.map(viewModel.items, "content");
          var transactionDates = _.map(viewModel.payment.phases, "transferDate");
+         var paymentDates = _.map(viewModel.payment.phases, "date");
          var banks = _.map(viewModel.payment.phases, "bank");
 
          result.report_data.push({
@@ -363,7 +364,7 @@ Controller.prototype.getPaidReport = function(viewModels, user){
              "total_weight": totalWeight,
              "price": viewModel.cost.total,
              "transaction_date": viewModel.date,
-             "payment_date": transactionDates.join(),
+             "payment_date": paymentDates.join(),
              "bank": banks.join()
          });
 

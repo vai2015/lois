@@ -10,6 +10,7 @@ var app = express();
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 app.use(session({secret: 'sdfe34234fdff234fsdf', saveUninitialized: true, resave: true}));
+app.use(require('./routes/home'));
 app.use(require('./routes/user'));
 app.use(require('./routes/region'));
 app.use(require('./routes/location'));

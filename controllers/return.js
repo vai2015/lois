@@ -15,8 +15,8 @@ Controller.prototype.getParameters = function(query){
      "conditions": {
        "regions.destination": query['defaultRegionDest'],
        "returned": false,
+       "colli.quantity": {"$gt": 0},
        "$where": "this.colli.delivered == this.colli.quantity",
-       "colli.quantity": {"$gt": 0}
      }
    };
 

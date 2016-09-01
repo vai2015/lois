@@ -117,6 +117,11 @@ module lois.controllers{
            this.query['recapDate'] = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
         }
 
+        if(this.filters['date']){
+           var date = new Date(this.filters['date']);
+           this.query['date'] = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+        }
+
         if(this.filters['transferDate']){
            var date = new Date(this.filters['transferDate']);
            this.query['transferDate'] = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
