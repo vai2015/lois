@@ -40,8 +40,8 @@ Controller.prototype.getAll = function(query){
 
    return model.aggregate([
     {$match: shippingMatches},
+    {$match: {"items.colli.available": {"$gt": 0}}},
 	  {$sort : {"number" : -1}},
-	  {$match: {"items.colli.available": {"$gt": 0}}},
     {$unwind: "$items"},
     {$skip: skip},
     {$limit: limit}
@@ -74,9 +74,9 @@ Controller.prototype.getAllCancel = function(query){
 
   return model.aggregate([
    {$match: shippingMatches},
+   {$match: {"items.recapitulations": {"$elemMatch": {"available": {"$gt": 0}}}}},
    {$sort : {"number" : -1}},
    {$unwind: "$items"},
-   {$match: {"items.recapitulations": {"$elemMatch": {"available": {"$gt": 0}}}}},
    {$unwind: "$items.recapitulations"},
    {$skip: skip},
    {$limit: limit}

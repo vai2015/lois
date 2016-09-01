@@ -47,9 +47,9 @@ Controller.prototype.getAll = function(query){
 
     return model.aggregate([
       {$match: shippingMatches},
-      {$match: recapMatches},
       {$sort : {"number" : -1}},
       {$unwind: "$items"},
+  		{$match: recapMatches},
       {$unwind: "$items.recapitulations"},
       {$skip: skip},
       {$limit: limit}
@@ -89,10 +89,10 @@ Controller.prototype.getAllCancel = function(query){
 
   return model.aggregate([
     {$match: shippingMatches},
-    {$match: {"items.deliveries": {"$elemMatch": {"available": {"$gt": 0}}}}},
-    {$match: recapMatches},
     {$sort : {"number" : -1}},
     {$unwind: "$items"},
+    {$match: recapMatches},
+    {$match: {"items.deliveries": {"$elemMatch": {"available": {"$gt": 0}}}}},
     {$unwind: "$items.deliveries"},
     {$skip: skip},
     {$limit: limit}
