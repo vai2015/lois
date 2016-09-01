@@ -16,7 +16,7 @@ Controller.api = 'delivery';
 
 Controller.prototype.getAll = function(query){
     var shippingMatches = {"regions.destination": objectId(query['defaultRegionDest'])};
-    var recapMatches = {"items.recapitulations": {"$elemMatch": {"available" : {"$gt": 0}}}};
+    var recapMatches = {"items": {"$elemMatch": {"recapitulations": {"$elemMatch": {"available": {"$gt": 0}}}}}};
 
     var limit = query['limit'] ? query['limit'] : 10;
     var skip = query['skip'] ? query['skip'] : 0;
