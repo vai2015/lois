@@ -30,8 +30,10 @@ Controller.prototype.getAll = function(query){
     if(query['recapDriver'])
       recapMatches['items.recapitulations.driver'] = objectId(query['recapDriver']);
 
-    if(query['recapDate'])
-      recapMatches['items.recapitulations.date'] = new Date(query['recapDate']);
+    if(query['recapDate']){
+      var recapDate = new Date(query['recapDate']);
+      recapMatches['items.recapitulations'] = {"$elemMatch": {"date": new Date(recapDate.toISOString())}};
+    }
 
     if(query['regionSource'])
       shippingMatches['regions.source'] = objectId(query['regionSource']);
@@ -42,7 +44,7 @@ Controller.prototype.getAll = function(query){
     if(query['from'] && query['to']){
        var fromShipping = new Date(query['from']);
        var toShipping = new Date(query['to']);
-       shippingMatches['date'] = {"$gte" : fromShipping, "$lte": toShipping};
+       shippingMatches['date'] = {"$gte" : new Date(fromShipping.toISOString()), "$lte": new Date(toShipping.toISOString())};
     }
 
     return model.aggregate([
@@ -50,9 +52,9 @@ Controller.prototype.getAll = function(query){
       {$match:  {"items": {"$elemMatch": {"recapitulations": {"$elemMatch": {"available": {"$ne": 0}}}}}}},
       {$sort : {"number" : -1}},
       {$unwind: "$items"},
+      {$match: recapMatches},
       {$unwind: "$items.recapitulations"},
       {$match: {"items.recapitulations.available": {"$gt": 0}}},
-      {$match: recapMatches},
       {$skip: skip},
       {$limit: limit}
     ]).exec();
@@ -74,8 +76,10 @@ Controller.prototype.getAllCancel = function(query){
   if(query['recapDriver'])
     recapMatches['items.recapitulations'] = {"$elemMatch": {"driver": objectId(query['recapDriver'])}};
 
-  if(query['recapDate'])
-    recapMatches['items.recapitulations'] = {"$elemMatch": {"created.date": new Date(query['recapDate'])}};
+  if(query['recapDate']){
+    var recapDate = new Date(query['recapDate']);
+    recapMatches['items.recapitulations'] = {"$elemMatch": {"date": new Date(recapDate.toISOString())}};
+  }
 
   if(query['regionSource'])
     shippingMatches['regions.source'] = objectId(query['regionSource']);
@@ -86,15 +90,15 @@ Controller.prototype.getAllCancel = function(query){
   if(query['from'] && query['to']){
      var fromShipping = new Date(query['from']);
      var toShipping = new Date(query['to']);
-     shippingMatches['date'] = {"$gte" : fromShipping, "$lte": toShipping};
+     shippingMatches['date'] = {"$gte" : new Date(fromShipping.toISOString()), "$lte": new Date(toShipping.toISOString())};
   }
 
   return model.aggregate([
     {$match: shippingMatches},
     {$match: {"items": {$elemMatch: {"deliveries": {$elemMatch: {"available": {"$ne": 0}}}}}}},
-    {$match: recapMatches},
     {$sort : {"number" : -1}},
     {$unwind: "$items"},
+    {$match: recapMatches},
     {$unwind: "$items.deliveries"},
     {$match: {"items.deliveries.available": {"$gt": 0}}},
     {$skip: skip},

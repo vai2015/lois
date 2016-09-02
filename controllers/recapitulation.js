@@ -35,7 +35,7 @@ Controller.prototype.getAll = function(query){
    if(query['from'] && query['to']){
       var fromShipping = new Date(query['from']);
       var toShipping = new Date(query['to']);
-      shippingMatches['date'] = {"$gte" : fromShipping, "$lte": toShipping};
+      shippingMatches['date'] = {"$gte" : new Date(fromShipping.toISOString()), "$lte": new Date(toShipping.toISOString())};
    }
 
    return model.aggregate([
@@ -69,7 +69,7 @@ Controller.prototype.getAllCancel = function(query){
   if(query['from'] && query['to']){
      var fromShipping = new Date(query['from']);
      var toShipping = new Date(query['to']);
-     shippingMatches['date'] = {"$gte" : fromShipping, "$lte": toShipping};
+     shippingMatches['date'] = {"$gte" : new Date(fromShipping.toISOString()), "$lte": new Date(toShipping.toISOString())};
   }
 
   return model.aggregate([

@@ -11,9 +11,10 @@ var objectId = mongoose.Types.ObjectId;
 function Controller(){};
 
 Controller.prototype.getRecapitulations = function(query){
-   var matches = {"inputLocation": objectId(query['defaultLocation']), "items.recapitulations.quantity" : {"$gt": 0}};
+   var matches = {"inputLocation": objectId(query['defaultLocation'])};
    var limit = query['limit'] ? query['limit'] : 10;
    var skip = query['skip'] ? query['skip'] : 0;
+   var recapMatches = {};
 
    if(query['spbNumber'])
      matches['spbNumber'] = new RegExp(query['spbNumber'], 'i');
@@ -28,26 +29,36 @@ Controller.prototype.getRecapitulations = function(query){
      matches['regions.destination'] = objectId(query['regionDest']);
 
    if(query['trainType'])
-     matches['items.recapitulations.trainType'] = objectId(query['trainType']);
+     recapMatches['items.recapitulations'] = {"$elemMatch": {"trainType" :objectId(query['trainType'])}};
 
    if(query['driver'])
-     matches['items.recapitulations.driver'] = objectId(query['driver']);
+     recapMatches['items.recapitulations'] = {"$elemMatch": {"driver": objectId(query['driver'])}};
 
-   if(query['recapDate'])
-     matches['items.recapitulations.modified.date'] = new Date(query['recapDate']);
+   if(query['recapDate']){
+     var recapDate = new Date(query['recapDate']);
+     recapMatches['items.recapitulations'] = {"$elemMatch": {"date": new Date(recapDate.toISOString())}};
+   }
 
    if(query['vehicleNumber'])
-     matches['items.recapitulations.vehicleNumber'] = query['vehicleNumber'];
+     recapMatches['items.recapitulations'] = {"$elemMatch": {"vehicleNumber": query['vehicleNumber']}};
 
-   if(query['from'] && query['to'])
-     matches['date'] = {"$gte" : new Date(query['from']), "$lt": new Date(query['to'])};
+   if(query['from'] && query['to']){
+     var fromShipping = new Date(query['from']);
+     var toShipping = new Date(query['to']);
+     matches['date'] = {"$gte" : new Date(fromShipping.toISOString()), "$lte": new Date(toShipping.toISOString())};
+   }
 
    return model.aggregate([
-		{$sort : { "_id" : -1} },
-		{$match: matches},
+      {$match: matches},
+      {$match:  {"items": {"$elemMatch": {"recapitulations": {"$elemMatch": {"quantity": {"$ne": 0}}}}}}},
+		  {$sort : { "number" : -1}},
       {$unwind: "$items"},
+      {$match: recapMatches},
       {$unwind: "$items.recapitulations"},
-      {$lookup: {"from": "clients", "localField": "sender", "foreignField": "_id", "as": "sender"}}
+      {$match:  {"items.recapitulations.quantity": {"$gt": 0}}},
+      {$lookup: {"from": "clients", "localField": "sender", "foreignField": "_id", "as": "sender"}},
+      {$lookup: {"from": "trainTypes", "localField": "items.recapitulations.trainType", "foreignField": "_id", "as": "trainType"}},
+      {$lookup: {"from": "drivers", "localField": "items.recapitulations.driver", "foreignField": "_id", "as": "driver"}}
    ]).skip(skip).limit(limit).exec();
 };
 
@@ -108,9 +119,10 @@ Controller.prototype.getRecapitulationsReport = function(viewModels, user){
 }
 
 Controller.prototype.getDeliveries = function(query){
-   var matches = {"regions.destination": objectId(query['defaultRegion']), "items.deliveries.quantity" : {"$gt": 0}};
+   var matches = {"regions.destination": objectId(query['defaultRegion'])};
    var limit = query['limit'] ? query['limit'] : 10;
    var skip = query['skip'] ? query['skip'] : 0;
+   var deliveryMatches = {};
 
    if(query['spbNumber'])
      matches['spbNumber'] = new RegExp(query['spbNumber'], 'i');
@@ -122,27 +134,31 @@ Controller.prototype.getDeliveries = function(query){
      matches['regions.source'] = objectId(query['regionSource']);
 
    if(query['deliveryCode'])
-     matches['items.deliveries.deliveryCode'] = query['deliveryCode'];
+     matches['items.deliveries'] = {"$elemMatch": {"code": query['deliveryCode']}};
 
    if(query['vehicleNumber'])
-     matches['items.deliveries.vehicleNumber'] = query['vehicleNumber'];
+     deliveryMatches['items.deliveries'] = {"$elemMatch": {"vehicleNumber": query['vehicleNumber']}};
 
    if(query['driver'])
-     matches['items.deliveries.driver'] = objectId(query['driver']);
+     deliveryMatches['items.deliveries'] = {"$elemMatch": {"driver": objectId(query['driver'])}};
 
-   if(query['deliveryDate'])
-     matches['items.deliveries.modified.date'] = new Date(query['deliveryDate']);
-
+   if(query['deliveryDate']){
+     var deliveryDate = new Date(query['deliveryDate']);
+     deliveryMatches['items.deliveries'] = {"$elemMatch": {"date": new Date(deliveryDate.toISOString())}};
+   }
    if(query['from'] && query['to'])
      matches['date'] = {"$gte" : new Date(query['from']), "$lte": new Date(query['to'])};
 
    return model.aggregate([
-		{$sort : { "_id" : -1} },
-		{$match: matches},
+      {$match: matches},
+		  {$sort : { "number" : -1}},
       {$unwind: "$items"},
+      {$match: deliveryMatches},
       {$unwind: "$items.deliveries"},
+      {$match:  {"items.deliveries.quantity": {"$gt": 0}}},
       {$lookup: {"from": "clients", "localField": "sender", "foreignField": "_id", "as": "sender"}},
-      {$lookup: {"from": "paymentTypes", "localField": "payment.type", "foreignField": "_id", "as": "paymentType"}}
+      {$lookup: {"from": "paymentTypes", "localField": "payment.type", "foreignField": "_id", "as": "paymentType"}},
+      {$lookup: {"from": "drivers", "localField": "items.deliveries.driver", "foreignField": "_id", "as": "driver"}}
    ]).skip(skip).limit(limit).exec();
 };
 
