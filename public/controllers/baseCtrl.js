@@ -82,28 +82,29 @@ var lois;
                 if (this.filters['from'] && this.filters['to']) {
                     var from = new Date(this.filters['from']);
                     var to = new Date(this.filters['to']);
-                    this.query['from'] = Date.UTC(from.getFullYear(), from.getMonth(), from.getDate());
-                    this.query['to'] = Date.UTC(to.getFullYear(), to.getMonth(), to.getDate());
+					
+                    this.query['from'] = dateFormat(from);
+                    this.query['to'] = dateFormat(to);
                 }
                 if (this.filters['recapDate']) {
                     var date = new Date(this.filters['recapDate']);
-                    this.query['recapDate'] = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+                    this.query['recapDate'] = dateFormat(date);
                 }
                 if (this.filters['date']) {
                     var date = new Date(this.filters['date']);
-                    this.query['date'] = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+                    this.query['date'] = dateFormat(date);
                 }
                 if (this.filters['transferDate']) {
                     var date = new Date(this.filters['transferDate']);
-                    this.query['transferDate'] = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+                    this.query['transferDate'] = dateFormat(date);
                 }
                 if (this.filters['paymentDate']) {
                     var date = new Date(this.filters['paymentDate']);
-                    this.query['paymentDate'] = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+                    this.query['paymentDate'] = dateFormat(date);
                 }
                 if (this.filters['deliveryDate']) {
                     var date = new Date(this.filters['deliveryDate']);
-                    this.query['deliveryDate'] = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+                    this.query['deliveryDate'] = dateFormat(date);
                 }
             };
             baseCtrl.prototype.createPagingQuery = function () {
@@ -143,3 +144,11 @@ var lois;
         controllers.baseCtrl = baseCtrl;
     })(controllers = lois.controllers || (lois.controllers = {}));
 })(lois || (lois = {}));
+
+function dateFormat(date_format){
+	var UTC_date = new Date(Date.UTC(date_format.getFullYear(), date_format.getMonth(), date_format.getDate()));
+	var format_date = UTC_date.getDate();
+	var format_month = UTC_date.getMonth()+1;
+	var format_year = UTC_date.getFullYear();
+	return format_year+"/"+format_month+"/"+format_date;
+}

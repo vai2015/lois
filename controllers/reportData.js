@@ -35,17 +35,17 @@ Controller.prototype.getRecapitulations = function(query){
      recapMatches['items.recapitulations'] = {"$elemMatch": {"driver": objectId(query['driver'])}};
 
    if(query['recapDate']){
-     var recapDate = new Date(query['recapDate']);
-     recapMatches['items.recapitulations'] = {"$elemMatch": {"date": new Date(recapDate.toISOString())}};
+     var recapDate = query['recapDate'];
+     recapMatches['items.recapitulations'] = {"$elemMatch": {"date": new Date(recapDate)}};
    }
 
    if(query['vehicleNumber'])
      recapMatches['items.recapitulations'] = {"$elemMatch": {"vehicleNumber": query['vehicleNumber']}};
 
    if(query['from'] && query['to']){
-     var fromShipping = new Date(query['from']);
-     var toShipping = new Date(query['to']);
-     matches['date'] = {"$gte" : new Date(fromShipping.toISOString()), "$lte": new Date(toShipping.toISOString())};
+     var fromShipping = query['from'];
+     var toShipping = query['to'];
+     matches['date'] = {"$gte" : new Date(fromShipping), "$lte": new Date(toShipping)};
    }
 
    return model.aggregate([
@@ -143,8 +143,8 @@ Controller.prototype.getDeliveries = function(query){
      deliveryMatches['items.deliveries'] = {"$elemMatch": {"driver": objectId(query['driver'])}};
 
    if(query['deliveryDate']){
-     var deliveryDate = new Date(query['deliveryDate']);
-     deliveryMatches['items.deliveries'] = {"$elemMatch": {"date": new Date(deliveryDate.toISOString())}};
+     var deliveryDate = query['deliveryDate'];
+     deliveryMatches['items.deliveries'] = {"$elemMatch": {"date": new Date(deliveryDate)}};
    }
    if(query['from'] && query['to'])
      matches['date'] = {"$gte" : new Date(query['from']), "$lte": new Date(query['to'])};

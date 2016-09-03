@@ -19,9 +19,9 @@ Controller.prototype.getParameters = function(query){
      parameters['conditions']['receiver.name'] = new RegExp(query['receiver'], 'i');
 
    if(query['from'] && query['to']){
-      var fromShipping = new Date(query['from']);
-      var toShipping = new Date(query['to']);
-      parameters['conditions']['date'] = {"$gte" : new Date(fromShipping.toISOString()), "$lte": new Date(toShipping.toISOString())};
+      var fromShipping = query['from'];
+      var toShipping = query['to'];
+      parameters['conditions']['date'] = {"$gte" : new Date(fromShipping), "$lte": new Date(toShipping)};
    }
 
    return parameters;

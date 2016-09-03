@@ -30,9 +30,9 @@ Controller.prototype.getParameters = function(query){
      parameters['conditions']['regions.source'] = objectId(query['regionSource']);
 
    if(query['from'] && query['to']){
-      var fromShipping = new Date(query['from']);
-      var toShipping = new Date(query['to']);
-      parameters['conditions']['date'] = {"$gte" : fromShipping, "$lte": toShipping};
+      var fromShipping = query['from'];
+      var toShipping = query['to'];
+      parameters['conditions']['date'] = {"$gte" : new Date(fromShipping), "$lte": new Date(toShipping)};
    }
 
    return parameters;
@@ -53,9 +53,9 @@ Controller.prototype.getAll = function(query){
     matches['regions.source'] = objectId(query['regionSource']);
 
   if(query['from'] && query['to']){
-     var fromShipping = new Date(query['from']);
-     var toShipping = new Date(query['to']);
-     matches['date'] = {"$gte" : fromShipping, "$lte": toShipping};
+     var fromShipping = query['from'];
+     var toShipping = query['to'];
+     matches['date'] = {"$gte" : new Date(fromShipping), "$lte": new Date(toShipping)};
   }
 
   return model.aggregate([
@@ -87,9 +87,9 @@ Controller.prototype.getConfirmReturns = function(query){
     parameters['returnInfo.date'] = new Date(query['returnDate']);
 
   if(query['from'] && query['to']){
-     var fromShipping = new Date(query['fromShipping']);
-     var toShipping = new Date(query['toShipping']);
-     parameters['date'] = {"$gte" : fromShipping, "$lt": toShipping};
+     var fromShipping = query['fromShipping'];
+     var toShipping = query['toShipping'];
+     parameters['date'] = {"$gte" : new Date(fromShipping), "$lte": new Date(toShipping)};
   }
 
   return model.find(parameters).sort({"number": -1}).skip(skip).limit(limit).lean().exec();
