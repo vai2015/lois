@@ -83,28 +83,28 @@ var lois;
                     var from = new Date(this.filters['from']);
                     var to = new Date(this.filters['to']);
 					
-                    this.query['from'] = dateFormat(from);
-                    this.query['to'] = dateFormat(to);
+                    this.query['from'] = dateFormat(from,0);
+                    this.query['to'] = dateFormat(to,1);
                 }
                 if (this.filters['recapDate']) {
                     var date = new Date(this.filters['recapDate']);
-                    this.query['recapDate'] = dateFormat(date);
+                    this.query['recapDate'] = dateFormat(date,0);
                 }
                 if (this.filters['date']) {
                     var date = new Date(this.filters['date']);
-                    this.query['date'] = dateFormat(date);
+                    this.query['date'] = dateFormat(date,0);
                 }
                 if (this.filters['transferDate']) {
                     var date = new Date(this.filters['transferDate']);
-                    this.query['transferDate'] = dateFormat(date);
+                    this.query['transferDate'] = dateFormat(date,0);
                 }
                 if (this.filters['paymentDate']) {
                     var date = new Date(this.filters['paymentDate']);
-                    this.query['paymentDate'] = dateFormat(date);
+                    this.query['paymentDate'] = dateFormat(date,0);
                 }
                 if (this.filters['deliveryDate']) {
                     var date = new Date(this.filters['deliveryDate']);
-                    this.query['deliveryDate'] = dateFormat(date);
+                    this.query['deliveryDate'] = dateFormat(date,0);
                 }
             };
             baseCtrl.prototype.createPagingQuery = function () {
@@ -145,10 +145,14 @@ var lois;
     })(controllers = lois.controllers || (lois.controllers = {}));
 })(lois || (lois = {}));
 
-function dateFormat(date_format){
+function dateFormat(date_format, properties){
 	var UTC_date = new Date(Date.UTC(date_format.getFullYear(), date_format.getMonth(), date_format.getDate()));
 	var format_date = UTC_date.getDate();
 	var format_month = UTC_date.getMonth()+1;
 	var format_year = UTC_date.getFullYear();
-	return format_year+"/"+format_month+"/"+format_date;
+	if (properties===0){
+		return format_year+"/"+format_month+"/"+format_date+" "+"00:00:00";
+	} else {
+		return format_year+"/"+format_month+"/"+format_date+" "+"23:59:59";
+	}
 }

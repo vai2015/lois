@@ -33,9 +33,9 @@ Controller.prototype.getAll = function(query){
      shippingMatches['destination'] = objectId(query['destination']);
 
    if(query['from'] && query['to']){
-      var fromShipping = new Date(query['from']);
-      var toShipping = new Date(query['to']);
-      shippingMatches['date'] = {"$gte" : new Date(fromShipping.toISOString()), "$lte": new Date(toShipping.toISOString())};
+      var fromShipping = query['from'];
+      var toShipping = query['to'];
+      shippingMatches['date'] = {"$gte" : new Date(fromShipping), "$lte": new Date(toShipping)};
    }
 
    return model.aggregate([
